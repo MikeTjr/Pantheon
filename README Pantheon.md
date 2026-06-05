@@ -367,7 +367,19 @@ Entities are modeled as **nodes** in a directed relationship graph rather than r
 -----
 
 ## Canonical Hierarchy
+This project treats certain canonical nodes (for example, Jesus in Christian cosmology) as central reference points to which comparative correspondences are attached. The angelic orders are modeled explicitly so that researchers can trace rank, function, and cross-traditional parallels.
 
+### Angel Hierarchy (summary)
+
+- **Seraphim:** Closest to the divine presence — burning purity and love.
+- **Cherubim:** Guardians of sacred thresholds and bearers of esoteric knowledge.
+- **Thrones / Aralim:** Embodiments of divine justice and cosmic order.
+- **Dominions / Chasmalim:** Administrators of heavenly governance.
+- **Virtues:** Channels of miracles and sustaining natural forces.
+- **Powers:** Warrior angels combating chaos.
+- **Principalities:** Guardians over nations and collective institutions.
+- **Archangels:** High messengers and commanders (Michael, Gabriel, Raphael, etc.).
+- **Angels:** Personal messengers to individuals.
 The project organizes entities across **seven structural levels**, representing the cosmological distance from the ultimate source of being — as that distance is described, with remarkable consistency, across Neoplatonic, Kabbalistic, Gnostic, and Hermetic systems. This hierarchy is a **research scaffold**, not a theological claim.
 
 ```

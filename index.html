@@ -7,7 +7,7 @@
 
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
 
 <!-- Cytoscape for graph -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.min.js"></script>
@@ -38,8 +38,8 @@
   --shadow-deep: 0 8px 48px rgba(26,20,16,0.4);
 
   --font-display: 'Cinzel Decorative', serif;
-  --font-heading: 'Cinzel', serif;
-  --font-body:    'EB Garamond', serif;
+  --font-heading: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-body:    'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
   --radius: 2px;
   --transition: 0.2s ease;
@@ -48,7 +48,8 @@
 /* ─── RESET & BASE ─── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { font-size: 17px; scroll-behavior: smooth; }
+/* Increase base size by ~18% for improved readability */
+html { font-size: 20px; scroll-behavior: smooth; }
 
 body {
   font-family: var(--font-body);
@@ -76,6 +77,28 @@ body::before {
   pointer-events: none;
   z-index: 0;
 }
+
+/* ─── PARALLAX LAYERS (subtle, performant) ─── */
+.parallax {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.parallax-layer {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+  width: 160%;
+  height: 140%;
+  background-repeat: no-repeat;
+  background-position: center top;
+  will-change: transform;
+  opacity: 0.9;
+}
+.parallax-layer.back { background-image: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.03), transparent 20%), radial-gradient(circle at 80% 60%, rgba(228,184,90,0.02), transparent 12%); filter: blur(10px); opacity:0.35; }
+.parallax-layer.mid  { background-image: linear-gradient(180deg, rgba(255,255,255,0.02), transparent 40%), repeating-linear-gradient(90deg, rgba(255,255,255,0.01), rgba(255,255,255,0.01) 40px); opacity:0.22; }
+.parallax-layer.front{ background-image: linear-gradient(180deg, rgba(0,0,0,0.0), rgba(0,0,0,0.12)); opacity:0.12; }
 
 /* ─── HEADER ─── */
 #header {
@@ -919,6 +942,11 @@ h1 {
 
 <!-- HEADER -->
 <header id="header">
+  <div class="parallax" aria-hidden="true">
+    <div class="parallax-layer back"></div>
+    <div class="parallax-layer mid"></div>
+    <div class="parallax-layer front"></div>
+  </div>
   <span class="header-sigil">✦ ✧ ✦</span>
   <h1>Pantheon Concordance</h1>
   <p class="header-sub">Syncretic Mythology &amp; Occult Genealogy</p>
@@ -997,6 +1025,25 @@ h1 {
         "When you know that all divine names are one name, the mind begins to see the map beneath the map."<br>
         — paraphrased from Pico della Mirandola, <em>Oration on the Dignity of Man</em> (1486)
       </blockquote>
+
+      <h2>Jesus — Center of All Creation</h2>
+      <p>In this concordance Jesus is presented as the central focal point of Christian cosmology and as a primary reference node in cross-traditional correspondences. Entries that map Christic analogues, typological prefigurations, or comparative motifs (dying-and-rising savior, divine Logos, world-soul mediator) are linked to this canonical node so researchers can trace parallels and divergences clearly.</p>
+
+      <h2>Angel Hierarchy (Canonical Overview)</h2>
+      <p class="about-content" style="margin-bottom:0.6rem">The following angelic orders are included as an editorial hierarchy for comparative mapping (most sources derive from biblical, pseudepigraphic, and patristic classifications):</p>
+      <div class="hier-block" style="margin-bottom:1rem">
+        <div class="trad-block-fields" style="padding:0.6rem 1rem; display:block;">
+          <div class="trad-field"><div class="trad-field-key">Seraphim</div><div class="trad-field-val">Closest to the divine presence — burning purity and love.</div></div>
+          <div class="trad-field"><div class="trad-field-key">Cherubim</div><div class="trad-field-val">Guards of sacred thresholds and bearers of divine knowledge.</div></div>
+          <div class="trad-field"><div class="trad-field-key">Thrones (Aralim)</div><div class="trad-field-val">Manifestation of divine justice and cosmic order.</div></div>
+          <div class="trad-field"><div class="trad-field-key">Dominions (Chasmalim)</div><div class="trad-field-val">Administrators of heavenly governance and delegations.</div></div>
+          <div class="trad-field"><div class="trad-field-key">Virtues</div><div class="trad-field-val">Mediators of miracles and sustaining forces of nature.</div></div>
+          <div class="trad-field"><div class="trad-field-key">Powers</div><div class="trad-field-val">Warrior-order angels, defenders against chaotic forces.</div></div>
+          <div class="trad-field"><div class="trad-field-key">Principalities</div><div class="trad-field-val">Guardians of nations, cities, and collective institutions.</div></div>
+          <div class="trad-field"><div class="trad-field-key">Archangels</div><div class="trad-field-val">High messengers and commanders (Michael, Gabriel, Raphael, etc.).</div></div>
+          <div class="trad-field"><div class="trad-field-key">Angels</div><div class="trad-field-val">Personal messengers and ministers to humanity.</div></div>
+        </div>
+      </div>
 
       <h2>Project Purpose</h2>
       <p>Pantheon Concordance is a structured research database mapping the intersection of eleven major religious, mythological, and esoteric traditions. It compiles historical syncretism — Roman <em>Interpretatio romana</em>, Patristic reframing of pagan deities, and Islamic-Hermetic correspondences — alongside grimoiric lineages, Kabbalistic systems, and planetary correspondences.</p>
@@ -1151,8 +1198,26 @@ const EDGE_COLORS = {
 const CONCORDANCE_DATA = {
   "version": "0.4",
   "last_updated": "2026-06",
-  "entity_count": 20,
+  "entity_count": 21,
   "entities": [
+    {
+      "id": "jesus-christ",
+      "canonical_name": "Jesus Christ",
+      "aliases": ["Jesus of Nazareth", "Christ", "The Logos", "Savior", "Son of God"],
+      "tradition_vectors": {
+        "biblical_angel": { "name": "Jesus", "rank": "Son", "canonical_function": "Incarnation of the Logos; Savior and Redeemer", "source_texts": ["Gospels (Matthew, Mark, Luke, John)"] },
+        "kabbalistic": { "sephira": "Tiphareth", "angelic_order": "N/A", "divine_name": "Yeshua as manifestation of the Logos", "source_texts": ["Medieval Christian Kabbalah; Christian mystical sources"] },
+        "hermetic": { "role": "Incarnate Logos; mediator of divine wisdom and reconciliation", "corpus_hermeticum_ref": "(comparative role)" },
+        "islamic": { "name_arabic": "عيسى", "name_transliterated": "ʿĪsā", "classification": "Prophet", "quranic_reference": "Quran 3:45; 5:110" },
+        "gnostic": { "name": "Christos / Redeemer", "system": "Various", "classification": "Soteriological Aeon", "source_texts": ["Nag Hammadi Gospel of Thomas; Pistis Sophia (comparative)"] }
+      },
+      "functional_domains": ["Incarnation", "Soteriology", "Logos / Divine Word", "Mediator", "Dying-and-Rising Savior"],
+      "hierarchical_level": 1,
+      "relationships": [],
+      "source_attestations": ["New Testament Gospels", "Pauline Epistles", "Nicene Creed"],
+      "research_notes": "Presented here as the canonical Christian reference node (Logos, Incarnation, Redeemer) so that typological and comparative parallels can be linked consistently.",
+      "completeness_score": 85
+    },
     {
       "id": "hermes-trismegistus",
       "canonical_name": "Hermes Trismegistus",
@@ -1174,6 +1239,7 @@ const CONCORDANCE_DATA = {
         { "target_id": "thoth", "edge_type": "SYNCRETIZED_WITH", "source_tradition": "Hellenistic Egypt", "source_text": "Herodotus Histories II.67; Iamblichus De Mysteriis VIII", "notes": "One of the most well-attested ancient syncretisms" },
         { "target_id": "metatron", "edge_type": "MANIFESTED_AS", "source_tradition": "Jewish Mysticism", "source_text": "3 Enoch 3–15", "notes": "Enoch's apotheosis into Metatron maps the Hermetic sage into the angelic hierarchy" },
         { "target_id": "idris-prophet", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Islamic Isra'iliyyat", "source_text": "al-Tabari Tarikh al-Rusul", "notes": "Identification is strong in Islamic scholarship but not universal" }
+        ,{ "target_id": "jesus-christ", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Comparative Soteriology", "source_text": "Typological and Logos parallels noted by Christian Hermeticists", "notes": "Hermes Trismegistus functions as a wisdom revealer and divine Logos-parallel in some comparative traditions." }
       ],
       "source_attestations": ["Corpus Hermeticum I–XVIII", "1 Enoch 12–16", "3 Enoch", "Quran 19:56", "Homeric Hymn IV"],
       "research_notes": "The figure of Hermes Trismegistus is itself a synthesis — the Hermetic texts were likely composed in Egypt 1st–3rd century CE, blending Platonic philosophy with Egyptian priestly wisdom attributed to Thoth.",
@@ -1217,6 +1283,7 @@ const CONCORDANCE_DATA = {
       "relationships": [
         { "target_id": "hermes-trismegistus", "edge_type": "SYNCRETIZED_WITH", "source_tradition": "Hellenistic Egypt", "source_text": "Herodotus Histories II.67", "notes": "Foundation of all Hermetic tradition" },
         { "target_id": "anubis", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Egyptian", "source_text": "Book of the Dead Ch. 125", "notes": "Both present at the Weighing of the Heart; Thoth records, Anubis guides" }
+        ,{ "target_id": "jesus-christ", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Comparative Wisdom Traditions", "source_text": "Studies on sacred scribal Logos figures", "notes": "Thoth as divine scribe parallels Logos/Christic functions in typological comparisons." }
       ],
       "source_attestations": ["Pyramid Texts", "Coffin Texts", "Book of the Dead", "Herodotus Histories II"],
       "research_notes": "Thoth's association with the moon and lunar calendar distinguishes him from Hermes' solar-mercurial qualities. The syncretism is functional, not cosmological.",
@@ -1332,6 +1399,7 @@ const CONCORDANCE_DATA = {
       "relationships": [
         { "target_id": "dionysus", "edge_type": "SYNCRETIZED_WITH", "source_tradition": "Greco-Roman Egypt", "source_text": "Herodotus II.42; Plutarch De Iside et Osiride ch. 13", "notes": "Plutarch explicitly identifies them as aspects of the same divine principle" },
         { "target_id": "horus", "edge_type": "DESCENDED_FROM", "source_tradition": "Egyptian", "source_text": "Pyramid Texts utterance 219", "notes": "Horus as son and avenger of Osiris is one of the core Egyptian mythological relationships" }
+        ,{ "target_id": "jesus-christ", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Comparative Religion", "source_text": "Scholarly literature on dying-and-rising deities", "notes": "Osiris is often compared structurally to savior/resurrection motifs found in Christian tradition; parallels are comparative, not identity claims." }
       ],
       "source_attestations": ["Pyramid Texts", "Coffin Texts", "Book of the Dead", "Plutarch De Iside et Osiride"],
       "research_notes": "Osiris is among the most cosmologically complex Egyptian deities — solar deity, grain deity, and chthonic judge simultaneously. The dying-and-rising god parallel to Christ was a central argument in early 20th century comparative religion (Fraser), now treated with more nuance.",
@@ -1374,6 +1442,7 @@ const CONCORDANCE_DATA = {
       "relationships": [
         { "target_id": "hermes-trismegistus", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Comparative Esotericism", "source_text": "Idel Kabbalah: New Perspectives", "notes": "Both are human sages translated to divine status as celestial scribes" },
         { "target_id": "michael-archangel", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Jewish Mysticism", "source_text": "3 Enoch; Talmud", "notes": "Rival traditions give primacy to each as chief of the heavenly court" }
+        ,{ "target_id": "jesus-christ", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Comparative Christology", "source_text": "Christian mystical and Kabbalistic syncretic sources", "notes": "Metatron and Christ are both mediating, salvific figures in differing traditions; comparison is typological and not doctrinal." }
       ],
       "source_attestations": ["3 Enoch", "Talmud Hagigah 15a", "Zohar I:21b", "Sefer Raziel ha-Malakh"],
       "research_notes": "Metatron's name is etymologically disputed: possibly from Greek 'meta thronon' (beside the throne), Latin 'metator' (one who marks out), or the Aramaic 'matron.' His near-divine status caused rabbinic controversy — the heretic Elisha ben Abuya saw him enthroned and concluded 'there are two powers in heaven.'",
@@ -2020,7 +2089,28 @@ function buildHierarchy() {
 //  BOOT
 // ═══════════════════════════════════════════════════════
 
+// ─── Parallax scroll handler (lightweight) ───
+function initParallax() {
+  const layers = Array.from(document.querySelectorAll('.parallax-layer'));
+  if (!layers.length) return;
+
+  function onScroll() {
+    const sc = window.scrollY || window.pageYOffset;
+    // subtle multipliers for depth illusion
+    layers.forEach((el, idx) => {
+      const speed = [0.04, 0.08, 0.14][idx] || (0.06 + idx * 0.02);
+      el.style.transform = `translateX(-50%) translateY(${sc * speed}px)`;
+    });
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  // initialize position
+  onScroll();
+}
+
+
 init(CONCORDANCE_DATA);
+initParallax();
 </script>
 
 </body>
