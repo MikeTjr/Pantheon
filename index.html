@@ -1,0 +1,2027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pantheon Concordance — Syncretic Mythology & Occult Genealogy</title>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+
+<!-- Cytoscape for graph -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.min.js"></script>
+<!-- Fuse.js for fuzzy search -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/7.0.0/fuse.min.js"></script>
+
+<style>
+/* ─── DESIGN TOKENS ─── */
+:root {
+  --ink:        #1a1410;
+  --vellum:     #f2ead8;
+  --parchment:  #e8dbbf;
+  --aged:       #d4c49a;
+  --foxed:      #c4a96e;
+  --sepia:      #8b6914;
+  --rust:       #7a3b1e;
+  --crimson:    #8b1a1a;
+  --gold:       #c9983a;
+  --gold-light: #e4b85a;
+  --dim:        #6b5a3e;
+  --faint:      #9a8760;
+
+  --border:     #c4a96e44;
+  --border-mid: #c4a96e88;
+  --border-strong: #c4a96ecc;
+
+  --shadow: 0 4px 24px rgba(26,20,16,0.25);
+  --shadow-deep: 0 8px 48px rgba(26,20,16,0.4);
+
+  --font-display: 'Cinzel Decorative', serif;
+  --font-heading: 'Cinzel', serif;
+  --font-body:    'EB Garamond', serif;
+
+  --radius: 2px;
+  --transition: 0.2s ease;
+}
+
+/* ─── RESET & BASE ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 17px; scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--ink);
+  color: var(--vellum);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
+  cursor: default;
+}
+
+/* Parchment texture overlay on body */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 34px,
+      rgba(196,169,110,0.03) 34px,
+      rgba(196,169,110,0.03) 35px
+    );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─── HEADER ─── */
+#header {
+  position: relative;
+  text-align: center;
+  padding: 3rem 2rem 2.5rem;
+  border-bottom: 1px solid var(--border-mid);
+  background: linear-gradient(180deg, #0f0d0a 0%, #1a1410 100%);
+  overflow: hidden;
+}
+
+#header::before, #header::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+#header::before { top: 1.2rem; }
+#header::after  { bottom: 1.2rem; }
+
+.header-sigil {
+  font-size: 2rem;
+  letter-spacing: 0.5em;
+  color: var(--gold);
+  opacity: 0.5;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+h1 {
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 4vw, 2.2rem);
+  font-weight: 700;
+  color: var(--gold-light);
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+  text-shadow: 0 0 40px rgba(201,152,58,0.3);
+}
+
+.header-sub {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  letter-spacing: 0.3em;
+  color: var(--faint);
+  text-transform: uppercase;
+  margin-top: 0.6rem;
+}
+
+.header-meta {
+  margin-top: 1.2rem;
+  font-size: 0.85rem;
+  color: var(--dim);
+  font-style: italic;
+}
+
+/* ─── NAV TABS ─── */
+#nav {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  background: #110f0c;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-btn {
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--faint);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 0.85rem 1.8rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.nav-btn:hover { color: var(--vellum); }
+
+.nav-btn.active {
+  color: var(--gold-light);
+  border-bottom-color: var(--gold);
+}
+
+/* ─── MAIN LAYOUT ─── */
+#app {
+  position: relative;
+  z-index: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.view { display: none; padding: 2rem 0; }
+.view.active { display: block; }
+
+/* ─── SEARCH VIEW ─── */
+.search-wrap {
+  max-width: 700px;
+  margin: 0 auto 2.5rem;
+}
+
+.search-title {
+  font-family: var(--font-heading);
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--faint);
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.search-box-wrap {
+  position: relative;
+}
+
+#search-input {
+  width: 100%;
+  background: #0f0d0a;
+  border: 1px solid var(--border-mid);
+  border-radius: var(--radius);
+  padding: 0.85rem 1.2rem 0.85rem 3rem;
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  color: var(--vellum);
+  outline: none;
+  transition: border-color var(--transition);
+}
+
+#search-input::placeholder { color: var(--dim); font-style: italic; }
+#search-input:focus { border-color: var(--gold); }
+
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--faint);
+  font-size: 1rem;
+  pointer-events: none;
+}
+
+/* ─── FILTER BAR ─── */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.filter-btn {
+  font-family: var(--font-heading);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--faint);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 1px;
+  padding: 0.3rem 0.7rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.filter-btn:hover { color: var(--vellum); border-color: var(--border-mid); }
+.filter-btn.active { color: var(--gold-light); border-color: var(--gold); background: rgba(201,152,58,0.08); }
+
+/* ─── RESULTS GRID ─── */
+.results-count {
+  font-family: var(--font-heading);
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dim);
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+#results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+/* ─── ENTITY CARD ─── */
+.entity-card {
+  background: linear-gradient(145deg, #1e1911, #17130f);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.2rem;
+  cursor: pointer;
+  transition: border-color var(--transition), transform var(--transition), box-shadow var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.entity-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
+.entity-card:hover {
+  border-color: var(--border-strong);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.entity-card:hover::before { opacity: 1; }
+
+.card-level {
+  font-family: var(--font-heading);
+  font-size: 0.58rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--sepia);
+  margin-bottom: 0.35rem;
+}
+
+.card-name {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--gold-light);
+  margin-bottom: 0.2rem;
+  line-height: 1.2;
+}
+
+.card-aliases {
+  font-size: 0.82rem;
+  color: var(--dim);
+  font-style: italic;
+  margin-bottom: 0.6rem;
+}
+
+.card-domains {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-bottom: 0.8rem;
+}
+
+.domain-tag {
+  font-family: var(--font-heading);
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--faint);
+  border: 1px solid var(--border);
+  padding: 0.15rem 0.45rem;
+  border-radius: 1px;
+}
+
+.card-traditions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.trad-pip {
+  font-family: var(--font-heading);
+  font-size: 0.55rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.15rem 0.5rem;
+  border-radius: 1px;
+  font-weight: 600;
+}
+
+/* Tradition colors */
+.trad-greek    { background: rgba(139,105,20,0.25); color: #d4a832; border: 1px solid rgba(212,168,50,0.3); }
+.trad-roman    { background: rgba(122,59,30,0.25); color: #c4703a; border: 1px solid rgba(196,112,58,0.3); }
+.trad-egyptian { background: rgba(20,100,100,0.25); color: #3ab8b8; border: 1px solid rgba(58,184,184,0.3); }
+.trad-biblical_angel { background: rgba(100,80,150,0.25); color: #a088d8; border: 1px solid rgba(160,136,216,0.3); }
+.trad-enochian { background: rgba(80,30,30,0.25); color: #c06060; border: 1px solid rgba(192,96,96,0.3); }
+.trad-kabbalistic { background: rgba(30,80,50,0.25); color: #50b870; border: 1px solid rgba(80,184,112,0.3); }
+.trad-hermetic { background: rgba(100,80,20,0.25); color: #d4aa30; border: 1px solid rgba(212,170,48,0.3); }
+.trad-gnostic  { background: rgba(60,30,80,0.25); color: #9060c0; border: 1px solid rgba(144,96,192,0.3); }
+.trad-goetic   { background: rgba(120,20,20,0.25); color: #d04040; border: 1px solid rgba(208,64,64,0.3); }
+.trad-islamic  { background: rgba(20,60,80,0.25); color: #30a0c0; border: 1px solid rgba(48,160,192,0.3); }
+.trad-planetary{ background: rgba(20,20,80,0.25); color: #6088d8; border: 1px solid rgba(96,136,216,0.3); }
+
+.card-completeness {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.7rem;
+  font-family: var(--font-heading);
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  color: var(--dim);
+}
+
+/* ─── ENTITY DETAIL PANEL ─── */
+#detail-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(10,8,6,0.85);
+  z-index: 500;
+  overflow-y: auto;
+  padding: 2rem 1rem;
+}
+
+#detail-overlay.open { display: block; }
+
+#detail-panel {
+  max-width: 860px;
+  margin: 0 auto;
+  background: linear-gradient(160deg, #1e1810, #151209);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-deep);
+  overflow: hidden;
+  animation: panel-in 0.25s ease;
+}
+
+@keyframes panel-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.detail-header {
+  background: linear-gradient(90deg, #110e09, #1e1810, #110e09);
+  padding: 1.8rem 2rem;
+  border-bottom: 1px solid var(--border-mid);
+  position: relative;
+}
+
+.detail-level {
+  font-family: var(--font-heading);
+  font-size: 0.62rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--sepia);
+  margin-bottom: 0.4rem;
+}
+
+.detail-name {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  color: var(--gold-light);
+  line-height: 1.1;
+  text-shadow: 0 0 30px rgba(201,152,58,0.25);
+}
+
+.detail-aliases {
+  margin-top: 0.4rem;
+  font-style: italic;
+  color: var(--dim);
+  font-size: 0.9rem;
+}
+
+.detail-close {
+  position: absolute;
+  top: 1.2rem;
+  right: 1.5rem;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--faint);
+  font-family: var(--font-heading);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.7rem;
+  cursor: pointer;
+  border-radius: 1px;
+  transition: var(--transition);
+}
+
+.detail-close:hover { color: var(--vellum); border-color: var(--border-mid); }
+
+.detail-body { padding: 1.8rem 2rem; }
+
+/* Sections within detail */
+.detail-section { margin-bottom: 1.8rem; }
+
+.detail-section-title {
+  font-family: var(--font-heading);
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+/* Tradition vector blocks */
+.trad-block {
+  background: rgba(0,0,0,0.25);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--gold);
+  padding: 0.9rem 1rem;
+  margin-bottom: 0.7rem;
+  border-radius: var(--radius);
+}
+
+.trad-block-name {
+  font-family: var(--font-heading);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.trad-block-fields {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.trad-field {
+  display: flex;
+  gap: 0.8rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.trad-field-key {
+  font-family: var(--font-heading);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--faint);
+  min-width: 100px;
+  padding-top: 0.15rem;
+  flex-shrink: 0;
+}
+
+.trad-field-val {
+  color: var(--vellum);
+  font-style: italic;
+}
+
+/* Relationship edges */
+.edge-item {
+  border: 1px solid var(--border);
+  padding: 0.8rem 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: var(--radius);
+  background: rgba(0,0,0,0.2);
+}
+
+.edge-type {
+  font-family: var(--font-heading);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 1px;
+  margin-bottom: 0.4rem;
+}
+
+.edge-SYNCRETIZED_WITH    { background: rgba(50,180,120,0.15); color: #50c878; border: 1px solid rgba(80,200,120,0.3); }
+.edge-FUNCTIONAL_PARALLEL { background: rgba(100,140,200,0.15); color: #80a8d8; border: 1px solid rgba(128,168,216,0.3); }
+.edge-DESCENDED_FROM      { background: rgba(200,160,60,0.15); color: #c8a040; border: 1px solid rgba(200,160,64,0.3); }
+.edge-EMANATED_FROM       { background: rgba(180,120,220,0.15); color: #b880d8; border: 1px solid rgba(184,128,216,0.3); }
+.edge-POLEMIC_EQUIVALENT  { background: rgba(200,60,60,0.15); color: #d07070; border: 1px solid rgba(200,96,96,0.3); }
+.edge-MANIFESTED_AS       { background: rgba(180,140,40,0.15); color: #c8a040; border: 1px solid rgba(200,160,64,0.3); }
+.edge-FALLEN_FORM_OF      { background: rgba(160,60,60,0.15); color: #c05050; border: 1px solid rgba(192,80,80,0.3); }
+.edge-TAUGHT_BY           { background: rgba(60,140,140,0.15); color: #50b0b0; border: 1px solid rgba(80,176,176,0.3); }
+.edge-COMMANDS            { background: rgba(140,60,40,0.15); color: #b06040; border: 1px solid rgba(176,96,64,0.3); }
+.edge-CORRESPONDS_TO      { background: rgba(60,80,160,0.15); color: #7090d0; border: 1px solid rgba(112,144,208,0.3); }
+.edge-CONTESTED_IDENTIFICATION { background: rgba(160,100,40,0.15); color: #c09040; border: 1px solid rgba(192,144,64,0.3); }
+
+.edge-target {
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  color: var(--vellum);
+  margin-bottom: 0.3rem;
+}
+
+.edge-target a {
+  color: var(--gold-light);
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: rgba(228,184,90,0.4);
+  text-underline-offset: 3px;
+}
+
+.edge-meta {
+  font-size: 0.82rem;
+  color: var(--dim);
+  line-height: 1.5;
+}
+
+.edge-notes {
+  margin-top: 0.3rem;
+  font-style: italic;
+  color: var(--faint);
+  font-size: 0.8rem;
+}
+
+/* Domain tags in detail */
+.domains-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.domain-tag-large {
+  font-family: var(--font-heading);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--faint);
+  border: 1px solid var(--border-mid);
+  padding: 0.3rem 0.7rem;
+  border-radius: 1px;
+}
+
+.research-note {
+  font-size: 0.9rem;
+  color: var(--vellum);
+  background: rgba(0,0,0,0.2);
+  border-left: 3px solid var(--sepia);
+  padding: 0.8rem 1rem;
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.source-list {
+  list-style: none;
+  padding: 0;
+}
+
+.source-list li {
+  font-size: 0.88rem;
+  color: var(--dim);
+  padding: 0.2rem 0;
+  padding-left: 1rem;
+  position: relative;
+}
+
+.source-list li::before {
+  content: '◆';
+  position: absolute;
+  left: 0;
+  color: var(--sepia);
+  font-size: 0.5rem;
+  top: 0.35rem;
+}
+
+.completeness-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 0.5rem;
+  overflow: hidden;
+}
+
+.completeness-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--sepia), var(--gold));
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+
+/* ─── GRAPH VIEW ─── */
+#graph-view {
+  position: relative;
+}
+
+.graph-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  align-items: center;
+}
+
+.graph-controls label {
+  font-family: var(--font-heading);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-right: 0.2rem;
+}
+
+.graph-btn {
+  font-family: var(--font-heading);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--faint);
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 0.3rem 0.7rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.graph-btn:hover { color: var(--vellum); }
+.graph-btn.active { color: var(--gold-light); border-color: var(--gold); background: rgba(201,152,58,0.08); }
+
+#cy-container {
+  width: 100%;
+  height: 72vh;
+  background: #0d0b08;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  position: relative;
+}
+
+#cy { width: 100%; height: 100%; }
+
+.graph-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+  padding: 0.8rem 1rem;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-heading);
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.legend-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ─── HIERARCHY VIEW ─── */
+.hierarchy-view {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.hier-level {
+  margin-bottom: 0.5rem;
+  position: relative;
+}
+
+.hier-connector {
+  text-align: center;
+  color: var(--border-mid);
+  font-size: 1.2rem;
+  margin: 0.2rem 0;
+  font-family: monospace;
+}
+
+.hier-block {
+  border: 1px solid var(--border-mid);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.hier-header {
+  background: linear-gradient(90deg, #110e09, #1a1510);
+  padding: 0.6rem 1rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.hier-level-num {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--gold);
+  line-height: 1;
+}
+
+.hier-level-title {
+  font-family: var(--font-heading);
+  font-size: 0.78rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+}
+
+.hier-entries {
+  padding: 0.8rem 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.hier-entity {
+  font-size: 0.88rem;
+  color: var(--vellum);
+  cursor: pointer;
+  padding: 0.2rem 0.5rem;
+  border-radius: 1px;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.hier-entity:hover { background: rgba(201,152,58,0.1); color: var(--gold-light); }
+
+.hier-entity .hier-trad-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  flex-shrink: 0;
+}
+
+/* ─── ABOUT VIEW ─── */
+.about-content {
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--vellum);
+}
+
+.about-content h2 {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.4rem;
+  margin: 2rem 0 1rem;
+}
+
+.about-content p { margin-bottom: 1rem; }
+
+.about-content blockquote {
+  border-left: 3px solid var(--sepia);
+  padding: 0.8rem 1.2rem;
+  margin: 1.5rem 0;
+  background: rgba(0,0,0,0.2);
+  font-style: italic;
+  color: var(--faint);
+}
+
+.schema-block {
+  background: #0d0b08;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--sepia);
+  padding: 1rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.78rem;
+  color: var(--aged);
+  overflow-x: auto;
+  margin: 1rem 0;
+  line-height: 1.6;
+  white-space: pre;
+}
+
+.status-badge {
+  display: inline-block;
+  font-family: var(--font-heading);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.6rem;
+  border-radius: 1px;
+  margin-right: 0.5rem;
+  margin-bottom: 0.3rem;
+}
+
+.status-done { background: rgba(50,150,80,0.2); color: #60c880; border: 1px solid rgba(80,200,120,0.3); }
+.status-wip  { background: rgba(180,140,40,0.2); color: #c8a040; border: 1px solid rgba(200,160,64,0.3); }
+.status-todo { background: rgba(100,100,100,0.15); color: #888; border: 1px solid rgba(128,128,128,0.3); }
+
+/* ─── EMPTY STATE ─── */
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--dim);
+}
+
+.empty-state .empty-glyph {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  opacity: 0.4;
+}
+
+.empty-state p {
+  font-style: italic;
+  font-size: 0.95rem;
+}
+
+/* ─── DIVIDER ORNAMENT ─── */
+.ornament {
+  text-align: center;
+  color: var(--sepia);
+  font-size: 0.9rem;
+  letter-spacing: 0.5em;
+  margin: 1.5rem 0;
+  opacity: 0.6;
+}
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0f0d0a; }
+::-webkit-scrollbar-thumb { background: var(--sepia); border-radius: 3px; }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 640px) {
+  .nav-btn { padding: 0.75rem 1rem; font-size: 0.6rem; letter-spacing: 0.12em; }
+  .detail-body { padding: 1.2rem; }
+  .trad-field { flex-direction: column; gap: 0.1rem; }
+  .trad-field-key { min-width: unset; }
+  h1 { font-size: 1.2rem; }
+  #results-grid { grid-template-columns: 1fr; }
+}
+
+/* ─── LOAD ANIMATION ─── */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.entity-card {
+  animation: fade-up 0.3s ease both;
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="header">
+  <span class="header-sigil">✦ ✧ ✦</span>
+  <h1>Pantheon Concordance</h1>
+  <p class="header-sub">Syncretic Mythology &amp; Occult Genealogy</p>
+  <p class="header-meta">A cross-traditional reference database — <span id="entity-count-meta">—</span> entities across 11 tradition tracks</p>
+</header>
+
+<!-- NAV -->
+<nav id="nav">
+  <button class="nav-btn active" data-view="search">⊕ Search</button>
+  <button class="nav-btn" data-view="graph">⊛ Graph</button>
+  <button class="nav-btn" data-view="hierarchy">⊗ Hierarchy</button>
+  <button class="nav-btn" data-view="about">⊜ About</button>
+</nav>
+
+<!-- APP CONTAINER -->
+<div id="app">
+
+  <!-- ── SEARCH VIEW ── -->
+  <section id="view-search" class="view active">
+
+    <div class="search-wrap">
+      <p class="search-title">Search by name, domain, tradition, or epithet</p>
+      <div class="search-box-wrap">
+        <span class="search-icon">◉</span>
+        <input type="text" id="search-input" placeholder="e.g. Hermes, psychopomp, watcher, goetic king…" autocomplete="off" spellcheck="false">
+      </div>
+    </div>
+
+    <div class="filter-bar" id="filter-bar">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="greek">Greek</button>
+      <button class="filter-btn" data-filter="roman">Roman</button>
+      <button class="filter-btn" data-filter="egyptian">Egyptian</button>
+      <button class="filter-btn" data-filter="biblical_angel">Angelology</button>
+      <button class="filter-btn" data-filter="enochian">Enochian</button>
+      <button class="filter-btn" data-filter="kabbalistic">Kabbalah</button>
+      <button class="filter-btn" data-filter="hermetic">Hermetic</button>
+      <button class="filter-btn" data-filter="gnostic">Gnostic</button>
+      <button class="filter-btn" data-filter="goetic">Goetic</button>
+      <button class="filter-btn" data-filter="islamic">Islamic</button>
+      <button class="filter-btn" data-filter="planetary">Planetary</button>
+    </div>
+
+    <p class="results-count" id="results-count"></p>
+
+    <div id="results-grid"></div>
+
+  </section>
+
+  <!-- ── GRAPH VIEW ── -->
+  <section id="view-graph" class="view">
+    <div class="graph-controls">
+      <span style="font-family:var(--font-heading);font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--faint)">Filter edges:</span>
+      <button class="graph-btn active" data-edge="all">All</button>
+      <button class="graph-btn" data-edge="SYNCRETIZED_WITH">Syncretized</button>
+      <button class="graph-btn" data-edge="FUNCTIONAL_PARALLEL">Parallel</button>
+      <button class="graph-btn" data-edge="DESCENDED_FROM">Descent</button>
+      <button class="graph-btn" data-edge="POLEMIC_EQUIVALENT">Polemic</button>
+      <button class="graph-btn" data-edge="CONTESTED_IDENTIFICATION">Contested</button>
+      <button class="graph-btn" data-edge="COMMANDS">Commands</button>
+      <span style="margin-left:auto;font-family:var(--font-heading);font-size:0.6rem;color:var(--dim)">Click node to view • Scroll to zoom</span>
+    </div>
+    <div id="cy-container"><div id="cy"></div></div>
+    <div class="graph-legend" id="graph-legend"></div>
+  </section>
+
+  <!-- ── HIERARCHY VIEW ── -->
+  <section id="view-hierarchy" class="view">
+    <div class="hierarchy-view" id="hierarchy-container"></div>
+  </section>
+
+  <!-- ── ABOUT VIEW ── -->
+  <section id="view-about" class="view">
+    <div class="about-content">
+      <blockquote>
+        "When you know that all divine names are one name, the mind begins to see the map beneath the map."<br>
+        — paraphrased from Pico della Mirandola, <em>Oration on the Dignity of Man</em> (1486)
+      </blockquote>
+
+      <h2>Project Purpose</h2>
+      <p>Pantheon Concordance is a structured research database mapping the intersection of eleven major religious, mythological, and esoteric traditions. It compiles historical syncretism — Roman <em>Interpretatio romana</em>, Patristic reframing of pagan deities, and Islamic-Hermetic correspondences — alongside grimoiric lineages, Kabbalistic systems, and planetary correspondences.</p>
+      <p>The goal is a unified, searchable network of correspondences: the kind of cross-reference system used by Renaissance occultists like Agrippa and Ficino, and by modern comparative mythology researchers.</p>
+
+      <h2>Methodology</h2>
+      <p>Three principles govern every entry:</p>
+      <p><strong style="color:var(--gold-light)">1. Source transparency.</strong> Every correspondence is tagged with the tradition and text that makes the claim. The database distinguishes between ancient explicit syncretisms, structural parallels identified by modern scholars, and polemical equivalences made by one tradition about another.</p>
+      <p><strong style="color:var(--gold-light)">2. Contested claims are preserved, not resolved.</strong> Where scholars disagree — on Enochian identification, Goetic derivations, Islamic Isra'iliyyat — both positions are stored and flagged. The database does not adjudicate.</p>
+      <p><strong style="color:var(--gold-light)">3. This is history of ideas, not theology.</strong> Mapping Augustine's claim that Zeus is a demon does not endorse that theology. Every tradition is treated with equal scholarly care and none as uniquely authoritative.</p>
+
+      <h2>Data Model</h2>
+      <div class="schema-block">Entity → {
+  id, canonical_name, aliases
+  tradition_vectors: {
+    greek, roman, egyptian,
+    biblical_angel, enochian,
+    kabbalistic, hermetic, gnostic,
+    goetic, islamic, planetary
+  }
+  functional_domains[]
+  hierarchical_level (1–7)
+  relationships[] → {
+    target_id, edge_type,
+    source_tradition, source_text, notes
+  }
+  source_attestations[]
+  research_notes
+  completeness_score (0–100)
+}</div>
+
+      <h2>Current Status</h2>
+      <p>
+        <span class="status-badge status-done">✓ Done</span> Schema v0.4 finalized<br>
+        <span class="status-badge status-done">✓ Done</span> 11 tradition tracks defined<br>
+        <span class="status-badge status-done">✓ Done</span> 20 seed entities populated<br>
+        <span class="status-badge status-done">✓ Done</span> Search, graph, hierarchy UI<br>
+        <span class="status-badge status-wip">In Progress</span> Full Ars Goetia 72 spirits<br>
+        <span class="status-badge status-wip">In Progress</span> Complete Greek Olympians<br>
+        <span class="status-badge status-todo">Planned</span> Full Egyptian Ennead &amp; Ogdoad<br>
+        <span class="status-badge status-todo">Planned</span> All 20 named Enochian Watchers<br>
+        <span class="status-badge status-todo">Planned</span> Kabbalistic Sefirot + Qliphoth complete<br>
+        <span class="status-badge status-todo">Planned</span> Citation layer per relationship edge<br>
+        <span class="status-badge status-todo">Planned</span> Tradition-lens toggle on graph<br>
+        <span class="status-badge status-todo">Planned</span> Mesopotamian tradition track<br>
+        <span class="status-badge status-todo">Planned</span> Norse correspondence layer
+      </p>
+
+      <h2>Deployment</h2>
+      <p>Pure static files. No build step. No server required. Deploy via GitHub Pages: push to <code style="color:var(--aged);font-family:monospace">main</code>, enable Pages from repository settings, done. Add entities by dropping new JSON files in <code style="color:var(--aged);font-family:monospace">/data/entities/</code> and rebuilding <code style="color:var(--aged);font-family:monospace">concordance.json</code>.</p>
+
+      <h2>Primary Sources</h2>
+      <p style="color:var(--dim);font-size:0.88rem">Hesiod's <em>Theogony</em> · Homeric Hymns · <em>1 Enoch</em> · Pseudo-Dionysius <em>De Coelesti Hierarchia</em> · <em>Corpus Hermeticum</em> · Nag Hammadi Library · Agrippa's <em>Three Books of Occult Philosophy</em> · <em>Lemegeton Clavicula Salomonis</em> (Ars Goetia) · <em>Sefer ha-Zohar</em> · <em>Picatrix</em> · Plutarch's <em>De Iside et Osiride</em> · Egyptian <em>Book of the Dead</em> · Dead Sea Scrolls (War Scroll, Book of Giants) · <em>Quran</em> · al-Tabari's <em>Tarikh</em></p>
+
+      <div class="ornament">✦ ✧ ✦</div>
+      <p style="font-size:0.82rem;color:var(--dim);text-align:center;font-style:italic">This repository is a tool for comparative literature, history of ideas, and esoteric studies. It maps ideological lineages, symbolic syncretism, and historical claims — not theological claims about their truth.</p>
+    </div>
+  </section>
+
+</div><!-- /#app -->
+
+<!-- ENTITY DETAIL OVERLAY -->
+<div id="detail-overlay">
+  <div id="detail-panel">
+    <div class="detail-header">
+      <p class="detail-level" id="d-level"></p>
+      <h2 class="detail-name" id="d-name"></h2>
+      <p class="detail-aliases" id="d-aliases"></p>
+      <button class="detail-close" onclick="closeDetail()">✕ Close</button>
+    </div>
+    <div class="detail-body">
+      <div class="detail-section" id="d-domains-section">
+        <p class="detail-section-title">Functional Domains</p>
+        <div class="domains-list" id="d-domains"></div>
+      </div>
+      <div class="detail-section" id="d-traditions-section">
+        <p class="detail-section-title">Tradition Vectors</p>
+        <div id="d-traditions"></div>
+      </div>
+      <div class="detail-section" id="d-relations-section">
+        <p class="detail-section-title">Relationships</p>
+        <div id="d-relations"></div>
+      </div>
+      <div class="detail-section" id="d-sources-section">
+        <p class="detail-section-title">Primary Source Attestations</p>
+        <ul class="source-list" id="d-sources"></ul>
+      </div>
+      <div class="detail-section" id="d-notes-section">
+        <p class="detail-section-title">Research Notes</p>
+        <p class="research-note" id="d-notes"></p>
+      </div>
+      <div class="detail-section">
+        <p class="detail-section-title">Entry Completeness</p>
+        <div class="completeness-bar"><div class="completeness-fill" id="d-completeness"></div></div>
+        <p style="font-size:0.78rem;color:var(--dim);margin-top:0.4rem" id="d-completeness-label"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  DATA + STATE
+// ═══════════════════════════════════════════════════════
+
+let DB = { entities: [] };
+let fuse = null;
+let cy = null;
+let currentFilter = 'all';
+let currentEdgeFilter = 'all';
+
+const TRADITION_LABELS = {
+  greek: 'Greek', roman: 'Roman', egyptian: 'Egyptian',
+  biblical_angel: 'Angelology', enochian: 'Enochian',
+  kabbalistic: 'Kabbalah', hermetic: 'Hermetic', gnostic: 'Gnostic',
+  goetic: 'Goetic', islamic: 'Islamic', planetary: 'Planetary'
+};
+
+const LEVEL_LABELS = {
+  1: 'Level I — The Absolute / Primordial Source',
+  2: 'Level II — First Emanations / Supreme Principles',
+  3: 'Level III — Sovereign Rulers / Cosmic Archons',
+  4: 'Level IV — Mediators, Messengers & Liminal Figures',
+  5: 'Level V — Powers of Nature / Domain Deities',
+  6: 'Level VI — Grimoiric Hierarchy / Named Spirits',
+  7: 'Level VII — Regional, Chthonic & Folkloric'
+};
+
+const NODE_COLORS = {
+  greek: '#d4a832', roman: '#c4703a', egyptian: '#3ab8b8',
+  biblical_angel: '#a088d8', enochian: '#c06060',
+  kabbalistic: '#50b870', hermetic: '#d4aa30', gnostic: '#9060c0',
+  goetic: '#d04040', islamic: '#30a0c0', planetary: '#6088d8',
+  default: '#c9983a'
+};
+
+const EDGE_COLORS = {
+  SYNCRETIZED_WITH: '#50c878',
+  FUNCTIONAL_PARALLEL: '#80a8d8',
+  DESCENDED_FROM: '#c8a040',
+  EMANATED_FROM: '#b880d8',
+  POLEMIC_EQUIVALENT: '#d07070',
+  MANIFESTED_AS: '#c8a040',
+  FALLEN_FORM_OF: '#c05050',
+  TAUGHT_BY: '#50b0b0',
+  COMMANDS: '#b06040',
+  CORRESPONDS_TO: '#7090d0',
+  CONTESTED_IDENTIFICATION: '#c09040'
+};
+
+// ─── Inline data (embedded for single-file GitHub Pages deployment) ───
+const CONCORDANCE_DATA = {
+  "version": "0.4",
+  "last_updated": "2026-06",
+  "entity_count": 20,
+  "entities": [
+    {
+      "id": "hermes-trismegistus",
+      "canonical_name": "Hermes Trismegistus",
+      "aliases": ["Thrice-Greatest Hermes", "The Antediluvian Sage", "Mercurius ter Maximus"],
+      "tradition_vectors": {
+        "greek": { "name": "Hermes", "class": "Olympian", "epithets": ["Psychopompos", "Logios", "Chthonios", "Trismegistos"], "source_texts": ["Homeric Hymn IV", "Hesiod Theogony 938"] },
+        "roman": { "name": "Mercury", "interpretatio_type": "Direct", "source_texts": ["Ovid Metamorphoses I", "Virgil Aeneid IV"] },
+        "egyptian": { "name": "Thoth", "theology": "Hermopolitan", "ennead_position": "Scribe of the Gods", "source_texts": ["Book of the Dead Ch. 1", "Coffin Texts"] },
+        "biblical_angel": { "name": "Metatron", "rank": "Archangel", "canonical_function": "Heavenly scribe, divine chancellor, angel of the presence", "source_texts": ["3 Enoch", "Talmud Hagigah 15a"] },
+        "enochian": { "name": "Enoch", "classification": "Other", "enoch_book": "1 Enoch", "sin_or_role": "Translated to heaven without death; became Metatron", "chapter_reference": "1 Enoch 12–16, 70–71" },
+        "kabbalistic": { "sephira": "Hod", "angelic_order": "Bene Elohim", "divine_name": "Elohim Tzabaoth", "source_texts": ["Sefer Yetzirah", "Zohar I:21b"] },
+        "hermetic": { "role": "Revealer of divine wisdom; author of Hermetic corpus", "corpus_hermeticum_ref": "Poimandres (CH I)", "agrippan_attribution": "Rules over all writing, magic, and hidden knowledge", "alchemical_symbol": "Quicksilver / Mercury" },
+        "islamic": { "name_arabic": "إدريس", "name_transliterated": "Idris", "classification": "Prophet", "quranic_reference": "Quran 19:56–57, 21:85", "isra_iliyyat_link": "Identified with Enoch in classical Islamic scholarship (al-Tabari, al-Tha'labi)" },
+        "planetary": { "planet": "Mercury", "zodiac_rulership": ["Gemini", "Virgo"], "day_of_week": "Wednesday", "metal": "Quicksilver", "color": "Orange / Mixed", "agrippa_book_ref": "OCPhil II.10" }
+      },
+      "functional_domains": ["Psychopomp", "Divine Scribe", "Messenger", "Magic and Sorcery", "Sacred Geometry", "Astrology", "Alchemy"],
+      "hierarchical_level": 4,
+      "relationships": [
+        { "target_id": "thoth", "edge_type": "SYNCRETIZED_WITH", "source_tradition": "Hellenistic Egypt", "source_text": "Herodotus Histories II.67; Iamblichus De Mysteriis VIII", "notes": "One of the most well-attested ancient syncretisms" },
+        { "target_id": "metatron", "edge_type": "MANIFESTED_AS", "source_tradition": "Jewish Mysticism", "source_text": "3 Enoch 3–15", "notes": "Enoch's apotheosis into Metatron maps the Hermetic sage into the angelic hierarchy" },
+        { "target_id": "idris-prophet", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Islamic Isra'iliyyat", "source_text": "al-Tabari Tarikh al-Rusul", "notes": "Identification is strong in Islamic scholarship but not universal" }
+      ],
+      "source_attestations": ["Corpus Hermeticum I–XVIII", "1 Enoch 12–16", "3 Enoch", "Quran 19:56", "Homeric Hymn IV"],
+      "research_notes": "The figure of Hermes Trismegistus is itself a synthesis — the Hermetic texts were likely composed in Egypt 1st–3rd century CE, blending Platonic philosophy with Egyptian priestly wisdom attributed to Thoth.",
+      "completeness_score": 92
+    },
+    {
+      "id": "azazel",
+      "canonical_name": "Azazel",
+      "aliases": ["Azael", "Azaziel", "Hazazel", "Azzazel"],
+      "tradition_vectors": {
+        "greek": { "name": "Prometheus", "class": "Titan", "epithets": ["Pyrphoros (Fire-bearer)", "Epimetheus (Afterthought's brother)"], "source_texts": ["Hesiod Theogony 521–616", "Aeschylus Prometheus Bound"] },
+        "biblical_angel": { "name": "Azazel", "rank": "Angel", "canonical_function": "Levitical scapegoat recipient; wilderness entity", "source_texts": ["Leviticus 16:8–10", "Mishnah Yoma"] },
+        "enochian": { "name": "Azazel", "classification": "Fallen Watcher", "enoch_book": "1 Enoch", "sin_or_role": "Taught humanity metalworking, weapons, cosmetics, and sorcery. Bound under desert of Dudael until final judgment.", "chapter_reference": "1 Enoch 8:1–3, 10:4–8" },
+        "kabbalistic": { "sephira": "Geburah", "qliphoth_counterpart": "Golachab", "angelic_order": "Fallen Seraphim (per some traditions)", "source_texts": ["Zohar II:237b", "Sefer ha-Bahir"] },
+        "planetary": { "planet": "Mars", "metal": "Iron", "color": "Red", "agrippa_book_ref": "OCPhil II.10" }
+      },
+      "functional_domains": ["Forbidden Knowledge Transmission", "Weapons and War Technology", "Scapegoat Sacrifice", "Rebellion Against Divine Order", "Metalcraft"],
+      "hierarchical_level": 3,
+      "relationships": [
+        { "target_id": "prometheus", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Comparative Mythology", "source_text": "Forsyth The Old Enemy (1987); Hanegraaff Fallen Angels (2010)", "notes": "Structural parallel — both transmit forbidden technology and are punished. Not claimed by any ancient source." },
+        { "target_id": "semjaza", "edge_type": "COMMANDS", "source_tradition": "Enochian", "source_text": "1 Enoch 6–8", "notes": "Azazel is among the 200 Watchers; his sin is treated as more corrupting than Semjaza's" },
+        { "target_id": "lucifer", "edge_type": "CONTESTED_IDENTIFICATION", "source_tradition": "Christian Demonology", "source_text": "Various Early Modern grimoires", "notes": "Some traditions conflate; treated as distinct entities here per primary Enochian text" }
+      ],
+      "source_attestations": ["Leviticus 16", "1 Enoch 6–10", "Apocalypse of Abraham 13–14", "Zohar II:237b"],
+      "research_notes": "The Leviticus 'Azazel' may be a place-name, a function, or a proper demon name — heavily contested. See Stökl Ben Ezra (2003) for the definitive treatment.",
+      "completeness_score": 71
+    },
+    {
+      "id": "thoth",
+      "canonical_name": "Thoth",
+      "aliases": ["Djehuty", "Tahuti", "Zehuti", "Lord of Khemenu"],
+      "tradition_vectors": {
+        "greek": { "name": "Hermes", "class": "Olympian", "epithets": ["Psychopompos", "Trismegistos"], "source_texts": ["Herodotus Histories II.67"] },
+        "roman": { "name": "Mercury", "interpretatio_type": "Direct", "source_texts": ["Cicero De Natura Deorum III"] },
+        "egyptian": { "name": "Thoth", "theology": "Hermopolitan", "ennead_position": "Scribe and Vizier of Ra; arbiter of the gods", "source_texts": ["Book of the Dead", "Coffin Texts", "Pyramid Texts"] },
+        "hermetic": { "role": "Divine origin of all Hermetic wisdom", "corpus_hermeticum_ref": "Asclepius; Kore Kosmou (Stobaean Excerpts)", "alchemical_symbol": "Quicksilver" },
+        "planetary": { "planet": "Mercury", "zodiac_rulership": ["Gemini", "Virgo"], "day_of_week": "Wednesday", "metal": "Quicksilver", "color": "Yellow / Mixed" }
+      },
+      "functional_domains": ["Divine Scribe", "Lord of Writing and Language", "Magic and Heka", "Lunar Calculation", "Weighing of the Soul"],
+      "hierarchical_level": 4,
+      "relationships": [
+        { "target_id": "hermes-trismegistus", "edge_type": "SYNCRETIZED_WITH", "source_tradition": "Hellenistic Egypt", "source_text": "Herodotus Histories II.67", "notes": "Foundation of all Hermetic tradition" },
+        { "target_id": "anubis", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Egyptian", "source_text": "Book of the Dead Ch. 125", "notes": "Both present at the Weighing of the Heart; Thoth records, Anubis guides" }
+      ],
+      "source_attestations": ["Pyramid Texts", "Coffin Texts", "Book of the Dead", "Herodotus Histories II"],
+      "research_notes": "Thoth's association with the moon and lunar calendar distinguishes him from Hermes' solar-mercurial qualities. The syncretism is functional, not cosmological.",
+      "completeness_score": 78
+    },
+    {
+      "id": "lucifer",
+      "canonical_name": "Lucifer / The Light-Bringer",
+      "aliases": ["Helel ben Shahar", "Phosphorus", "Morning Star", "Son of the Dawn"],
+      "tradition_vectors": {
+        "greek": { "name": "Phosphoros / Eosphoros", "class": "Other", "epithets": ["Light-Bringer", "Dawn-Bearer"], "source_texts": ["Hesiod Theogony 381", "Homeric Hymn to Selene"] },
+        "roman": { "name": "Lucifer", "interpretatio_type": "Direct", "source_texts": ["Ovid Metamorphoses II.115", "Virgil Aeneid II"] },
+        "biblical_angel": { "name": "Helel ben Shahar", "rank": "Angel", "canonical_function": "Taunt-poem figure; later tradition developed into fallen angel", "source_texts": ["Isaiah 14:12–15"] },
+        "enochian": { "name": "Gadreel / Shemihaza tradition", "classification": "Fallen Watcher", "enoch_book": "1 Enoch", "sin_or_role": "Some traditions link the Light-Bringer motif to Gadreel who led Eve astray", "chapter_reference": "1 Enoch 69:6" },
+        "kabbalistic": { "sephira": "Tiphareth", "qliphoth_counterpart": "Thagirion (Belial / Sorath)", "divine_name": "YHVH Eloah ve-Da'ath", "source_texts": ["Zohar III:227a", "Etz Chaim"] },
+        "gnostic": { "name": "Sophia (Lower Aspect) / Yaldabaoth (pride parallel)", "system": "Valentinian", "classification": "Archon", "source_texts": ["Apocryphon of John", "On the Origin of the World"] },
+        "goetic": { "name": "Lucifer", "rank": "King", "legions": 0, "primary_functions": ["Illumination", "Pride", "Rebellion"], "grimoire_source": "Grand Grimoire" },
+        "planetary": { "planet": "Venus", "zodiac_rulership": ["Taurus", "Libra"], "day_of_week": "Friday", "metal": "Copper", "color": "Green / Emerald" }
+      },
+      "functional_domains": ["Forbidden Knowledge", "Pride and Self-Deification", "Rebellion Against Hierarchy", "Morning Star / Dawn", "Illumination"],
+      "hierarchical_level": 3,
+      "relationships": [
+        { "target_id": "azazel", "edge_type": "CONTESTED_IDENTIFICATION", "source_tradition": "Christian Demonology", "source_text": "Origen De Principiis I.5", "notes": "Conflation common in later Christian demonology; primary sources treat separately" },
+        { "target_id": "yaldabaoth", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Gnosticism", "source_text": "Apocryphon of John NHC II.1", "notes": "Both represent misappropriation of divine light; structural not claimed parallel" },
+        { "target_id": "prometheus", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Comparative Mythology", "source_text": "Forsyth The Old Enemy (1987)", "notes": "Fire-bringer parallel widely noted by scholars" }
+      ],
+      "source_attestations": ["Isaiah 14:12", "Luke 10:18", "Revelation 12:9", "Grand Grimoire", "Zohar III:227a"],
+      "research_notes": "Isaiah 14:12 is a taunt directed at the King of Babylon; the 'fallen angel' interpretation is entirely a later Christian development, not present in the Hebrew text. The Latin 'Lucifer' simply means 'morning star.'",
+      "completeness_score": 83
+    },
+    {
+      "id": "zeus-jupiter",
+      "canonical_name": "Zeus / Jupiter",
+      "aliases": ["Jupiter Optimus Maximus", "Zeus Olympios", "Jove", "Dias"],
+      "tradition_vectors": {
+        "greek": { "name": "Zeus", "class": "Olympian", "epithets": ["Olympios", "Kronides", "Pater Andrōn te Theōn te", "Keraunos (Thunderer)"], "source_texts": ["Hesiod Theogony 886–929", "Homer Iliad I", "Homeric Hymn to Zeus"] },
+        "roman": { "name": "Jupiter", "interpretatio_type": "Direct", "source_texts": ["Virgil Aeneid I", "Ovid Metamorphoses I"] },
+        "egyptian": { "name": "Amun-Ra", "theology": "Theban", "ennead_position": "King of the Gods", "source_texts": ["Hymn to Amun (Papyrus Leiden I 350)"] },
+        "biblical_angel": { "name": "Beelzebub (Patristic identification)", "rank": "Power", "canonical_function": "Patristic demonology identified Baal/Zeus as Beelzebub, Lord of Flies", "source_texts": ["Origen Contra Celsum VII", "Augustine City of God II"] },
+        "kabbalistic": { "sephira": "Chesed", "angelic_order": "Chasmalim", "divine_name": "El", "source_texts": ["Zohar", "Sefer Yetzirah"] },
+        "gnostic": { "name": "Yaldabaoth / Demiurge parallel", "system": "Sethian", "classification": "Demiurge", "source_texts": ["Apocryphon of John"], "notes": "Gnostic systems often map the chief Archon onto the sky-god of competing traditions" },
+        "goetic": { "name": "Bael", "rank": "King", "legions": 66, "primary_functions": ["Invisibility", "Cunning speech", "Commanding spirits"], "grimoire_source": "Ars Goetia" },
+        "islamic": { "name_arabic": "بعل", "name_transliterated": "Ba'al", "classification": "Other", "quranic_reference": "Quran 37:125 (Baal mentioned as false god)" },
+        "planetary": { "planet": "Jupiter", "zodiac_rulership": ["Sagittarius", "Pisces"], "day_of_week": "Thursday", "metal": "Tin", "color": "Blue / Royal", "agrippa_book_ref": "OCPhil II.10" }
+      },
+      "functional_domains": ["Sky Sovereignty", "Thunder and Lightning", "Law and Justice", "Divine Kingship", "Oaths and Covenants"],
+      "hierarchical_level": 3,
+      "relationships": [
+        { "target_id": "baal-hadad", "edge_type": "SYNCRETIZED_WITH", "source_tradition": "Hellenistic Syria", "source_text": "Philo of Byblos Phoenician History (via Eusebius)", "notes": "Ba'al Hadad and Zeus were formally identified throughout the Hellenistic Near East" },
+        { "target_id": "osiris", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Greco-Roman Egypt", "source_text": "Plutarch De Iside et Osiride", "notes": "Both divine kings; Plutarch himself explores the comparison" }
+      ],
+      "source_attestations": ["Hesiod Theogony", "Homer Iliad I", "Virgil Aeneid I", "Pausanias Description of Greece V"],
+      "research_notes": "The Patristic identification of Zeus/Jupiter with demonic forces (Beelzebub, etc.) is a polemical move documented extensively from Justin Martyr onward and is tagged POLEMIC_EQUIVALENT in all edges.",
+      "completeness_score": 88
+    },
+    {
+      "id": "hecate",
+      "canonical_name": "Hecate",
+      "aliases": ["Hekate", "Trivia", "Antaia", "Brimo", "Queen of the Night"],
+      "tradition_vectors": {
+        "greek": { "name": "Hecate", "class": "Chthonic", "epithets": ["Trioditis (of the three ways)", "Phosphoros (light-bearing)", "Chthonia", "Kleidouchos (key-holder)"], "source_texts": ["Hesiod Theogony 411–452", "Homeric Hymn to Demeter", "Apollonius Rhodius Argonautica III"] },
+        "roman": { "name": "Trivia", "interpretatio_type": "Direct", "source_texts": ["Virgil Aeneid VI", "Ovid Metamorphoses VII"] },
+        "egyptian": { "name": "Nephthys", "theology": "Heliopolitan", "ennead_position": "Lady of the Temple Enclosure", "source_texts": ["Pyramid Texts 606"] },
+        "kabbalistic": { "sephira": "Malkuth", "qliphoth_counterpart": "Lilith / Nahemah", "angelic_order": "Ashim (souls of fire)", "source_texts": ["Zohar I:55a", "Treatise on the Left Emanation"] },
+        "hermetic": { "role": "World-Soul in its chthonic aspect; guardian of thresholds", "corpus_hermeticum_ref": "CH XVI (on daemons)", "alchemical_symbol": "Salt (chthonic fixity)" },
+        "planetary": { "planet": "Moon", "zodiac_rulership": ["Cancer"], "day_of_week": "Monday", "metal": "Silver", "color": "Silver / Black", "agrippa_book_ref": "OCPhil II.10" }
+      },
+      "functional_domains": ["Crossroads and Liminal Spaces", "Witchcraft and Magic", "Lunar Phases", "Necromancy", "Dogs and Night Animals", "Herbology and Poison"],
+      "hierarchical_level": 5,
+      "relationships": [
+        { "target_id": "lilith", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Western Esotericism", "source_text": "Agrippa OCPhil III; Renaissance grimoires", "notes": "Both rule the nocturnal feminine, crossroads, and sorcery; identification made in early modern occultism" },
+        { "target_id": "isis", "edge_type": "SYNCRETIZED_WITH", "source_tradition": "Hellenistic Egypt", "source_text": "PGM (Greek Magical Papyri) multiple", "notes": "In the magical papyri Hecate and Isis are frequently invoked as the same goddess" }
+      ],
+      "source_attestations": ["Hesiod Theogony 411–452", "Greek Magical Papyri (PGM)", "Chaldean Oracles", "Virgil Aeneid VI"],
+      "research_notes": "Hesiod grants Hecate unusual prominence for a pre-Olympian figure, giving her dominion over earth, sea, and sky. Her triple-form iconography likely postdates Hesiod.",
+      "completeness_score": 74
+    },
+    {
+      "id": "michael-archangel",
+      "canonical_name": "Michael",
+      "aliases": ["Mikha'el", "Mikhail", "Saint Michael", "The Prince of the Host"],
+      "tradition_vectors": {
+        "biblical_angel": { "name": "Michael", "rank": "Archangel", "canonical_function": "Warrior archangel, protector of Israel, commander of divine armies", "source_texts": ["Daniel 10:13, 12:1", "Revelation 12:7", "Jude 1:9"] },
+        "enochian": { "name": "Michael", "classification": "Archangel", "enoch_book": "1 Enoch", "sin_or_role": "One of the four presences before God; binds Azazel and Semjaza", "chapter_reference": "1 Enoch 9:1, 10:11–13, 54:6" },
+        "kabbalistic": { "sephira": "Chesed", "angelic_order": "Seraphim (per some Kabbalistic sources)", "divine_name": "El", "source_texts": ["Zohar I:149a", "Sefer Raziel ha-Malakh"] },
+        "hermetic": { "role": "Solar warrior principle; guardian against adverse forces", "agrippa_book_ref": "OCPhil III.24" },
+        "islamic": { "name_arabic": "ميكائيل", "name_transliterated": "Mika'il", "classification": "Malak", "quranic_reference": "Quran 2:98", "isra_iliyyat_link": "One of the four cardinal angels; rules over rain and sustenance in Islamic angelology" },
+        "planetary": { "planet": "Sun", "color": "Gold / White", "metal": "Gold", "day_of_week": "Sunday" }
+      },
+      "functional_domains": ["Divine Warfare", "Protection of the Righteous", "Weighing of Souls (Catholic tradition)", "Binding of Fallen Angels", "Champion of God"],
+      "hierarchical_level": 3,
+      "relationships": [
+        { "target_id": "metatron", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Jewish Mysticism", "source_text": "3 Enoch; Talmud Yoma 77a", "notes": "Both function as chief angelic intercessors; different traditions give the prime position to each" },
+        { "target_id": "horus", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Comparative Religion", "source_text": "Assmann Egyptian Theology; Hornung Conceptions of God", "notes": "Both are divine warrior sons who battle the embodiment of chaos (Set / Satan)" }
+      ],
+      "source_attestations": ["Daniel 10–12", "1 Enoch 9–10", "Revelation 12", "Quran 2:98", "3 Enoch"],
+      "research_notes": "Michael's role expands significantly from the Hebrew Bible through Enochian literature and into Christian angelology. His identification as 'prince of the host' is established in Daniel; his warrior role against Satan is Revelation.",
+      "completeness_score": 80
+    },
+    {
+      "id": "osiris",
+      "canonical_name": "Osiris",
+      "aliases": ["Asar", "Wsir", "Onnophris (the eternally good)", "Lord of the Duat"],
+      "tradition_vectors": {
+        "greek": { "name": "Dionysus (partial)", "class": "Olympian", "epithets": ["Dismembered god", "Dying and rising deity"], "source_texts": ["Plutarch De Iside et Osiride", "Herodotus Histories II.42"] },
+        "roman": { "name": "Bacchus / Dis Pater (partial)", "interpretatio_type": "Partial", "source_texts": ["Plutarch De Iside et Osiride"] },
+        "egyptian": { "name": "Osiris", "theology": "Heliopolitan", "ennead_position": "Son of Geb and Nut; Husband of Isis; Father of Horus; Lord of the Dead", "source_texts": ["Pyramid Texts", "Book of the Dead", "Coffin Texts"] },
+        "kabbalistic": { "sephira": "Tiphareth", "qliphoth_counterpart": "Thagirion", "divine_name": "YHVH Eloah ve-Da'ath", "source_texts": ["Golden Dawn correspondence tables (Liber 777)"] },
+        "planetary": { "planet": "Sun", "color": "Gold / Green", "metal": "Gold", "day_of_week": "Sunday" }
+      },
+      "functional_domains": ["Death and Resurrection", "Underworld Sovereignty", "Agriculture and Grain", "Divine Kingship", "Judgment of the Dead"],
+      "hierarchical_level": 3,
+      "relationships": [
+        { "target_id": "dionysus", "edge_type": "SYNCRETIZED_WITH", "source_tradition": "Greco-Roman Egypt", "source_text": "Herodotus II.42; Plutarch De Iside et Osiride ch. 13", "notes": "Plutarch explicitly identifies them as aspects of the same divine principle" },
+        { "target_id": "horus", "edge_type": "DESCENDED_FROM", "source_tradition": "Egyptian", "source_text": "Pyramid Texts utterance 219", "notes": "Horus as son and avenger of Osiris is one of the core Egyptian mythological relationships" }
+      ],
+      "source_attestations": ["Pyramid Texts", "Coffin Texts", "Book of the Dead", "Plutarch De Iside et Osiride"],
+      "research_notes": "Osiris is among the most cosmologically complex Egyptian deities — solar deity, grain deity, and chthonic judge simultaneously. The dying-and-rising god parallel to Christ was a central argument in early 20th century comparative religion (Fraser), now treated with more nuance.",
+      "completeness_score": 72
+    },
+    {
+      "id": "lilith",
+      "canonical_name": "Lilith",
+      "aliases": ["Lilit", "Laylah", "Labartu (possible cognate)", "Queen of Demons"],
+      "tradition_vectors": {
+        "biblical_angel": { "name": "Lilit", "rank": "Angel", "canonical_function": "Night creature; appears once in Isaiah 34:14 as wilderness demon", "source_texts": ["Isaiah 34:14"] },
+        "enochian": { "name": "Naamah (related tradition)", "classification": "Other", "enoch_book": "1 Enoch", "sin_or_role": "Naamah identified in some Kabbalistic texts as one of the Watcher-brides; associated with Lilith as dual night-queens", "chapter_reference": "1 Enoch 7:1 (general)" },
+        "kabbalistic": { "sephira": "Malkuth", "qliphoth_counterpart": "Lilith / Nahemah (Lilith IS the Qliphah of Malkuth)", "divine_name": "Adonai ha-Aretz (positive); Lilith (shadow)", "source_texts": ["Zohar I:55a, III:19a", "Treatise on the Left Emanation (Kabbalist Isaac ben Jacob ha-Kohen)", "Alphabet of Ben Sira (medieval)"] },
+        "hermetic": { "role": "Nocturnal feminine force; embodiment of unbound female power", "alchemical_symbol": "Night, untransformed matter" },
+        "planetary": { "planet": "Moon", "zodiac_rulership": ["Scorpio (partial)"], "day_of_week": "Monday", "metal": "Silver", "color": "Black / Crimson" }
+      },
+      "functional_domains": ["Night and Darkness", "Unbound Feminine", "Child Mortality Demon (folk tradition)", "Sexual Sorcery", "Crossroads (with Hecate)", "First Wife of Adam (Midrashic)"],
+      "hierarchical_level": 5,
+      "relationships": [
+        { "target_id": "hecate", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Western Esotericism", "source_text": "Agrippa OCPhil III; Picatrix", "notes": "Both rule nocturnal feminine power and witchcraft; identification made explicitly in early modern occultism" },
+        { "target_id": "ereshkigal", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Comparative Mythology", "source_text": "Black The Literature of Ancient Sumer", "notes": "Possible Mesopotamian origin of Lilith figure debated; Ereshkigal as dark-feminine archetype parallel" }
+      ],
+      "source_attestations": ["Isaiah 34:14", "Zohar I:55a", "Alphabet of Ben Sira", "Treatise on the Left Emanation"],
+      "research_notes": "Lilith as 'first wife of Adam' is medieval legend, not biblical — originating in the Alphabet of Ben Sira (7th–10th century CE). Her Babylonian antecedent Ardat Lili is debated. The Kabbalistic Lilith is the most developed form.",
+      "completeness_score": 68
+    },
+    {
+      "id": "metatron",
+      "canonical_name": "Metatron",
+      "aliases": ["Youth (Na'ar)", "Lesser YHVH", "Angel of the Presence", "Heavenly Scribe"],
+      "tradition_vectors": {
+        "biblical_angel": { "name": "Metatron", "rank": "Archangel", "canonical_function": "Highest-ranking angel; chancellor of heaven; sits on a throne beside God (controversial)", "source_texts": ["3 Enoch 3–15", "Talmud Hagigah 15a", "Talmud Sanhedrin 38b"] },
+        "enochian": { "name": "Enoch-Metatron", "classification": "Archangel", "enoch_book": "2 Enoch", "sin_or_role": "Enoch translated alive into heaven, transformed into fiery angel Metatron", "chapter_reference": "3 Enoch 3–15; 2 Enoch 22" },
+        "kabbalistic": { "sephira": "Kether", "angelic_order": "Chayot ha-Kodesh (or above all orders)", "divine_name": "Ehyeh", "source_texts": ["Zohar I:21b", "Sefer Raziel", "Pardes Rimonim"] },
+        "hermetic": { "role": "The Nous made personal; divine intellect as angelic being", "corpus_hermeticum_ref": "CH I (Poimandres parallel)", "agrippan_attribution": "OCPhil III.16" },
+        "planetary": { "planet": "Saturn (some) / Sun (others)", "color": "White / Blinding", "metal": "Gold" }
+      },
+      "functional_domains": ["Heavenly Scribe", "Divine Chancellor", "Mystical Vision (Merkabah)", "Transformation of the Human into the Divine", "Guardian of the Throne"],
+      "hierarchical_level": 2,
+      "relationships": [
+        { "target_id": "hermes-trismegistus", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Comparative Esotericism", "source_text": "Idel Kabbalah: New Perspectives", "notes": "Both are human sages translated to divine status as celestial scribes" },
+        { "target_id": "michael-archangel", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Jewish Mysticism", "source_text": "3 Enoch; Talmud", "notes": "Rival traditions give primacy to each as chief of the heavenly court" }
+      ],
+      "source_attestations": ["3 Enoch", "Talmud Hagigah 15a", "Zohar I:21b", "Sefer Raziel ha-Malakh"],
+      "research_notes": "Metatron's name is etymologically disputed: possibly from Greek 'meta thronon' (beside the throne), Latin 'metator' (one who marks out), or the Aramaic 'matron.' His near-divine status caused rabbinic controversy — the heretic Elisha ben Abuya saw him enthroned and concluded 'there are two powers in heaven.'",
+      "completeness_score": 77
+    },
+    {
+      "id": "paimon",
+      "canonical_name": "Paimon",
+      "aliases": ["Paymon", "Paimonia"],
+      "tradition_vectors": {
+        "goetic": { "name": "Paimon", "rank": "King", "legions": 200, "seal_reference": "Ars Goetia Seal #9", "primary_functions": ["All arts and sciences", "Secret and private things", "Binding of other spirits", "Knowledge of creation"], "grimoire_source": "Ars Goetia" },
+        "kabbalistic": { "sephira": "Chesed", "qliphoth_counterpart": "Gha'agsheblah", "source_texts": ["Sefer Shem ha-Mephorash correspondences"] },
+        "planetary": { "planet": "Sun", "color": "Gold", "metal": "Gold", "day_of_week": "Sunday" }
+      },
+      "functional_domains": ["Universal Knowledge", "Arts and Sciences", "Commanding Spirits", "Revealing Hidden Things", "Binding Obedience"],
+      "hierarchical_level": 6,
+      "relationships": [
+        { "target_id": "zeus-jupiter", "edge_type": "MANIFESTED_AS", "source_tradition": "Grimoiric / Comparative", "source_text": "McLean The Goetia of Dr. Rudd (2007)", "notes": "Paimon's role as king of universal knowledge parallels the Jovian-solar sovereign archetype" }
+      ],
+      "source_attestations": ["Ars Goetia (Lemegeton)", "Pseudomonarchia Daemonum (Weyer, 1577)", "Goetia of Dr. Rudd"],
+      "research_notes": "Paimon is described as riding a dromedary, crowned, with a fierce countenance, accompanied by two lesser kings Bebal and Abalam. His appearance facing west distinguishes him. The 200 legions figure is among the largest in the Goetia.",
+      "completeness_score": 55
+    },
+    {
+      "id": "asmodeus",
+      "canonical_name": "Asmodeus",
+      "aliases": ["Asmodai", "Ashmedai", "Sydonai", "Chashmodai"],
+      "tradition_vectors": {
+        "biblical_angel": { "name": "Asmodeus", "rank": "Power", "canonical_function": "Demon of lust; slays seven husbands of Sarah; bound by Raphael", "source_texts": ["Tobit 3:8, 8:3"] },
+        "enochian": { "name": "Related to Gadreel / Lust-teaching Watchers", "classification": "Fallen Watcher", "enoch_book": "1 Enoch", "sin_or_role": "Connection to Watcher tradition of carnal sin and forbidden knowledge", "chapter_reference": "1 Enoch 69:4–6" },
+        "kabbalistic": { "sephira": "Geburah", "qliphoth_counterpart": "Golachab", "angelic_order": "Fallen from Seraphim or Thrones class", "source_texts": ["Zohar", "Treatise on the Left Emanation"] },
+        "goetic": { "name": "Asmodai", "rank": "King", "legions": 72, "seal_reference": "Ars Goetia Seal #32", "primary_functions": ["Arithmetic", "Astronomy", "Handicrafts", "Revealing treasure", "Making invisible"], "grimoire_source": "Ars Goetia" },
+        "hermetic": { "role": "Represents unbridled desire opposing the ordered cosmos", "alchemical_symbol": "Sulfur (burning passion)" },
+        "planetary": { "planet": "Mars", "zodiac_rulership": ["Scorpio (partial)"], "metal": "Iron", "color": "Red", "day_of_week": "Tuesday" }
+      },
+      "functional_domains": ["Lust and Carnal Desire", "Destruction of Marriage", "Hidden Treasure", "Arithmetic and Mathematics", "Gambling"],
+      "hierarchical_level": 6,
+      "relationships": [
+        { "target_id": "raphael", "edge_type": "CONTESTED_IDENTIFICATION", "source_tradition": "Biblical / Angelological", "source_text": "Tobit 8:3", "notes": "Raphael binds Asmodeus in Egypt — one of the few named angel-demon direct confrontations in canonical-adjacent scripture" }
+      ],
+      "source_attestations": ["Tobit 3:8", "Ars Goetia #32", "Talmud Pesahim 110a", "Zohar"],
+      "research_notes": "Asmodeus is one of the most attested demonic figures, appearing in the Book of Tobit, the Talmud (where he is said to have sat on Solomon's throne), and the Goetia. His Zoroastrian cognate Aēšma-daēva (demon of wrath) is the probable origin.",
+      "completeness_score": 73
+    },
+    {
+      "id": "horus",
+      "canonical_name": "Horus",
+      "aliases": ["Heru", "Har", "Horus the Elder (Haroeris)", "Horus the Younger (Harsiese)", "Ra-Horakhty"],
+      "tradition_vectors": {
+        "greek": { "name": "Apollo (partial)", "class": "Olympian", "epithets": ["Solar deity", "Divine son"], "source_texts": ["Plutarch De Iside et Osiride ch. 12"] },
+        "roman": { "name": "Apollo / Mars (partial)", "interpretatio_type": "Partial", "source_texts": ["Macrobius Saturnalia I"] },
+        "egyptian": { "name": "Horus", "theology": "Heliopolitan", "ennead_position": "Son of Osiris and Isis; divine king; Eye of Ra", "source_texts": ["Pyramid Texts", "Contending of Horus and Seth"] },
+        "kabbalistic": { "sephira": "Tiphareth", "divine_name": "YHVH Eloah ve-Da'ath", "source_texts": ["Golden Dawn Liber 777"] },
+        "planetary": { "planet": "Sun", "color": "Gold", "metal": "Gold", "day_of_week": "Sunday" }
+      },
+      "functional_domains": ["Divine Kingship", "Solar Sovereignty", "Vengeance and Justice for the Father", "War", "Healing of Divine Wounds"],
+      "hierarchical_level": 3,
+      "relationships": [
+        { "target_id": "osiris", "edge_type": "DESCENDED_FROM", "source_tradition": "Egyptian", "source_text": "Pyramid Texts utterance 219", "notes": "Son and avenger of Osiris; their myth is central to Egyptian kingship theology" },
+        { "target_id": "michael-archangel", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Comparative Religion", "source_text": "Assmann The Mind of Egypt", "notes": "Both are divine sons who battle the cosmic adversary (Set / Satan / Dragon)" }
+      ],
+      "source_attestations": ["Pyramid Texts", "Coffin Texts", "Contending of Horus and Seth (Papyrus Chester Beatty I)", "Plutarch De Iside"],
+      "research_notes": "There are multiple distinct Horus figures in Egyptian tradition: Horus the Elder (Haroeris), brother of Osiris; and Horus the Younger (Harsiese), son of Osiris and Isis. Later tradition merged them. The 'Eye of Horus' is distinct from the 'Eye of Ra.'",
+      "completeness_score": 69
+    },
+    {
+      "id": "gabriel",
+      "canonical_name": "Gabriel",
+      "aliases": ["Jibril", "Gavriel", "Gabriel Seraph"],
+      "tradition_vectors": {
+        "biblical_angel": { "name": "Gabriel", "rank": "Archangel", "canonical_function": "Divine messenger; interpreter of visions; announces births (John the Baptist, Jesus)", "source_texts": ["Daniel 8:16, 9:21", "Luke 1:19, 1:26"] },
+        "enochian": { "name": "Gabriel", "classification": "Archangel", "enoch_book": "1 Enoch", "sin_or_role": "One of the four presences before God; sent to destroy the giants", "chapter_reference": "1 Enoch 9:1, 10:9" },
+        "kabbalistic": { "sephira": "Yesod", "angelic_order": "Kerubim", "divine_name": "Shaddai El Chai", "source_texts": ["Zohar I:119b", "Sefer Raziel"] },
+        "hermetic": { "role": "Lunar messenger; bridge between divine and human realms", "agrippa_book_ref": "OCPhil III.24" },
+        "islamic": { "name_arabic": "جبريل", "name_transliterated": "Jibril", "classification": "Malak", "quranic_reference": "Quran 2:97–98, 66:4", "isra_iliyyat_link": "Transmits divine revelation to Muhammad; identified as the Holy Spirit in some classical Islamic scholarship" },
+        "planetary": { "planet": "Moon", "zodiac_rulership": ["Cancer"], "day_of_week": "Monday", "metal": "Silver", "color": "Silver / White" }
+      },
+      "functional_domains": ["Divine Messenger", "Revelation and Prophecy", "Annunciation", "Transmission of Scripture", "Lunar Forces"],
+      "hierarchical_level": 4,
+      "relationships": [
+        { "target_id": "hermes-trismegistus", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Comparative Angelology", "source_text": "Davidson Dictionary of Angels", "notes": "Both are divine messengers between the supreme and the human; Gabriel holds the Abrahamic role Hermes holds in Hellenic tradition" }
+      ],
+      "source_attestations": ["Daniel 8–9", "Luke 1", "1 Enoch 9–10", "Quran 2:97–98"],
+      "research_notes": "Gabriel is among the most cross-traditional of all named angels — appearing in Hebrew Bible, New Testament, Enochian literature, and Quran with consistent messenger function. His Quranic role (transmitting revelation to Muhammad) is his most exalted.",
+      "completeness_score": 82
+    },
+    {
+      "id": "aphrodite-venus",
+      "canonical_name": "Aphrodite / Venus",
+      "aliases": ["Kypris", "Cytherea", "Venus Genetrix", "Urania (heavenly aspect)", "Pandemos (earthly aspect)"],
+      "tradition_vectors": {
+        "greek": { "name": "Aphrodite", "class": "Olympian", "epithets": ["Kypris", "Philommeidēs (smile-loving)", "Urania", "Pandemos"], "source_texts": ["Hesiod Theogony 185–206", "Homeric Hymn V", "Homer Iliad V"] },
+        "roman": { "name": "Venus", "interpretatio_type": "Direct", "source_texts": ["Virgil Aeneid I", "Lucretius De Rerum Natura I"] },
+        "egyptian": { "name": "Hathor / Isis (partial)", "theology": "Heliopolitan", "ennead_position": "Hathor as divine beauty and love", "source_texts": ["Plutarch De Iside et Osiride"] },
+        "kabbalistic": { "sephira": "Netzach", "angelic_order": "Elohim", "divine_name": "YHVH Tzabaoth", "source_texts": ["Sefer Yetzirah", "Zohar"] },
+        "goetic": { "name": "Duke Sitri", "rank": "Duke", "legions": 60, "primary_functions": ["Inflames with love and lust", "Reveals secrets of women"], "grimoire_source": "Ars Goetia" },
+        "planetary": { "planet": "Venus", "zodiac_rulership": ["Taurus", "Libra"], "day_of_week": "Friday", "metal": "Copper", "color": "Green / Rose", "agrippa_book_ref": "OCPhil II.10" }
+      },
+      "functional_domains": ["Love and Desire", "Beauty and Aesthetics", "Fertility", "Sea and Seafarers (birthplace myth)", "War (Spartan cult)", "Music and the Arts"],
+      "hierarchical_level": 5,
+      "relationships": [
+        { "target_id": "isis", "edge_type": "SYNCRETIZED_WITH", "source_tradition": "Hellenistic Egypt", "source_text": "Plutarch De Iside et Osiride; PGM IV", "notes": "Isis absorbed many Aphrodite attributes in the Hellenistic period; both rule love, magic, and the sea" }
+      ],
+      "source_attestations": ["Hesiod Theogony 185", "Homeric Hymn V", "Virgil Aeneid I", "Lucretius De Rerum Natura I"],
+      "research_notes": "The two Aphrodites — Urania (heavenly, spiritual love) and Pandemos (earthly, physical love) — originate in Plato's Symposium (180c–185c) and became a standard distinction in Neoplatonic and Renaissance treatments.",
+      "completeness_score": 77
+    },
+    {
+      "id": "belial",
+      "canonical_name": "Belial",
+      "aliases": ["Beliar", "Beli Ya'al", "Angel of Lawlessness", "Prince of Darkness (Dead Sea Scrolls)"],
+      "tradition_vectors": {
+        "biblical_angel": { "name": "Belial", "rank": "Power", "canonical_function": "Embodiment of worthlessness and wickedness; adversarial force", "source_texts": ["2 Corinthians 6:15", "Deuteronomy 13:13 (sons of Belial)", "Nahum 1:15"] },
+        "enochian": { "name": "Belial", "classification": "Fallen Watcher", "enoch_book": "Book of Jubilees", "sin_or_role": "In DSS War Scroll: Prince of Darkness ruling the forces of evil opposing the Sons of Light", "chapter_reference": "1QM (War Scroll) I:1, XIII:11" },
+        "kabbalistic": { "sephira": "Malkuth", "qliphoth_counterpart": "Lilith (first shell) / Nahemah", "source_texts": ["Treatise on the Left Emanation"] },
+        "goetic": { "name": "Belial", "rank": "King", "legions": 80, "seal_reference": "Ars Goetia Seal #68", "primary_functions": ["Distribution of senatorships and dignities", "Causes favor", "Distributes presentations and senatorships"], "grimoire_source": "Ars Goetia" },
+        "planetary": { "planet": "Saturn", "metal": "Lead", "color": "Black", "day_of_week": "Saturday" }
+      },
+      "functional_domains": ["Lawlessness and Wickedness", "Opposition to Divine Order", "Earthly Power and Status", "Prince of This World (DSS)", "Corruption of Justice"],
+      "hierarchical_level": 6,
+      "relationships": [
+        { "target_id": "lucifer", "edge_type": "CONTESTED_IDENTIFICATION", "source_tradition": "Christian Demonology", "source_text": "2 Cor 6:15; Milton Paradise Lost", "notes": "Paul uses 'Beliar' as near-equivalent to Satan; later tradition sometimes identifies, sometimes separates" }
+      ],
+      "source_attestations": ["Dead Sea Scrolls War Scroll (1QM)", "2 Corinthians 6:15", "Testament of the Twelve Patriarchs", "Ars Goetia #68"],
+      "research_notes": "'Beli ya'al' is a Hebrew compound meaning 'without worth' or 'without going up (to God).' In the Dead Sea Scrolls, Belial is a fully developed supernatural Prince of Darkness opposing the archangel Michael — the most developed pre-Christian angelological dualism.",
+      "completeness_score": 70
+    },
+    {
+      "id": "anubis",
+      "canonical_name": "Anubis",
+      "aliases": ["Anpu", "Inpu", "Khenty-Imentiu (Foremost of the Westerners)", "Lord of the Sacred Land"],
+      "tradition_vectors": {
+        "greek": { "name": "Hermes Chthonios / Hermes Psychopompos", "class": "Chthonic", "epithets": ["Guide of souls", "Lord of the dead"], "source_texts": ["Plutarch De Iside et Osiride ch. 15"] },
+        "roman": { "name": "Mercury Chthonios / Dis Pater (partial)", "interpretatio_type": "Partial", "source_texts": ["Apuleius Golden Ass XI"] },
+        "egyptian": { "name": "Anubis", "theology": "Heliopolitan", "ennead_position": "Son of Osiris (or Ra); god of embalming; conductor of souls to judgment", "source_texts": ["Book of the Dead Ch. 125", "Pyramid Texts", "Coffin Texts"] },
+        "kabbalistic": { "sephira": "Yesod", "angelic_order": "Kerubim", "source_texts": ["Golden Dawn correspondence tables"] },
+        "planetary": { "planet": "Mercury", "zodiac_rulership": ["Virgo (partial)"], "day_of_week": "Wednesday", "metal": "Quicksilver", "color": "Black / Gold" }
+      },
+      "functional_domains": ["Psychopomp / Soul Guide", "Embalming and Mummification", "Guardian of the Scales", "Threshold of the Duat", "Jackal of the Necropolis"],
+      "hierarchical_level": 4,
+      "relationships": [
+        { "target_id": "thoth", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Egyptian", "source_text": "Book of the Dead Ch. 125", "notes": "Both present at the Weighing of the Heart — Anubis manages the scales, Thoth records the result" },
+        { "target_id": "hermes-trismegistus", "edge_type": "SYNCRETIZED_WITH", "source_tradition": "Hellenistic Egypt", "source_text": "Plutarch De Iside ch. 15; Apuleius Metamorphoses XI", "notes": "Anubis-Hermes syncretism attested in multiple Greco-Roman texts" }
+      ],
+      "source_attestations": ["Pyramid Texts", "Book of the Dead", "Plutarch De Iside et Osiride", "Apuleius Golden Ass XI"],
+      "research_notes": "Anubis lost his prominence as lord of the dead to Osiris over the course of Egyptian religious history; by the Middle Kingdom, Osiris is the supreme lord of the Duat and Anubis serves him. His role as embalmer and psychopomp remained constant.",
+      "completeness_score": 71
+    },
+    {
+      "id": "saturn-kronos",
+      "canonical_name": "Saturn / Kronos",
+      "aliases": ["Cronus", "Father Time", "The Reaper", "El (Phoenician cognate)"],
+      "tradition_vectors": {
+        "greek": { "name": "Kronos", "class": "Titan", "epithets": ["Anchisteus (nearest of the Titans)", "Agrotera", "Harpe-bearer"], "source_texts": ["Hesiod Theogony 453–506", "Homeric Hymn to Kronos"] },
+        "roman": { "name": "Saturn", "interpretatio_type": "Direct", "source_texts": ["Virgil Aeneid VIII", "Macrobius Saturnalia I"] },
+        "egyptian": { "name": "Geb (earth-time parallel)", "theology": "Heliopolitan", "ennead_position": "Father of Osiris, Isis, Set, Nephthys", "source_texts": ["Pyramid Texts"] },
+        "kabbalistic": { "sephira": "Binah", "angelic_order": "Aralim (Thrones)", "divine_name": "YHVH Elohim", "qliphoth_counterpart": "Satariel", "source_texts": ["Sefer Yetzirah", "Etz Chaim"] },
+        "gnostic": { "name": "Yaldabaoth (demiurgic parallel)", "system": "Sethian", "classification": "Archon", "source_texts": ["Apocryphon of John"] },
+        "hermetic": { "role": "Principle of limitation, form, and time; necessary for manifestation", "corpus_hermeticum_ref": "CH XVI", "agrippa_book_ref": "OCPhil II.10", "alchemical_symbol": "Lead" },
+        "planetary": { "planet": "Saturn", "zodiac_rulership": ["Capricorn", "Aquarius"], "day_of_week": "Saturday", "metal": "Lead", "color": "Black / Indigo", "agrippa_book_ref": "OCPhil II.10" }
+      },
+      "functional_domains": ["Time and Limitation", "Agriculture and the Harvest", "Golden Age Rulership", "Devouring Father", "Structure and Form"],
+      "hierarchical_level": 3,
+      "relationships": [
+        { "target_id": "zeus-jupiter", "edge_type": "DESCENDED_FROM", "source_tradition": "Greek", "source_text": "Hesiod Theogony 453–506", "notes": "Zeus overthrows Kronos; the generational conflict is the central Greek cosmogonic myth" },
+        { "target_id": "yaldabaoth", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Gnosticism", "source_text": "Apocryphon of John NHC II.1", "notes": "Both are demiurgic father-gods who are ultimately displaced; Gnostic systems likely drew on this Titanic model" }
+      ],
+      "source_attestations": ["Hesiod Theogony 453–506", "Hesiod Works and Days 111–120 (Golden Age)", "Macrobius Saturnalia I", "Virgil Aeneid VIII"],
+      "research_notes": "The Greek Kronos / Roman Saturn split is more complex than simple direct correspondence — Saturn had a distinct Italian agricultural prehistory. Their merger was so complete that Saturn's festival (Saturnalia) was the most popular Roman holiday.",
+      "completeness_score": 81
+    },
+    {
+      "id": "isis",
+      "canonical_name": "Isis",
+      "aliases": ["Aset", "Eset", "Weret-Kekau (Great of Magic)", "Meri (beloved)", "Star of the Sea"],
+      "tradition_vectors": {
+        "greek": { "name": "Demeter / Aphrodite / Selene (various syncretisms)", "class": "Olympian", "epithets": ["Isis-Demeter", "Isis-Aphrodite"], "source_texts": ["Plutarch De Iside et Osiride", "Diodorus Siculus I.27"] },
+        "roman": { "name": "Isis (retained own name)", "interpretatio_type": "Partial", "source_texts": ["Apuleius Golden Ass XI"] },
+        "egyptian": { "name": "Isis", "theology": "Heliopolitan", "ennead_position": "Daughter of Geb and Nut; wife and restorer of Osiris; mother of Horus; supreme magician", "source_texts": ["Pyramid Texts", "Book of the Dead", "Coffin Texts"] },
+        "kabbalistic": { "sephira": "Binah", "angelic_order": "Aralim (Thrones)", "divine_name": "YHVH Elohim", "source_texts": ["Golden Dawn Liber 777"] },
+        "hermetic": { "role": "World-Soul in its redemptive, loving aspect; guardian of the body of Osiris (divine knowledge)", "corpus_hermeticum_ref": "Kore Kosmou (Stobaean Fragment)", "alchemical_symbol": "Silver / Prima Materia (restorer)" },
+        "planetary": { "planet": "Moon", "zodiac_rulership": ["Cancer (partial)", "Virgo (partial)"], "day_of_week": "Monday", "metal": "Silver", "color": "Blue / Silver / Gold" }
+      },
+      "functional_domains": ["Magic and Sorcery (supreme magician)", "Motherhood and Protection", "Healing", "Resurrection and Restoration", "Throne of the Pharaoh", "Navigation and the Sea (Hellenistic)"],
+      "hierarchical_level": 3,
+      "relationships": [
+        { "target_id": "aphrodite-venus", "edge_type": "SYNCRETIZED_WITH", "source_tradition": "Hellenistic Egypt", "source_text": "PGM IV; Plutarch De Iside", "notes": "In the Hellenistic world, Isis absorbed nearly every major goddess attribute; Aphrodite identification particularly strong in magical papyri" },
+        { "target_id": "osiris", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Egyptian", "source_text": "Book of the Dead", "notes": "Isis and Osiris are the divine couple; she is the restorer, he the restored; their myth underlies all Egyptian resurrection theology" }
+      ],
+      "source_attestations": ["Pyramid Texts", "Book of the Dead", "Plutarch De Iside et Osiride", "Apuleius Golden Ass XI", "PGM (Greek Magical Papyri)"],
+      "research_notes": "Isis became the most universally worshipped deity of the Roman Empire by the 1st–3rd centuries CE — her cult spread to Britain, Germany, and the Rhine frontier. Apuleius' Metamorphoses Book XI is the most literary treatment of her mysteries.",
+      "completeness_score": 84
+    },
+    {
+      "id": "semjaza",
+      "canonical_name": "Semjaza / Samyaza",
+      "aliases": ["Shemihaza", "Semihazah", "Shamhazai", "Leader of the Watchers"],
+      "tradition_vectors": {
+        "enochian": { "name": "Semjaza", "classification": "Fallen Watcher", "enoch_book": "1 Enoch", "sin_or_role": "Led the 200 Watchers in their descent to Mount Hermon; fathered Nephilim; bound until the Day of Judgment hanging between heaven and earth as the constellation Orion in some traditions", "chapter_reference": "1 Enoch 6:3–8, 7:1–6, 10:11–13" },
+        "kabbalistic": { "sephira": "Da'ath (Abyss)", "qliphoth_counterpart": "Thaumiel (dual contending force)", "source_texts": ["Late Kabbalistic demonology"] },
+        "planetary": { "planet": "Saturn", "metal": "Lead", "color": "Black" }
+      },
+      "functional_domains": ["Leadership of Rebellion", "Sexual Union with Humanity", "Patriarch of Nephilim", "Founder of Giant Race"],
+      "hierarchical_level": 4,
+      "relationships": [
+        { "target_id": "azazel", "edge_type": "COMMANDS", "source_tradition": "Enochian", "source_text": "1 Enoch 6–8", "notes": "Semjaza is the named leader; Azazel's transgressions are treated as more severe in 1 Enoch 10" },
+        { "target_id": "lucifer", "edge_type": "CONTESTED_IDENTIFICATION", "source_tradition": "Christian demonology / Comparative", "source_text": "Various patristic and medieval sources", "notes": "Some traditions conflate the Watcher rebellion with Lucifer's fall; 1 Enoch treats them as distinct events" }
+      ],
+      "source_attestations": ["1 Enoch 6–10", "Book of Giants (4Q530–532)", "Damascus Document (CD II:18)", "Genesis 6:1–4 (implied)"],
+      "research_notes": "The Semjaza narrative in 1 Enoch is almost certainly a reinterpretation of Genesis 6:1–4. His name may derive from Aramaic 'shem' (name) + 'azza' (strong/daring) — 'he who dares the Name of God.' The constellation identification (Orion) appears in later midrashic tradition.",
+      "completeness_score": 60
+    }
+  ]
+};
+
+// ═══════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════
+
+function init(data) {
+  DB = data;
+  document.getElementById('entity-count-meta').textContent =
+    `${DB.entities.length} entities · Schema v${DB.version}`;
+
+  fuse = new Fuse(DB.entities, {
+    keys: [
+      { name: 'canonical_name', weight: 2 },
+      { name: 'aliases', weight: 1.5 },
+      { name: 'functional_domains', weight: 1 },
+      { name: 'tradition_vectors.greek.name', weight: 0.8 },
+      { name: 'tradition_vectors.roman.name', weight: 0.8 },
+      { name: 'tradition_vectors.egyptian.name', weight: 0.8 },
+      { name: 'tradition_vectors.goetic.name', weight: 0.8 },
+      { name: 'tradition_vectors.enochian.name', weight: 0.8 },
+      { name: 'tradition_vectors.kabbalistic.sephira', weight: 0.5 },
+      { name: 'tradition_vectors.goetic.rank', weight: 0.5 },
+      { name: 'tradition_vectors.greek.epithets', weight: 0.5 },
+      { name: 'research_notes', weight: 0.3 }
+    ],
+    threshold: 0.35,
+    includeScore: true
+  });
+
+  renderSearch('');
+  buildHierarchy();
+  buildGraphLegend();
+
+  document.getElementById('search-input').addEventListener('input', e => {
+    renderSearch(e.target.value.trim());
+  });
+
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFilter = btn.dataset.filter;
+      renderSearch(document.getElementById('search-input').value.trim());
+    });
+  });
+
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.getElementById('view-' + btn.dataset.view).classList.add('active');
+      if (btn.dataset.view === 'graph' && !cy) initGraph();
+      else if (btn.dataset.view === 'graph' && cy) { cy.resize(); cy.fit(undefined, 60); }
+    });
+  });
+
+  document.querySelectorAll('.graph-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.graph-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentEdgeFilter = btn.dataset.edge;
+      if (cy) updateGraphEdgeVisibility();
+    });
+  });
+
+  document.getElementById('detail-overlay').addEventListener('click', e => {
+    if (e.target === document.getElementById('detail-overlay')) closeDetail();
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+//  SEARCH + RENDER
+// ═══════════════════════════════════════════════════════
+
+function getFilteredEntities() {
+  if (currentFilter === 'all') return DB.entities;
+  return DB.entities.filter(e => e.tradition_vectors && e.tradition_vectors[currentFilter]);
+}
+
+function renderSearch(query) {
+  const pool = getFilteredEntities();
+  let results;
+
+  if (!query) {
+    results = [...pool].sort((a,b) => a.hierarchical_level - b.hierarchical_level);
+  } else {
+    const fuseResults = fuse.search(query);
+    const ids = new Set(pool.map(e => e.id));
+    results = fuseResults.filter(r => ids.has(r.item.id)).map(r => r.item);
+  }
+
+  document.getElementById('results-count').textContent =
+    `${results.length} ${results.length === 1 ? 'entry' : 'entries'}${query ? ` matching "${query}"` : ''}${currentFilter !== 'all' ? ` in ${TRADITION_LABELS[currentFilter]}` : ''}`;
+
+  const grid = document.getElementById('results-grid');
+
+  if (!results.length) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="empty-glyph">◉</div><p>No entries found. The tradition may not yet be populated.</p></div>`;
+    return;
+  }
+
+  grid.innerHTML = '';
+  results.forEach((entity, i) => {
+    const card = document.createElement('div');
+    card.className = 'entity-card';
+    card.style.animationDelay = `${Math.min(i * 0.04, 0.4)}s`;
+    card.onclick = () => openDetail(entity.id);
+
+    const tradKeys = Object.keys(entity.tradition_vectors || {});
+    const tradPips = tradKeys.map(k =>
+      `<span class="trad-pip trad-${k}">${TRADITION_LABELS[k] || k}</span>`
+    ).join('');
+
+    const domains = (entity.functional_domains || []).slice(0,3).map(d =>
+      `<span class="domain-tag">${d}</span>`
+    ).join('');
+
+    const aliasStr = (entity.aliases || []).slice(0,2).join(' · ');
+
+    card.innerHTML = `
+      <p class="card-level">${LEVEL_LABELS[entity.hierarchical_level] || 'Level ' + entity.hierarchical_level}</p>
+      <h3 class="card-name">${entity.canonical_name}</h3>
+      ${aliasStr ? `<p class="card-aliases">${aliasStr}</p>` : ''}
+      <div class="card-domains">${domains}</div>
+      <div class="card-traditions">${tradPips}</div>
+      <span class="card-completeness">${entity.completeness_score || 0}%</span>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+//  DETAIL PANEL
+// ═══════════════════════════════════════════════════════
+
+function openDetail(id) {
+  const entity = DB.entities.find(e => e.id === id);
+  if (!entity) return;
+
+  document.getElementById('d-level').textContent = LEVEL_LABELS[entity.hierarchical_level] || '';
+  document.getElementById('d-name').textContent = entity.canonical_name;
+  document.getElementById('d-aliases').textContent = (entity.aliases || []).join(' · ');
+
+  // Domains
+  const domsEl = document.getElementById('d-domains');
+  domsEl.innerHTML = (entity.functional_domains || [])
+    .map(d => `<span class="domain-tag-large">${d}</span>`).join('');
+
+  // Traditions
+  const tradEl = document.getElementById('d-traditions');
+  tradEl.innerHTML = '';
+  const tv = entity.tradition_vectors || {};
+  Object.entries(tv).forEach(([tradKey, tradData]) => {
+    if (!tradData) return;
+    const block = document.createElement('div');
+    block.className = 'trad-block';
+    const labelColor = { color: (NODE_COLORS[tradKey] || '#c9983a') };
+    const fields = Object.entries(tradData)
+      .filter(([k,v]) => v && k !== 'source_texts')
+      .map(([k,v]) => {
+        const val = Array.isArray(v) ? v.join(', ') : v;
+        return `<div class="trad-field">
+          <span class="trad-field-key">${k.replace(/_/g,' ')}</span>
+          <span class="trad-field-val">${val}</span>
+        </div>`;
+      }).join('');
+    const srcs = (tradData.source_texts || [])
+      .map(s => `<div class="trad-field"><span class="trad-field-key">source</span><span class="trad-field-val">${s}</span></div>`).join('');
+    block.innerHTML = `
+      <p class="trad-block-name trad-${tradKey}" style="color:${NODE_COLORS[tradKey] || '#c9983a'}">${TRADITION_LABELS[tradKey] || tradKey}</p>
+      <div class="trad-block-fields">${fields}${srcs}</div>
+    `;
+    tradEl.appendChild(block);
+  });
+
+  // Relations
+  const relEl = document.getElementById('d-relations');
+  relEl.innerHTML = '';
+  (entity.relationships || []).forEach(rel => {
+    const targetEntity = DB.entities.find(e => e.id === rel.target_id);
+    const targetName = targetEntity ? targetEntity.canonical_name : rel.target_id;
+    const item = document.createElement('div');
+    item.className = 'edge-item';
+    item.innerHTML = `
+      <span class="edge-type edge-${rel.edge_type}">${rel.edge_type.replace(/_/g,' ')}</span>
+      <p class="edge-target">→ <a onclick="openDetail('${rel.target_id}')">${targetName}</a></p>
+      <p class="edge-meta"><strong style="color:var(--faint);font-family:var(--font-heading);font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase">Source:</strong> ${rel.source_text}</p>
+      ${rel.notes ? `<p class="edge-notes">${rel.notes}</p>` : ''}
+    `;
+    relEl.appendChild(item);
+  });
+
+  // Sources
+  const srcEl = document.getElementById('d-sources');
+  srcEl.innerHTML = (entity.source_attestations || [])
+    .map(s => `<li>${s}</li>`).join('');
+
+  // Notes
+  document.getElementById('d-notes').textContent = entity.research_notes || 'No research notes yet.';
+
+  // Completeness
+  const score = entity.completeness_score || 0;
+  document.getElementById('d-completeness').style.width = score + '%';
+  document.getElementById('d-completeness-label').textContent = `${score}% complete across all tradition tracks`;
+
+  document.getElementById('detail-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDetail() {
+  document.getElementById('detail-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ═══════════════════════════════════════════════════════
+//  GRAPH
+// ═══════════════════════════════════════════════════════
+
+function getPrimaryTradition(entity) {
+  const tv = entity.tradition_vectors || {};
+  const order = ['greek','egyptian','enochian','kabbalistic','goetic','hermetic','gnostic','roman','biblical_angel','islamic','planetary'];
+  for (const k of order) { if (tv[k]) return k; }
+  return 'default';
+}
+
+function initGraph() {
+  const elements = [];
+
+  DB.entities.forEach(entity => {
+    const trad = getPrimaryTradition(entity);
+    elements.push({
+      data: {
+        id: entity.id,
+        label: entity.canonical_name.split(' / ')[0].split(' (')[0],
+        color: NODE_COLORS[trad] || NODE_COLORS.default,
+        tradition: trad,
+        level: entity.hierarchical_level
+      }
+    });
+  });
+
+  const addedEdges = new Set();
+  DB.entities.forEach(entity => {
+    (entity.relationships || []).forEach(rel => {
+      const edgeId = [entity.id, rel.target_id, rel.edge_type].join('→');
+      const reverseId = [rel.target_id, entity.id, rel.edge_type].join('→');
+      if (addedEdges.has(reverseId)) return;
+      if (DB.entities.find(e => e.id === rel.target_id)) {
+        addedEdges.add(edgeId);
+        elements.push({
+          data: {
+            id: edgeId,
+            source: entity.id,
+            target: rel.target_id,
+            edgeType: rel.edge_type,
+            color: EDGE_COLORS[rel.edge_type] || '#888'
+          }
+        });
+      }
+    });
+  });
+
+  cy = cytoscape({
+    container: document.getElementById('cy'),
+    elements,
+    style: [
+      {
+        selector: 'node',
+        style: {
+          'background-color': 'data(color)',
+          'label': 'data(label)',
+          'color': '#f2ead8',
+          'font-family': 'Cinzel, serif',
+          'font-size': '9px',
+          'text-valign': 'bottom',
+          'text-margin-y': '4px',
+          'text-outline-color': '#1a1410',
+          'text-outline-width': '2px',
+          'width': el => Math.max(20, 36 - (el.data('level') || 4) * 3),
+          'height': el => Math.max(20, 36 - (el.data('level') || 4) * 3),
+          'border-width': 2,
+          'border-color': 'data(color)',
+          'border-opacity': 0.5,
+          'transition-property': 'border-width, border-opacity',
+          'transition-duration': '0.15s'
+        }
+      },
+      {
+        selector: 'node:selected',
+        style: {
+          'border-width': 3,
+          'border-opacity': 1,
+          'background-color': 'data(color)'
+        }
+      },
+      {
+        selector: 'edge',
+        style: {
+          'line-color': 'data(color)',
+          'target-arrow-color': 'data(color)',
+          'target-arrow-shape': 'triangle',
+          'arrow-scale': 0.7,
+          'width': 1.5,
+          'opacity': 0.6,
+          'curve-style': 'bezier',
+          'transition-property': 'opacity',
+          'transition-duration': '0.15s'
+        }
+      },
+      {
+        selector: 'edge.hidden',
+        style: { 'opacity': 0, 'events': 'no' }
+      },
+      {
+        selector: 'node.dimmed',
+        style: { 'opacity': 0.2 }
+      },
+      {
+        selector: 'edge.dimmed',
+        style: { 'opacity': 0.08 }
+      }
+    ],
+    layout: {
+      name: 'concentric',
+      concentric: node => 8 - (node.data('level') || 4),
+      levelWidth: () => 1,
+      minNodeSpacing: 60,
+      padding: 50
+    },
+    userZoomingEnabled: true,
+    userPanningEnabled: true,
+    minZoom: 0.2,
+    maxZoom: 4
+  });
+
+  cy.on('tap', 'node', evt => {
+    openDetail(evt.target.id());
+  });
+
+  cy.on('mouseover', 'node', evt => {
+    const node = evt.target;
+    cy.elements().addClass('dimmed');
+    node.removeClass('dimmed');
+    node.connectedEdges().removeClass('dimmed').connectedNodes().removeClass('dimmed');
+  });
+
+  cy.on('mouseout', 'node', () => {
+    cy.elements().removeClass('dimmed');
+  });
+
+  updateGraphEdgeVisibility();
+}
+
+function updateGraphEdgeVisibility() {
+  if (!cy) return;
+  cy.edges().removeClass('hidden');
+  if (currentEdgeFilter !== 'all') {
+    cy.edges().forEach(edge => {
+      if (edge.data('edgeType') !== currentEdgeFilter) edge.addClass('hidden');
+    });
+  }
+}
+
+function buildGraphLegend() {
+  const legend = document.getElementById('graph-legend');
+  legend.innerHTML = Object.entries(NODE_COLORS).filter(([k]) => k !== 'default').map(([k,c]) =>
+    `<div class="legend-item"><div class="legend-dot" style="background:${c}"></div>${TRADITION_LABELS[k] || k}</div>`
+  ).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+//  HIERARCHY
+// ═══════════════════════════════════════════════════════
+
+function buildHierarchy() {
+  const container = document.getElementById('hierarchy-container');
+  const byLevel = {};
+  for (let i = 1; i <= 7; i++) byLevel[i] = [];
+  DB.entities.forEach(e => {
+    const lvl = e.hierarchical_level || 7;
+    if (byLevel[lvl]) byLevel[lvl].push(e);
+  });
+
+  container.innerHTML = '';
+
+  for (let lvl = 1; lvl <= 7; lvl++) {
+    if (!byLevel[lvl].length && lvl > 1) continue;
+
+    if (lvl > 1) {
+      const conn = document.createElement('div');
+      conn.className = 'hier-connector';
+      conn.textContent = '│';
+      container.appendChild(conn);
+    }
+
+    const block = document.createElement('div');
+    block.className = 'hier-level';
+
+    const levelTitle = LEVEL_LABELS[lvl] || `Level ${lvl}`;
+    const [numPart, textPart] = levelTitle.split(' — ');
+
+    let entriesHTML = '';
+    if (byLevel[lvl].length) {
+      entriesHTML = byLevel[lvl].map(e => {
+        const trad = getPrimaryTradition(e);
+        return `<span class="hier-entity" onclick="openDetail('${e.id}')">
+          <span class="hier-trad-dot" style="background:${NODE_COLORS[trad] || '#c9983a'}"></span>
+          ${e.canonical_name}
+        </span>`;
+      }).join('');
+    } else {
+      entriesHTML = `<span style="color:var(--dim);font-style:italic;font-size:0.85rem">Not yet populated</span>`;
+    }
+
+    block.innerHTML = `
+      <div class="hier-block">
+        <div class="hier-header">
+          <span class="hier-level-num">${numPart}</span>
+          <span class="hier-level-title">${textPart || ''}</span>
+        </div>
+        <div class="hier-entries">${entriesHTML}</div>
+      </div>
+    `;
+    container.appendChild(block);
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+//  BOOT
+// ═══════════════════════════════════════════════════════
+
+init(CONCORDANCE_DATA);
+</script>
+
+</body>
+</html>
