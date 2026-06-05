@@ -7,7 +7,7 @@
 
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
 
 <!-- Cytoscape for graph -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.min.js"></script>
@@ -38,8 +38,8 @@
   --shadow-deep: 0 8px 48px rgba(26,20,16,0.4);
 
   --font-display: 'Cinzel Decorative', serif;
-  --font-heading: 'Cinzel', serif;
-  --font-body:    'EB Garamond', serif;
+  --font-heading: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-body:    'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
   --radius: 2px;
   --transition: 0.2s ease;
@@ -48,7 +48,8 @@
 /* ─── RESET & BASE ─── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { font-size: 17px; scroll-behavior: smooth; }
+/* Increase base size by ~18% for improved readability */
+html { font-size: 20px; scroll-behavior: smooth; }
 
 body {
   font-family: var(--font-body);
@@ -76,6 +77,28 @@ body::before {
   pointer-events: none;
   z-index: 0;
 }
+
+/* ─── PARALLAX LAYERS (subtle, performant) ─── */
+.parallax {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.parallax-layer {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+  width: 160%;
+  height: 140%;
+  background-repeat: no-repeat;
+  background-position: center top;
+  will-change: transform;
+  opacity: 0.9;
+}
+.parallax-layer.back { background-image: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.03), transparent 20%), radial-gradient(circle at 80% 60%, rgba(228,184,90,0.02), transparent 12%); filter: blur(10px); opacity:0.35; }
+.parallax-layer.mid  { background-image: linear-gradient(180deg, rgba(255,255,255,0.02), transparent 40%), repeating-linear-gradient(90deg, rgba(255,255,255,0.01), rgba(255,255,255,0.01) 40px); opacity:0.22; }
+.parallax-layer.front{ background-image: linear-gradient(180deg, rgba(0,0,0,0.0), rgba(0,0,0,0.12)); opacity:0.12; }
 
 /* ─── HEADER ─── */
 #header {
@@ -919,6 +942,11 @@ h1 {
 
 <!-- HEADER -->
 <header id="header">
+  <div class="parallax" aria-hidden="true">
+    <div class="parallax-layer back"></div>
+    <div class="parallax-layer mid"></div>
+    <div class="parallax-layer front"></div>
+  </div>
   <span class="header-sigil">✦ ✧ ✦</span>
   <h1>Pantheon Concordance</h1>
   <p class="header-sub">Syncretic Mythology &amp; Occult Genealogy</p>
@@ -997,6 +1025,25 @@ h1 {
         "When you know that all divine names are one name, the mind begins to see the map beneath the map."<br>
         — paraphrased from Pico della Mirandola, <em>Oration on the Dignity of Man</em> (1486)
       </blockquote>
+
+      <h2>Jesus — Center of All Creation</h2>
+      <p>In this concordance Jesus is presented as the central focal point of Christian cosmology and as a primary reference node in cross-traditional correspondences. Entries that map Christic analogues, typological prefigurations, or comparative motifs (dying-and-rising savior, divine Logos, world-soul mediator) are linked to this canonical node so researchers can trace parallels and divergences clearly.</p>
+
+      <h2>Angel Hierarchy (Canonical Overview)</h2>
+      <p class="about-content" style="margin-bottom:0.6rem">The following angelic orders are included as an editorial hierarchy for comparative mapping (most sources derive from biblical, pseudepigraphic, and patristic classifications):</p>
+      <div class="hier-block" style="margin-bottom:1rem">
+        <div class="trad-block-fields" style="padding:0.6rem 1rem; display:block;">
+          <div class="trad-field"><div class="trad-field-key">Seraphim</div><div class="trad-field-val">Closest to the divine presence — burning purity and love.</div></div>
+          <div class="trad-field"><div class="trad-field-key">Cherubim</div><div class="trad-field-val">Guards of sacred thresholds and bearers of divine knowledge.</div></div>
+          <div class="trad-field"><div class="trad-field-key">Thrones (Aralim)</div><div class="trad-field-val">Manifestation of divine justice and cosmic order.</div></div>
+          <div class="trad-field"><div class="trad-field-key">Dominions (Chasmalim)</div><div class="trad-field-val">Administrators of heavenly governance and delegations.</div></div>
+          <div class="trad-field"><div class="trad-field-key">Virtues</div><div class="trad-field-val">Mediators of miracles and sustaining forces of nature.</div></div>
+          <div class="trad-field"><div class="trad-field-key">Powers</div><div class="trad-field-val">Warrior-order angels, defenders against chaotic forces.</div></div>
+          <div class="trad-field"><div class="trad-field-key">Principalities</div><div class="trad-field-val">Guardians of nations, cities, and collective institutions.</div></div>
+          <div class="trad-field"><div class="trad-field-key">Archangels</div><div class="trad-field-val">High messengers and commanders (Michael, Gabriel, Raphael, etc.).</div></div>
+          <div class="trad-field"><div class="trad-field-key">Angels</div><div class="trad-field-val">Personal messengers and ministers to humanity.</div></div>
+        </div>
+      </div>
 
       <h2>Project Purpose</h2>
       <p>Pantheon Concordance is a structured research database mapping the intersection of eleven major religious, mythological, and esoteric traditions. It compiles historical syncretism — Roman <em>Interpretatio romana</em>, Patristic reframing of pagan deities, and Islamic-Hermetic correspondences — alongside grimoiric lineages, Kabbalistic systems, and planetary correspondences.</p>
@@ -1151,8 +1198,26 @@ const EDGE_COLORS = {
 const CONCORDANCE_DATA = {
   "version": "0.4",
   "last_updated": "2026-06",
-  "entity_count": 20,
+  "entity_count": 21,
   "entities": [
+    {
+      "id": "jesus-christ",
+      "canonical_name": "Jesus Christ",
+      "aliases": ["Jesus of Nazareth", "Christ", "The Logos", "Savior", "Son of God"],
+      "tradition_vectors": {
+        "biblical_angel": { "name": "Jesus", "rank": "Son", "canonical_function": "Incarnation of the Logos; Savior and Redeemer", "source_texts": ["Gospels (Matthew, Mark, Luke, John)"] },
+        "kabbalistic": { "sephira": "Tiphareth", "angelic_order": "N/A", "divine_name": "Yeshua as manifestation of the Logos", "source_texts": ["Medieval Christian Kabbalah; Christian mystical sources"] },
+        "hermetic": { "role": "Incarnate Logos; mediator of divine wisdom and reconciliation", "corpus_hermeticum_ref": "(comparative role)" },
+        "islamic": { "name_arabic": "عيسى", "name_transliterated": "ʿĪsā", "classification": "Prophet", "quranic_reference": "Quran 3:45; 5:110" },
+        "gnostic": { "name": "Christos / Redeemer", "system": "Various", "classification": "Soteriological Aeon", "source_texts": ["Nag Hammadi Gospel of Thomas; Pistis Sophia (comparative)"] }
+      },
+      "functional_domains": ["Incarnation", "Soteriology", "Logos / Divine Word", "Mediator", "Dying-and-Rising Savior"],
+      "hierarchical_level": 1,
+      "relationships": [],
+      "source_attestations": ["New Testament Gospels", "Pauline Epistles", "Nicene Creed"],
+      "research_notes": "Presented here as the canonical Christian reference node (Logos, Incarnation, Redeemer) so that typological and comparative parallels can be linked consistently.",
+      "completeness_score": 85
+    },
     {
       "id": "hermes-trismegistus",
       "canonical_name": "Hermes Trismegistus",
@@ -2020,7 +2085,28 @@ function buildHierarchy() {
 //  BOOT
 // ═══════════════════════════════════════════════════════
 
+// ─── Parallax scroll handler (lightweight) ───
+function initParallax() {
+  const layers = Array.from(document.querySelectorAll('.parallax-layer'));
+  if (!layers.length) return;
+
+  function onScroll() {
+    const sc = window.scrollY || window.pageYOffset;
+    // subtle multipliers for depth illusion
+    layers.forEach((el, idx) => {
+      const speed = [0.04, 0.08, 0.14][idx] || (0.06 + idx * 0.02);
+      el.style.transform = `translateX(-50%) translateY(${sc * speed}px)`;
+    });
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  // initialize position
+  onScroll();
+}
+
+
 init(CONCORDANCE_DATA);
+initParallax();
 </script>
 
 </body>
