@@ -484,6 +484,12 @@ h1 {
 
 .detail-body { padding: 1.8rem 2rem; }
 
+/* Interactive detail expands for educational mode */
+#detail-panel.interactive {
+  max-width: 98vw;
+  margin: 0.8rem;
+}
+
 /* Sections within detail */
 .detail-section { margin-bottom: 1.8rem; }
 
@@ -752,6 +758,42 @@ h1 {
   margin: 0 auto;
 }
 
+/* New hierarchy grid (tradition × level) */
+.hier-controls {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+.hier-controls label { color: var(--faint); font-family:var(--font-heading); font-size:0.68rem; }
+.hier-controls select {
+  background: #0f0d0a; border: 1px solid var(--border); color:var(--vellum); padding:0.4rem 0.6rem; border-radius:2px;
+}
+
+.hier-grid {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(200px, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+.trad-column { background: rgba(0,0,0,0.12); border:1px solid var(--border); border-radius:4px; padding:0.6rem; }
+.trad-column .trad-header { font-family:var(--font-heading); color:var(--gold-light); font-size:0.78rem; margin-bottom:0.4rem; }
+.trad-column .level-block { border-top:1px dashed var(--border); padding-top:0.5rem; margin-top:0.5rem; }
+.trad-column .level-title { font-family:var(--font-heading); color:var(--gold); font-size:0.72rem; margin-bottom:0.4rem; }
+.trad-column .level-entries { display:flex; flex-wrap:wrap; gap:0.4rem; }
+.trad-column .hier-entity { padding:0.2rem 0.4rem; }
+
+@media (max-width: 900px) {
+  .hier-grid { grid-auto-columns: minmax(160px, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .hier-grid { grid-auto-flow: row; grid-template-columns: 1fr; }
+  .graph-legend { display: none; }
+  #cy-container { height: 56vh; }
+}
+
 .hier-level {
   margin-bottom: 0.5rem;
   position: relative;
@@ -1007,10 +1049,28 @@ h1 {
       <button class="graph-btn" data-edge="POLEMIC_EQUIVALENT">Polemic</button>
       <button class="graph-btn" data-edge="CONTESTED_IDENTIFICATION">Contested</button>
       <button class="graph-btn" data-edge="COMMANDS">Commands</button>
+      <label style="margin-left:1rem;font-family:var(--font-heading);font-size:0.62rem;color:var(--faint);letter-spacing:0.12em">Tradition:</label>
+      <select id="graph-trad-select" style="background:#0f0d0a;border:1px solid var(--border);color:var(--vellum);padding:0.28rem 0.5rem;border-radius:2px;margin-right:0.6rem">
+        <option value="all">All</option>
+        <option value="greek">Greek</option>
+        <option value="roman">Roman</option>
+        <option value="egyptian">Egyptian</option>
+        <option value="biblical_angel">Angelology</option>
+        <option value="enochian">Enochian</option>
+        <option value="kabbalistic">Kabbalah</option>
+        <option value="hermetic">Hermetic</option>
+        <option value="gnostic">Gnostic</option>
+        <option value="goetic">Goetic</option>
+        <option value="islamic">Islamic</option>
+        <option value="planetary">Planetary</option>
+      </select>
+      <button class="graph-btn" id="graph-reset-lens">Reset</button>
+      <button class="graph-btn" id="graph-compact-toggle" title="Compact mobile graph mode">Compact</button>
       <span style="margin-left:auto;font-family:var(--font-heading);font-size:0.6rem;color:var(--dim)">Click node to view • Scroll to zoom</span>
     </div>
     <div id="cy-container"><div id="cy"></div></div>
     <div class="graph-legend" id="graph-legend"></div>
+    <div class="graph-legend" id="edge-legend" style="margin-top:0.4rem;font-size:0.72rem"></div>
   </section>
 
   <!-- ── HIERARCHY VIEW ── -->
@@ -1764,7 +1824,7 @@ function renderSearch(query) {
     const card = document.createElement('div');
     card.className = 'entity-card';
     card.style.animationDelay = `${Math.min(i * 0.04, 0.4)}s`;
-    card.onclick = () => openDetail(entity.id);
+    card.onclick = () => openInteractiveDetail(entity.id);
 
     const tradKeys = Object.keys(entity.tradition_vectors || {});
     const tradPips = tradKeys.map(k =>
@@ -1827,9 +1887,26 @@ function openDetail(id) {
     const srcs = (tradData.source_texts || [])
       .map(s => `<div class="trad-field"><span class="trad-field-key">source</span><span class="trad-field-val">${s}</span></div>`).join('');
     block.innerHTML = `
-      <p class="trad-block-name trad-${tradKey}" style="color:${NODE_COLORS[tradKey] || '#c9983a'}">${TRADITION_LABELS[tradKey] || tradKey}</p>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:0.6rem;margin-bottom:0.4rem">
+        <p class="trad-block-name trad-${tradKey}" style="color:${NODE_COLORS[tradKey] || '#c9983a'};margin:0">${TRADITION_LABELS[tradKey] || tradKey}</p>
+        <div style="display:flex;gap:0.4rem">
+          <button class="graph-btn" onclick="(function(){if(typeof applyTraditionLens==='function')applyTraditionLens('${tradKey}');})()">Focus in Graph</button>
+        </div>
+      </div>
       <div class="trad-block-fields">${fields}${srcs}</div>
     `;
+    // append list of relations within this tradition
+    const rels = (entity.relationships || []).filter(r => r.source_tradition === tradKey || (r.target_id && DB.entities.find(e=>e.id===r.target_id && e.tradition_vectors && e.tradition_vectors[tradKey])));
+    if (rels.length) {
+      const relList = document.createElement('div');
+      relList.className = 'trad-block';
+      relList.style.marginTop = '0.6rem';
+      relList.innerHTML = `<p class="trad-block-name" style="color:var(--faint);margin:0">Direct relations in ${TRADITION_LABELS[tradKey] || tradKey}</p>` + rels.map(r=>{
+        const target = DB.entities.find(en=>en.id===r.target_id);
+        return `<div class="trad-field"><span class="trad-field-key">${r.edge_type.replace(/_/g,' ')}</span><span class="trad-field-val">${target ? target.canonical_name : r.target_id}</span></div>`;
+      }).join('');
+      block.appendChild(relList);
+    }
     tradEl.appendChild(block);
   });
 
@@ -1865,6 +1942,24 @@ function openDetail(id) {
 
   document.getElementById('detail-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
+  // ensure interactive flag cleared by default
+  document.getElementById('detail-panel').classList.remove('interactive');
+}
+
+function openInteractiveDetail(id) {
+  // open expanded interactive detail for educational flow
+  openDetail(id);
+  const panel = document.getElementById('detail-panel');
+  panel.classList.add('interactive');
+  // when available, focus the graph on the entity's primary tradition
+  const ent = DB.entities.find(e => e.id === id);
+  if (ent && cy) {
+    const prim = getPrimaryTradition(ent);
+    applyTraditionLens(prim);
+    // ensure selected node is centered
+    const node = cy.getElementById(id);
+    if (node && node.length) cy.$(':selected').unselect(), node.select(), cy.fit(node.union(node.connectedEdges().connectedNodes()), 80);
+  }
 }
 
 function closeDetail() {
@@ -1931,13 +2026,23 @@ function initGraph() {
           'label': 'data(label)',
           'color': '#f2ead8',
           'font-family': 'Cinzel, serif',
-          'font-size': '9px',
+          'font-size': el => (window.innerWidth <= 640 ? '12px' : '9px'),
+          'text-background-color': '#1a1410',
+          'text-background-opacity': 0.85,
+          'text-background-padding': '3px',
+          'text-background-shape': 'roundrectangle',
           'text-valign': 'bottom',
           'text-margin-y': '4px',
           'text-outline-color': '#1a1410',
           'text-outline-width': '2px',
-          'width': el => Math.max(20, 36 - (el.data('level') || 4) * 3),
-          'height': el => Math.max(20, 36 - (el.data('level') || 4) * 3),
+          'width': el => {
+            const base = Math.max(20, 36 - (el.data('level') || 4) * 3);
+            return window.innerWidth <= 640 ? Math.max(28, base * 1.3) : base;
+          },
+          'height': el => {
+            const base = Math.max(20, 36 - (el.data('level') || 4) * 3);
+            return window.innerWidth <= 640 ? Math.max(28, base * 1.3) : base;
+          },
           'border-width': 2,
           'border-color': 'data(color)',
           'border-opacity': 0.5,
@@ -1980,13 +2085,18 @@ function initGraph() {
         style: { 'opacity': 0.08 }
       }
     ],
-    layout: {
-      name: 'concentric',
-      concentric: node => 8 - (node.data('level') || 4),
-      levelWidth: () => 1,
-      minNodeSpacing: 60,
-      padding: 50
-    },
+    layout: (function(){
+      if (window.innerWidth <= 640) {
+        return { name: 'cose', idealEdgeLength: 80, nodeOverlap: 10, refresh: 20, fit: true };
+      }
+      return {
+        name: 'concentric',
+        concentric: node => 8 - (node.data('level') || 4),
+        levelWidth: () => 1,
+        minNodeSpacing: 60,
+        padding: 50
+      };
+    })(),
     userZoomingEnabled: true,
     userPanningEnabled: true,
     minZoom: 0.2,
@@ -2008,7 +2118,119 @@ function initGraph() {
     cy.elements().removeClass('dimmed');
   });
 
+  // Touch-friendly neighbor highlight (hold to focus neighbors on mobile/touch)
+  cy.on('taphold', 'node', evt => {
+    const node = evt.target;
+    cy.elements().addClass('dimmed');
+    node.removeClass('dimmed');
+    node.connectedEdges().removeClass('dimmed').connectedNodes().removeClass('dimmed');
+  });
+
+  // Tap anywhere to clear dimming (mobile friendly)
+  cy.on('tap', evt => {
+    if (evt.target === cy) cy.elements().removeClass('dimmed');
+  });
+
   updateGraphEdgeVisibility();
+
+  // wire tradition selector (lens) and reset/compact controls
+  const tradSelect = document.getElementById('graph-trad-select');
+  const resetBtn = document.getElementById('graph-reset-lens');
+  const compactBtn = document.getElementById('graph-compact-toggle');
+
+  if (tradSelect) {
+    tradSelect.addEventListener('change', () => {
+      const v = tradSelect.value;
+      if (v === 'all') resetGraphLens(); else applyTraditionLens(v);
+    });
+  }
+  if (resetBtn) resetBtn.addEventListener('click', resetGraphLens);
+  if (compactBtn) {
+    compactBtn.addEventListener('click', () => {
+      if (compactBtn.classList.contains('active')) exitCompactMode(); else enterCompactMode();
+    });
+  }
+}
+
+let _graphLens = null;
+function applyTraditionLens(tradKey) {
+  if (!cy) return;
+  _graphLens = tradKey;
+  // quickly fade non-matching nodes and edges
+  cy.elements().addClass('dimmed');
+  cy.nodes().forEach(n => {
+    if (n.data('tradition') === tradKey) {
+      n.removeClass('dimmed');
+      n.connectedEdges().removeClass('dimmed');
+    }
+  });
+  // focus on the largest connected component within the tradition if available
+  const nodes = cy.nodes().filter(n => n.data('tradition') === tradKey);
+  if (nodes && nodes.length) {
+    const bb = nodes.boundingBox();
+    cy.fit(nodes, 60);
+  }
+  // fade UI legend for focus
+  document.getElementById('graph-legend').style.opacity = '0.35';
+}
+
+function resetGraphLens() {
+  if (!cy) return;
+  _graphLens = null;
+  cy.elements().removeClass('dimmed');
+  document.getElementById('graph-legend').style.opacity = '';
+  const tradSelect = document.getElementById('graph-trad-select'); if (tradSelect) tradSelect.value = 'all';
+  cy.fit(undefined, 60);
+}
+
+let _compactMode = false;
+function enterCompactMode() {
+  if (!cy) return;
+  _compactMode = true;
+  document.getElementById('graph-compact-toggle').classList.add('active');
+  // hide labels for clarity
+  cy.nodes().style('label', '');
+  // make taps center & zoom to node and show only its neighbors
+  cy.on('tap', 'node.compact-focus', () => {}); // noop ensure exists
+  cy.on('tap', 'node', compactNodeFocus);
+}
+
+function exitCompactMode() {
+  if (!cy) return;
+  _compactMode = false;
+  document.getElementById('graph-compact-toggle').classList.remove('active');
+  cy.nodes().style('label', node => node.data('label'));
+  cy.off('tap', 'node', compactNodeFocus);
+  cy.elements().removeClass('dimmed');
+  cy.fit(undefined, 60);
+}
+
+function compactNodeFocus(evt) {
+  const node = evt.target;
+  // zoom to node and highlight immediate neighbors
+  cy.elements().addClass('dimmed');
+  node.removeClass('dimmed');
+  const nbrs = node.connectedEdges().connectedNodes();
+  nbrs.removeClass('dimmed');
+  const focus = node.union(nbrs);
+  cy.fit(focus, 80);
+  // add a small reset overlay control
+  showCompactReset();
+}
+
+function showCompactReset() {
+  let existing = document.getElementById('compact-reset');
+  if (existing) return;
+  const btn = document.createElement('button');
+  btn.id = 'compact-reset';
+  btn.textContent = 'Exit Compact';
+  btn.className = 'graph-btn';
+  btn.style.position = 'absolute';
+  btn.style.right = '12px';
+  btn.style.top = '72px';
+  btn.style.zIndex = 600;
+  btn.onclick = () => { exitCompactMode(); btn.remove(); };
+  document.getElementById('cy-container').appendChild(btn);
 }
 
 function updateGraphEdgeVisibility() {
@@ -2026,6 +2248,26 @@ function buildGraphLegend() {
   legend.innerHTML = Object.entries(NODE_COLORS).filter(([k]) => k !== 'default').map(([k,c]) =>
     `<div class="legend-item"><div class="legend-dot" style="background:${c}"></div>${TRADITION_LABELS[k] || k}</div>`
   ).join('');
+  buildEdgeLegend();
+}
+
+function buildEdgeLegend() {
+  const el = document.getElementById('edge-legend');
+  if (!el) return;
+  const defs = {
+    SYNCRETIZED_WITH: 'Syncretized — historical identification or merger across traditions',
+    FUNCTIONAL_PARALLEL: 'Functional Parallel — similar roles/functions across systems',
+    DESCENDED_FROM: 'Descent — genealogical or origin relationship',
+    EMANATED_FROM: 'Emanated From — metaphysical derivation',
+    POLEMIC_EQUIVALENT: 'Polemic — polemical or demonizing identification',
+    MANIFESTED_AS: 'Manifested As — a figure appears as another in certain texts',
+    FALLEN_FORM_OF: 'Fallen Form — later corrupted or demonized variant',
+    TAUGHT_BY: 'Taught By — instructional relation (teacher/mentor)',
+    COMMANDS: 'Commands — hierarchical command relationship (leader→subordinate)',
+    CORRESPONDS_TO: 'Corresponds To — symbolically or functionally corresponds',
+    CONTESTED_IDENTIFICATION: 'Contested — identification is debated in scholarship'
+  };
+  el.innerHTML = Object.entries(defs).map(([k,v]) => `<div class="legend-item"><div class="legend-dot" style="background:${EDGE_COLORS[k]||'#888'};width:10px;height:6px;border-radius:2px"></div><strong style="margin-right:0.4rem">${k.replace(/_/g,' ')}</strong>${v}</div>`).join('');
 }
 
 // ═══════════════════════════════════════════════════════
@@ -2034,55 +2276,91 @@ function buildGraphLegend() {
 
 function buildHierarchy() {
   const container = document.getElementById('hierarchy-container');
-  const byLevel = {};
-  for (let i = 1; i <= 7; i++) byLevel[i] = [];
-  DB.entities.forEach(e => {
-    const lvl = e.hierarchical_level || 7;
-    if (byLevel[lvl]) byLevel[lvl].push(e);
-  });
+  const traditions = ['all', ...Object.keys(TRADITION_LABELS)];
 
   container.innerHTML = '';
 
-  for (let lvl = 1; lvl <= 7; lvl++) {
-    if (!byLevel[lvl].length && lvl > 1) continue;
+  // controls (mobile-friendly select)
+  const controls = document.createElement('div');
+  controls.className = 'hier-controls';
+  const label = document.createElement('label');
+  label.setAttribute('for', 'hier-trad-select');
+  label.textContent = 'Tradition:';
+  const select = document.createElement('select');
+  select.id = 'hier-trad-select';
+  traditions.forEach(t => {
+    const opt = document.createElement('option');
+    opt.value = t;
+    opt.textContent = t === 'all' ? 'All Traditions' : (TRADITION_LABELS[t] || t);
+    select.appendChild(opt);
+  });
+  controls.appendChild(label);
+  controls.appendChild(select);
+  container.appendChild(controls);
 
-    if (lvl > 1) {
-      const conn = document.createElement('div');
-      conn.className = 'hier-connector';
-      conn.textContent = '│';
-      container.appendChild(conn);
+  const grid = document.createElement('div');
+  grid.className = 'hier-grid';
+
+  traditions.forEach(tradKey => {
+    const col = document.createElement('div');
+    col.className = 'trad-column';
+    const header = document.createElement('div');
+    header.className = 'trad-header';
+    header.textContent = tradKey === 'all' ? 'All Traditions (by level)' : (TRADITION_LABELS[tradKey] || tradKey);
+    col.appendChild(header);
+
+    // levels 1..7
+    for (let lvl = 1; lvl <= 7; lvl++) {
+      const levelBlock = document.createElement('div');
+      levelBlock.className = 'level-block';
+      const title = document.createElement('div');
+      title.className = 'level-title';
+      title.textContent = LEVEL_LABELS[lvl] ? LEVEL_LABELS[lvl].split(' — ')[1] || LEVEL_LABELS[lvl] : `Level ${lvl}`;
+      levelBlock.appendChild(title);
+
+      const entriesWrap = document.createElement('div');
+      entriesWrap.className = 'level-entries';
+
+      const ents = DB.entities.filter(e => {
+        const hasTrad = tradKey === 'all' ? true : (e.tradition_vectors && e.tradition_vectors[tradKey]);
+        return hasTrad && ((e.hierarchical_level || 7) === lvl);
+      });
+
+      if (!ents.length) {
+        entriesWrap.innerHTML = `<span style="color:var(--dim);font-style:italic;font-size:0.85rem">—</span>`;
+      } else {
+        entriesWrap.innerHTML = ents.map(e => {
+          const trad = getPrimaryTradition(e);
+          return `<span class="hier-entity" onclick="openDetail('${e.id}')">
+            <span class="hier-trad-dot" style="background:${NODE_COLORS[trad] || '#c9983a'}"></span>
+            ${e.canonical_name}
+          </span>`;
+        }).join('');
+      }
+
+      levelBlock.appendChild(entriesWrap);
+      col.appendChild(levelBlock);
     }
 
-    const block = document.createElement('div');
-    block.className = 'hier-level';
+    grid.appendChild(col);
+  });
 
-    const levelTitle = LEVEL_LABELS[lvl] || `Level ${lvl}`;
-    const [numPart, textPart] = levelTitle.split(' — ');
+  container.appendChild(grid);
 
-    let entriesHTML = '';
-    if (byLevel[lvl].length) {
-      entriesHTML = byLevel[lvl].map(e => {
-        const trad = getPrimaryTradition(e);
-        return `<span class="hier-entity" onclick="openDetail('${e.id}')">
-          <span class="hier-trad-dot" style="background:${NODE_COLORS[trad] || '#c9983a'}"></span>
-          ${e.canonical_name}
-        </span>`;
-      }).join('');
-    } else {
-      entriesHTML = `<span style="color:var(--dim);font-style:italic;font-size:0.85rem">Not yet populated</span>`;
-    }
-
-    block.innerHTML = `
-      <div class="hier-block">
-        <div class="hier-header">
-          <span class="hier-level-num">${numPart}</span>
-          <span class="hier-level-title">${textPart || ''}</span>
-        </div>
-        <div class="hier-entries">${entriesHTML}</div>
-      </div>
-    `;
-    container.appendChild(block);
-  }
+  // toggle columns when a tradition is selected (mobile-friendly)
+  select.addEventListener('change', () => {
+    const v = select.value;
+    const cols = Array.from(grid.children);
+    cols.forEach((c, i) => {
+      if (v === 'all') {
+        c.style.display = '';
+      } else {
+        // show only the column matching selected tradition
+        const key = traditions[i];
+        c.style.display = (key === v) ? '' : 'none';
+      }
+    });
+  });
 }
 
 // ═══════════════════════════════════════════════════════
