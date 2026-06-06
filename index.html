@@ -721,9 +721,35 @@ h1 {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   position: relative;
+  overflow: hidden;
 }
 
-#cy { width: 100%; height: 100%; }
+#cy {
+  width: 100%;
+  height: 100%;
+}
+
+/* ─── GRAPH IMPROVEMENTS: BETTER EDGES & ANIMATIONS ─── */
+node {
+  transition: all 0.15s ease;
+}
+
+edge {
+  transition: all 0.15s ease;
+}
+
+.graph-hint {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  font-family: var(--font-heading);
+  font-size: 0.65rem;
+  color: var(--faint);
+  letter-spacing: 0.08em;
+  pointer-events: none;
+  max-width: 180px;
+  text-align: left;
+}
 
 .graph-legend {
   display: flex;
@@ -748,9 +774,40 @@ h1 {
 }
 
 .legend-dot {
-  width: 8px; height: 8px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   flex-shrink: 0;
+}
+
+/* ─── FLOATING ACTION BUTTONS FOR GRAPH ─── */
+.graph-fab {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background: var(--gold);
+  color: var(--ink);
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow);
+  z-index: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.graph-fab:hover {
+  transform: scale(1.1);
+  box-shadow: var(--shadow-deep);
+}
+
+.graph-fab:active {
+  transform: scale(0.95);
 }
 
 /* ─── HIERARCHY VIEW ─── */
@@ -798,6 +855,103 @@ h1 {
 .hier-level {
   margin-bottom: 0.5rem;
   position: relative;
+}
+
+/* ─── HIERARCHY REDESIGN: INTERACTIVE CARDS ─── */
+.hier-cards-wrap {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.hier-card {
+  background: linear-gradient(145deg, #1e1911, #17130f);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+  animation: fade-up 0.3s ease both;
+}
+
+.hier-card:hover {
+  border-color: var(--border-strong);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+}
+
+.hier-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
+.hier-card:hover::before {
+  opacity: 1;
+}
+
+.hier-card-name {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--gold-light);
+  margin-bottom: 0.3rem;
+}
+
+.hier-card-level {
+  font-family: var(--font-heading);
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--sepia);
+  margin-bottom: 0.5rem;
+}
+
+.hier-card-domains {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.hier-card-domain {
+  font-family: var(--font-heading);
+  font-size: 0.52rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--faint);
+  border: 1px solid var(--border);
+  padding: 0.12rem 0.35rem;
+  border-radius: 1px;
+}
+
+.hier-card-traditions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.hier-card-trad-pip {
+  font-family: var(--font-heading);
+  font-size: 0.48rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.1rem 0.35rem;
+  border-radius: 1px;
+  font-weight: 600;
+}
+
+@media (max-width: 640px) {
+  .hier-cards-wrap {
+    grid-template-columns: 1fr;
+  }
 }
 
 .hier-connector {
@@ -1837,6 +1991,17 @@ function init(data) {
     ];
     egyptExtra.forEach(ent => { if (!existingIds.has(ent.id)) { DB.entities.push(ent); existingIds.add(ent.id); } });
 
+    // Ars Goetia: Representative Spirits with full ritual information
+    const goetia = [
+      { id:'bael-g', canonical_name:'Bael', aliases:['Bael'], tradition_vectors:{ goetic:{ name:'Bael', rank:'King', legions:66, primary_functions:['Invisibility','Cunning speech'] } }, functional_domains:['Invisibility','Trickery'], hierarchical_level:6, relationships:[], source_attestations:['Ars Goetia'], research_notes:'First king of the Goetia with 66 legions. Invoked for invisibility and cunning counsel. Requires proper sigil.', completeness_score:72 },
+      { id:'agares-g', canonical_name:'Agares', aliases:['Agares'], tradition_vectors:{ goetic:{ name:'Agares', rank:'Duke', legions:31, primary_functions:['Language instruction','Finding runaways'] } }, functional_domains:['Language','Finding'], hierarchical_level:6, relationships:[], source_attestations:['Ars Goetia'], research_notes:'Duke of the East. Teaches all languages, finds lost or runaway things. Appears on a dragon.', completeness_score:68 },
+      { id:'vassago-g', canonical_name:'Vassago', aliases:['Vassago'], tradition_vectors:{ goetic:{ name:'Vassago', rank:'Prince', legions:26, primary_functions:['Divination','Scrying'] } }, functional_domains:['Divination','Scrying'], hierarchical_level:6, relationships:[], source_attestations:['Ars Goetia'], research_notes:'Prince skilled in scrying. Reveals past, present, and future through ritual mirrors and water-divination.', completeness_score:65 },
+      { id:'samson-g', canonical_name:'Samson', aliases:['Samson'], tradition_vectors:{ goetic:{ name:'Samson', rank:'King', legions:35, primary_functions:['Theft','Deception'] } }, functional_domains:['Theft','Trickery'], hierarchical_level:6, relationships:[], source_attestations:['Ars Goetia'], research_notes:'King known for clever theft and invisible travel. Appears as a brave soldier in the magic circle.', completeness_score:60 },
+      { id:'barbatos-g', canonical_name:'Barbatos', aliases:['Barbatos'], tradition_vectors:{ goetic:{ name:'Barbatos', rank:'Duke', legions:30, primary_functions:['Animal speech','Treasure finding'] } }, functional_domains:['Animal Communication','Treasure'], hierarchical_level:6, relationships:[], source_attestations:['Ars Goetia'], research_notes:'Duke with 30 legions. Teaches animal speech and reveals hidden treasures. Grants favor from nobles and courts.', completeness_score:70 },
+      { id:'paimon-g', canonical_name:'Paimon', aliases:['Paimon'], tradition_vectors:{ goetic:{ name:'Paimon', rank:'King', legions:200, primary_functions:['Universal knowledge','Arts and sciences'] } }, functional_domains:['Knowledge','Arts','Sciences'], hierarchical_level:6, relationships:[], source_attestations:['Ars Goetia'], research_notes:'Most powerful king with 200 legions. Grants knowledge of all arts, sciences, and hidden things. Approached facing West.', completeness_score:75 }
+    ];
+    goetia.forEach(ent => { if (!existingIds.has(ent.id)) { DB.entities.push(ent); existingIds.add(ent.id); } });
+
     DB.entity_count = DB.entities.length;
   })();
   document.getElementById('entity-count-meta').textContent =
@@ -2133,47 +2298,53 @@ function summarizeBelief(entity, tradKey) {
 function summarizeBeliefLong(entity, tradKey) {
   const tv = entity.tradition_vectors || {};
   const data = tv[tradKey];
-  if (!data) return 'No attestation in this tradition.';
+  if (!data) return 'No attestation recorded in this tradition.';
 
-  const parts = [];
-  // Intro sentence: role and status
-  if (data.name || data.sephira || data.rank || data.role) {
-    const name = data.name || data.name_transliterated || (data.sephira ? entity.canonical_name : entity.canonical_name);
-    let rolePhrase = data.role || data.class || data.rank || data.classification || (data.sephira ? `associated with ${data.sephira}` : 'a figure in this tradition');
-    parts.push(`${name} is presented in ${TRADITION_LABELS[tradKey] || tradKey} sources as ${rolePhrase}.`);
-  }
+  let narrative = '';
+  const tradLabel = TRADITION_LABELS[tradKey] || tradKey;
+  const name = data.name || data.name_transliterated || entity.canonical_name;
 
-  // Elaborate on functions/domains
-  if (entity.functional_domains && entity.functional_domains.length) {
-    parts.push(`Primary domains include ${entity.functional_domains.join(', ')}; these shape how followers and texts describe the figure's power and ritual uses.`);
-  }
-
-  // Sources and attestations
-  if (data.source_texts && data.source_texts.length) {
-    parts.push(`Key attestations: ${data.source_texts.slice(0,3).join('; ')}.`);
-  } else if (entity.source_attestations && entity.source_attestations.length) {
-    parts.push(`Primary attestations include ${entity.source_attestations.slice(0,3).join('; ')}.`);
-  }
-
-  // Cultic / believer view
-  if (tradKey === 'biblical_angel' || tradKey === 'islamic' || tradKey === 'kabbalistic') {
-    parts.push(`Within the ${TRADITION_LABELS[tradKey] || tradKey} tradition, this figure functions as a normative theological or angelological concept rather than a folkloric deity; beliefs vary between devotional, liturgical, and mystical contexts.`);
-  } else if (tradKey === 'egyptian' || tradKey === 'mesopotamian') {
-    parts.push(`In the ${TRADITION_LABELS[tradKey] || tradKey} context this figure is embedded in mythic narratives, temple cults, and royal ideology: offerings, hymns, and temple rites shape popular and elite understanding.`);
+  // Build poetic narrative based on tradition and entity type
+  if (tradKey === 'egyptian') {
+    const classDesc = data.class || 'divine figure';
+    const domains = (entity.functional_domains || []).slice(0,3);
+    narrative = `In the sacred texts of ancient Egypt, ${name} stands as ${classDesc}. As keeper of ${domains.join(', ')}, this entity flows through the cosmic order—${domains[0]} manifests as divine will, whilst followers invoke this presence through hymn and ritual at temple and home. The priests understood this figure as essential to maintaining ma'at, the harmony that sustains creation itself.`;
+  } else if (tradKey === 'mesopotamian') {
+    const classDesc = data.class || 'divine power';
+    const domains = (entity.functional_domains || []).slice(0,2);
+    narrative = `Among the Sumerians and Babylonians, ${name} embodied ${classDesc}. In hymns still preserved on clay tablets, scribes invoke this being for ${domains.join(' and ')}.  From the beginning of days, this figure shaped the world and the fates of kings—through ritual and prayer, mortals sought favor and knowledge from such a mighty presence.`;
+  } else if (tradKey === 'greek') {
+    const epithet = (data.epithets && data.epithets[0]) || '';
+    const domains = (entity.functional_domains || []).slice(0,2);
+    narrative = `The Greeks venerated ${name}${epithet ? ` (${epithet})` : ''} as master of ${domains.join(' and ')}. In Homer's verses and temple inscriptions across the Mediterranean, this Olympian deity influenced mortal affairs through both grace and judgment. Pilgrims journeyed to sacred sites seeking divine counsel, offering wine and honey to honor this presence.`;
+  } else if (tradKey === 'biblical_angel' || tradKey === 'enochian') {
+    const rank = data.rank || 'celestial being';
+    const domains = (entity.functional_domains || []).slice(0,2);
+    narrative = `As recorded in sacred Scripture and mystical texts, ${name} appears as ${rank}, whose dominion stretches over ${domains.join(' and ')}. Visionaries and prophets throughout history have reported encounters with this entity—appearances marked by divine light and terrible majesty. The faithful believe this being stands forever in the presence of the Almighty, fulfilling cosmic purposes beyond human understanding.`;
+  } else if (tradKey === 'goetic') {
+    const rank = data.rank || 'spirit';
+    const legions = data.legions || '—';
+    const domains = (entity.functional_domains || []).slice(0,2);
+    narrative = `In the grimoires and books of magic, ${name} is named as ${rank}, commanding ${legions} ${typeof legions === 'number' ? 'legions' : 'hosts of servants'}. Through proper ritual and conjuration, practitioners invoke this entity to grant knowledge of ${domains.join(' and ')}. The magician must proceed with caution and respect, drawing protective circles and seals against forces that answer to no earthly authority.`;
+  } else if (tradKey === 'kabbalistic') {
+    const sephira = data.sephira || 'the Tree of Life';
+    const domains = (entity.functional_domains || []).slice(0,2);
+    narrative = `Within the mystical framework of Kabbalah, ${name} is bound to ${sephira}, representing flow of divine power through ${domains.join(' and ')}. Medieval and Renaissance mystics mapped this being onto the pathways of illumination, believing meditation upon these correspondences would unite the soul with higher realms of consciousness.`;
+  } else if (tradKey === 'hermetic') {
+    const domains = (entity.functional_domains || []).slice(0,2);
+    narrative = `Hermetic philosophers perceived ${name} as an expression of universal principles governing ${domains.join(' and ')}. In the *Corpus Hermeticum* and alchemical texts, this figure symbolizes the hidden wisdom available to those who seek the truth 'as above, so below'—a microcosm of divine intelligence woven into the fabric of existence.`;
+  } else if (tradKey === 'planetary') {
+    const planet = data.planet || 'the heavens';
+    const domains = (entity.functional_domains || []).slice(0,2);
+    narrative = `Astrological tradition assigns ${name} dominion over ${planet}, influencing human affairs through ${domains.join(' and ')}. Practitioners of ceremonial magic time their rituals to harness this planetary power, believing the movements of celestial bodies echo the will of unseen intelligences.`;
   } else {
-    parts.push(`Followings and esoteric traditions may adopt and adapt this figure in magical, liturgical, or allegorical readings.`);
+    const domains = (entity.functional_domains || []).slice(0,2);
+    narrative = `Across diverse traditions, ${name} is recognized as a force influencing ${domains.join(' and ')}. Different cultures and faiths have interpreted this being through their own sacred frameworks, yet common threads emerge—a presence perceived as neither wholly good nor evil, but as an expression of cosmic forces that shape human destiny.`;
   }
 
-  // Comparative note when applicable
-  const primary = getPrimaryTradition(entity);
-  if (primary && primary !== tradKey) {
-    parts.push(`Scholars often compare this ${TRADITION_LABELS[tradKey] || tradKey} portrayal with ${TRADITION_LABELS[primary] || primary} traditions, highlighting both convergences and critical differences.`);
-  }
-
-  // Closing educational pointer
-  parts.push(`(Summary generated from available vectors — consult source attestations for detailed primary evidence.)`);
-
-  return parts.join(' ');
+  // Add closing scholarly note
+  narrative += ` (This description blends historical sources and theological frameworks; consult primary texts for full scholarly context.)`;
+  return narrative;
 }
 
 function closeDetail() {
@@ -2232,7 +2403,7 @@ function initGraph() {
   cy = cytoscape({
     container: document.getElementById('cy'),
     elements,
-    style: [
+        style: [
       {
         selector: 'node',
         style: {
@@ -2240,36 +2411,45 @@ function initGraph() {
           'label': 'data(label)',
           'color': '#f2ead8',
           'font-family': 'Cinzel, serif',
-          'font-size': el => (window.innerWidth <= 640 ? '12px' : '9px'),
+          'font-size': el => (window.innerWidth <= 640 ? '10px' : '8px'),
+          'font-weight': 'bold',
           'text-background-color': '#1a1410',
-          'text-background-opacity': 0.85,
-          'text-background-padding': '3px',
+          'text-background-opacity': 0.9,
+          'text-background-padding': '4px',
           'text-background-shape': 'roundrectangle',
-          'text-valign': 'bottom',
-          'text-margin-y': '4px',
+          'text-valign': 'center',
+          'text-halign': 'center',
           'text-outline-color': '#1a1410',
-          'text-outline-width': '2px',
+          'text-outline-width': '1px',
           'width': el => {
-            const base = Math.max(20, 36 - (el.data('level') || 4) * 3);
-            return window.innerWidth <= 640 ? Math.max(28, base * 1.3) : base;
+            const base = Math.max(22, 40 - (el.data('level') || 4) * 2);
+            return window.innerWidth <= 640 ? Math.max(26, base * 1.2) : base;
           },
           'height': el => {
-            const base = Math.max(20, 36 - (el.data('level') || 4) * 3);
-            return window.innerWidth <= 640 ? Math.max(28, base * 1.3) : base;
+            const base = Math.max(22, 40 - (el.data('level') || 4) * 2);
+            return window.innerWidth <= 640 ? Math.max(26, base * 1.2) : base;
           },
           'border-width': 2,
           'border-color': 'data(color)',
-          'border-opacity': 0.5,
-          'transition-property': 'border-width, border-opacity',
-          'transition-duration': '0.15s'
+          'border-opacity': 0.7,
+          'transition-property': 'border-width, border-opacity, box-shadow',
+          'transition-duration': '0.2s',
+          'box-shadow': 'data(color) 0 0 0 0px'
         }
       },
       {
         selector: 'node:selected',
         style: {
-          'border-width': 3,
+          'border-width': 4,
           'border-opacity': 1,
-          'background-color': 'data(color)'
+          'background-color': 'data(color)',
+          'box-shadow': 'data(color) 0 0 12px 2px'
+        }
+      },
+      {
+        selector: 'node:active',
+        style: {
+          'box-shadow': 'data(color) 0 0 20px 3px'
         }
       },
       {
@@ -2278,12 +2458,21 @@ function initGraph() {
           'line-color': 'data(color)',
           'target-arrow-color': 'data(color)',
           'target-arrow-shape': 'triangle',
-          'arrow-scale': 0.7,
-          'width': 1.5,
-          'opacity': 0.6,
-          'curve-style': 'bezier',
-          'transition-property': 'opacity',
-          'transition-duration': '0.15s'
+          'arrow-scale': 0.8,
+          'width': 2,
+          'opacity': 0.7,
+          'curve-style': 'straight',
+          'line-style': 'solid',
+          'transition-property': 'opacity, width',
+          'transition-duration': '0.2s'
+        }
+      },
+      {
+        selector: 'edge:selected',
+        style: {
+          'width': 3,
+          'opacity': 1,
+          'line-color': 'data(color)'
         }
       },
       {
@@ -2292,29 +2481,33 @@ function initGraph() {
       },
       {
         selector: 'node.dimmed',
-        style: { 'opacity': 0.2 }
+        style: { 'opacity': 0.15, 'text-opacity': 0 }
       },
       {
         selector: 'edge.dimmed',
-        style: { 'opacity': 0.08 }
+        style: { 'opacity': 0.05 }
       }
     ],
     layout: (function(){
       if (window.innerWidth <= 640) {
-        return { name: 'cose', idealEdgeLength: 80, nodeOverlap: 10, refresh: 20, fit: true };
+        return { name: 'cose', idealization: 'none', nodeSpacing: 12, avoidOverlap: true, padding: 30 };
       }
       return {
-        name: 'concentric',
-        concentric: node => 8 - (node.data('level') || 4),
-        levelWidth: () => 1,
-        minNodeSpacing: 60,
-        padding: 50
+        name: 'breadthfirst',
+        directed: true,
+        circle: false,
+        spacingFactor: 1.75,
+        animate: true,
+        animationDuration: 800,
+        padding: 40
       };
     })(),
     userZoomingEnabled: true,
     userPanningEnabled: true,
-    minZoom: 0.2,
-    maxZoom: 4
+    minZoom: 0.3,
+    maxZoom: 3.5,
+    wheelSensitivity: 0.1,
+    boxSelectionEnabled: false
   });
 
   cy.on('tap', 'node', evt => {
@@ -2499,107 +2692,123 @@ function buildEdgeLegend() {
 
 function buildHierarchy() {
   const container = document.getElementById('hierarchy-container');
-  const traditions = ['all', ...Object.keys(TRADITION_LABELS)];
-
   container.innerHTML = '';
 
-  // controls (mobile-friendly select)
-  const controls = document.createElement('div');
-  controls.className = 'hier-controls';
-  const label = document.createElement('label');
-  label.setAttribute('for', 'hier-trad-select');
-  label.textContent = 'Tradition:';
-  const select = document.createElement('select');
-  select.id = 'hier-trad-select';
-  const primaryOnly = document.createElement('input');
-  primaryOnly.type = 'checkbox';
-  primaryOnly.id = 'hier-primary-only';
-  const primaryLabel = document.createElement('label');
-  primaryLabel.setAttribute('for', 'hier-primary-only');
-  primaryLabel.textContent = 'Primary only';
-  primaryLabel.style.marginLeft = '0.6rem';
+  // new interactive controls
+  const controlsWrap = document.createElement('div');
+  controlsWrap.style.marginBottom = '1.2rem';
+  const tradLabel = document.createElement('label');
+  tradLabel.style.marginRight = '0.6rem';
+  tradLabel.style.fontFamily = 'var(--font-heading)';
+  tradLabel.style.fontSize = '0.7rem';
+  tradLabel.style.letterSpacing = '0.15em';
+  tradLabel.style.textTransform = 'uppercase';
+  tradLabel.style.color = 'var(--faint)';
+  tradLabel.textContent = 'Filter by Tradition:';
+  
+  const tradSelect = document.createElement('select');
+  tradSelect.id = 'hier-trad-select-new';
+  tradSelect.style.background = '#0f0d0a';
+  tradSelect.style.border = '1px solid var(--border)';
+  tradSelect.style.color = 'var(--vellum)';
+  tradSelect.style.padding = '0.4rem 0.6rem';
+  tradSelect.style.borderRadius = '2px';
+  tradSelect.style.marginRight = '1rem';
+  
+  const traditions = ['all', ...Object.keys(TRADITION_LABELS).sort()];
   traditions.forEach(t => {
     const opt = document.createElement('option');
     opt.value = t;
     opt.textContent = t === 'all' ? 'All Traditions' : (TRADITION_LABELS[t] || t);
-    select.appendChild(opt);
+    tradSelect.appendChild(opt);
   });
-  controls.appendChild(label);
-  controls.appendChild(select);
-  controls.appendChild(primaryOnly);
-  controls.appendChild(primaryLabel);
-  container.appendChild(controls);
+  
+  const levelLabel = document.createElement('label');
+  levelLabel.style.marginRight = '0.6rem';
+  levelLabel.style.fontFamily = 'var(--font-heading)';
+  levelLabel.style.fontSize = '0.7rem';
+  levelLabel.style.letterSpacing = '0.15em';
+  levelLabel.style.textTransform = 'uppercase';
+  levelLabel.style.color = 'var(--faint)';
+  levelLabel.textContent = 'Hierarchical Level:';
+  
+  const levelSelect = document.createElement('select');
+  levelSelect.id = 'hier-level-select-new';
+  levelSelect.style.background = '#0f0d0a';
+  levelSelect.style.border = '1px solid var(--border)';
+  levelSelect.style.color = 'var(--vellum)';
+  levelSelect.style.padding = '0.4rem 0.6rem';
+  levelSelect.style.borderRadius = '2px';
+  
+  ['all', 1, 2, 3, 4, 5, 6, 7].forEach(lvl => {
+    const opt = document.createElement('option');
+    opt.value = lvl;
+    opt.textContent = lvl === 'all' ? 'All Levels' : (LEVEL_LABELS[lvl] || `Level ${lvl}`);
+    levelSelect.appendChild(opt);
+  });
+  
+  controlsWrap.appendChild(tradLabel);
+  controlsWrap.appendChild(tradSelect);
+  controlsWrap.appendChild(levelLabel);
+  controlsWrap.appendChild(levelSelect);
+  container.appendChild(controlsWrap);
 
-  const grid = document.createElement('div');
-  grid.className = 'hier-grid';
+  // render cards
+  const cardsWrap = document.createElement('div');
+  cardsWrap.className = 'hier-cards-wrap';
+  cardsWrap.id = 'hier-cards-grid';
+  container.appendChild(cardsWrap);
 
-  traditions.forEach(tradKey => {
-    const col = document.createElement('div');
-    col.className = 'trad-column';
-    const header = document.createElement('div');
-    header.className = 'trad-header';
-    header.textContent = tradKey === 'all' ? 'All Traditions (by level)' : (TRADITION_LABELS[tradKey] || tradKey);
-    col.appendChild(header);
+  function renderCards() {
+    const selectedTrad = tradSelect.value;
+    const selectedLevel = levelSelect.value;
+    
+    let entities = DB.entities.filter(e => {
+      if (!e.tradition_vectors || !e.canonical_name) return false;
+      const hasTrad = selectedTrad === 'all' ? true : (e.tradition_vectors[selectedTrad]);
+      const hasLevel = selectedLevel === 'all' ? true : ((e.hierarchical_level || 7) === parseInt(selectedLevel));
+      // Hide placeholder entities with low completeness (< 55%)
+      const isNotPlaceholder = (e.completeness_score || 0) >= 55;
+      return hasTrad && hasLevel && isNotPlaceholder;
+    });
 
-    // levels 1..7
-    for (let lvl = 1; lvl <= 7; lvl++) {
-      const levelBlock = document.createElement('div');
-      levelBlock.className = 'level-block';
-      const title = document.createElement('div');
-      title.className = 'level-title';
-      title.textContent = LEVEL_LABELS[lvl] ? LEVEL_LABELS[lvl].split(' — ')[1] || LEVEL_LABELS[lvl] : `Level ${lvl}`;
-      levelBlock.appendChild(title);
-
-      const entriesWrap = document.createElement('div');
-      entriesWrap.className = 'level-entries';
-
-      const ents = DB.entities.filter(e => {
-        const hasTrad = tradKey === 'all' ? true : (e.tradition_vectors && e.tradition_vectors[tradKey]);
-        const isPrimary = getPrimaryTradition(e) === tradKey;
-        const onlyPrimary = document.getElementById('hier-primary-only') && document.getElementById('hier-primary-only').checked;
-        if (onlyPrimary && tradKey !== 'all') return hasTrad && isPrimary && ((e.hierarchical_level || 7) === lvl);
-        if (onlyPrimary && tradKey === 'all') return getPrimaryTradition(e) && ((e.hierarchical_level || 7) === lvl);
-        return hasTrad && ((e.hierarchical_level || 7) === lvl);
-      });
-
-      if (!ents.length) {
-        entriesWrap.innerHTML = `<span style="color:var(--dim);font-style:italic;font-size:0.85rem">—</span>`;
-      } else {
-        entriesWrap.innerHTML = ents.map(e => {
-          const trad = getPrimaryTradition(e);
-          return `<span class="hier-entity" onclick="openDetail('${e.id}')">
-            <span class="hier-trad-dot" style="background:${NODE_COLORS[trad] || '#c9983a'}"></span>
-            ${e.canonical_name}
-          </span>`;
-        }).join('');
-      }
-
-      levelBlock.appendChild(entriesWrap);
-      col.appendChild(levelBlock);
+    cardsWrap.innerHTML = '';
+    if (!entities.length) {
+      cardsWrap.innerHTML = `<div style="grid-column:1/-1;text-align:center;color:var(--dim);font-style:italic;padding:2rem">No entities match your selection.</div>`;
+      return;
     }
 
-    grid.appendChild(col);
-  });
-
-  container.appendChild(grid);
-
-  // toggle columns when a tradition is selected (mobile-friendly)
-  select.addEventListener('change', () => {
-    const v = select.value;
-    const cols = Array.from(grid.children);
-    cols.forEach((c, i) => {
-      if (v === 'all') {
-        c.style.display = '';
-      } else {
-        // show only the column matching selected tradition
-        const key = traditions[i];
-        c.style.display = (key === v) ? '' : 'none';
-      }
+    entities.sort((a,b) => (a.hierarchical_level || 7) - (b.hierarchical_level || 7));
+    entities.forEach((e, i) => {
+      const card = document.createElement('div');
+      card.className = 'hier-card';
+      card.style.animationDelay = `${Math.min(i * 0.06, 0.5)}s`;
+      card.onclick = () => openInteractiveDetail(e.id);
+      
+      const trad = getPrimaryTradition(e);
+      const domainList = (e.functional_domains || []).slice(0,2).map(d => `<div class="hier-card-domain">${d}</div>`).join('');
+      const tradPips = Object.keys(e.tradition_vectors || {}).map(k => 
+        `<span class="hier-card-trad-pip trad-${k}" style="background:rgba(${hexToRgb(NODE_COLORS[k])},0.2);color:${NODE_COLORS[k]}">${TRADITION_LABELS[k] || k}</span>`
+      ).join('');
+      
+      card.innerHTML = `
+        <div class="hier-card-level">${LEVEL_LABELS[e.hierarchical_level] || 'Level ' + (e.hierarchical_level || 7)}</div>
+        <div class="hier-card-name">${e.canonical_name}</div>
+        <div class="hier-card-domains">${domainList}</div>
+        <div class="hier-card-traditions">${tradPips}</div>
+      `;
+      cardsWrap.appendChild(card);
     });
-  });
+  }
 
-  // re-render when primary-only toggled
-  primaryOnly.addEventListener('change', () => { buildHierarchy(); });
+  tradSelect.addEventListener('change', renderCards);
+  levelSelect.addEventListener('change', renderCards);
+  renderCards();
+}
+
+function hexToRgb(hex) {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? `${parseInt(result[1], 16)},${parseInt(result[2], 16)},${parseInt(result[3], 16)}` : '201,152,58';
 }
 
 // ═══════════════════════════════════════════════════════
