@@ -1195,6 +1195,10 @@ h1 {
         <p class="detail-section-title">Research Notes</p>
         <p class="research-note" id="d-notes"></p>
       </div>
+      <div class="detail-section" id="d-comparative-section">
+        <p class="detail-section-title">Comparative Beliefs</p>
+        <div id="d-comparative"></div>
+      </div>
       <div class="detail-section">
         <p class="detail-section-title">Entry Completeness</p>
         <div class="completeness-bar"><div class="completeness-fill" id="d-completeness"></div></div>
@@ -1910,6 +1914,19 @@ function openDetail(id) {
     tradEl.appendChild(block);
   });
 
+    // Comparative belief summaries
+    const compEl = document.getElementById('d-comparative');
+    compEl.innerHTML = '';
+    const tvKeys = Object.keys(tv || {});
+    if (!tvKeys.length) compEl.innerHTML = `<p style="color:var(--dim);font-style:italic">No tradition vectors recorded.</p>`;
+    else {
+      const rows = tvKeys.map(k => {
+        const summary = summarizeBelief(entity, k);
+        return `<div style="margin-bottom:0.5rem"><strong style="color:${NODE_COLORS[k]||'#c9983a'};display:inline-block;width:130px">${TRADITION_LABELS[k]||k}:</strong> <span style="color:var(--vellum)">${summary}</span></div>`;
+      }).join('');
+      compEl.innerHTML = rows;
+    }
+
   // Relations
   const relEl = document.getElementById('d-relations');
   relEl.innerHTML = '';
@@ -1960,6 +1977,35 @@ function openInteractiveDetail(id) {
     const node = cy.getElementById(id);
     if (node && node.length) cy.$(':selected').unselect(), node.select(), cy.fit(node.union(node.connectedEdges().connectedNodes()), 80);
   }
+}
+
+function summarizeBelief(entity, tradKey) {
+  const tv = entity.tradition_vectors || {};
+  const data = tv[tradKey];
+  if (!data) return 'No attestation in this tradition.';
+
+  // Heuristic summaries based on common fields
+  if (data.name && data.class) {
+    return `${data.name} — ${data.class}${data.epithets ? ` (${(Array.isArray(data.epithets)?data.epithets.join(', '):data.epithets)})` : ''}.`;
+  }
+  if (data.sephira) {
+    return `${entity.canonical_name} is associated with the sephira ${data.sephira} and connected to ${data.angelic_order || 'divine orders'}.`;
+  }
+  if (data.rank) {
+    return `Listed as ${data.rank}${data.primary_functions ? ` — ${Array.isArray(data.primary_functions)?data.primary_functions.join(', '):data.primary_functions}` : ''}.`;
+  }
+  if (data.role) {
+    return `${data.role}${data.corpus_hermeticum_ref ? ` (${data.corpus_hermeticum_ref})` : ''}`;
+  }
+  if (data.name_arabic || data.name_transliterated) {
+    return `${data.name_transliterated || data.name_arabic} — ${data.classification || data.class || 'figure'} in Islamic sources.`;
+  }
+  // fallback: stringify some keys
+  const keys = Object.keys(data).filter(k=>k!=='source_texts');
+  if (keys.length) {
+    return keys.slice(0,3).map(k=>`${k.replace(/_/g,' ')}: ${Array.isArray(data[k])?data[k].join(', '):data[k]}`).join('; ');
+  }
+  return 'Attested, but no concise summary available.';
 }
 
 function closeDetail() {
@@ -2288,6 +2334,13 @@ function buildHierarchy() {
   label.textContent = 'Tradition:';
   const select = document.createElement('select');
   select.id = 'hier-trad-select';
+  const primaryOnly = document.createElement('input');
+  primaryOnly.type = 'checkbox';
+  primaryOnly.id = 'hier-primary-only';
+  const primaryLabel = document.createElement('label');
+  primaryLabel.setAttribute('for', 'hier-primary-only');
+  primaryLabel.textContent = 'Primary only';
+  primaryLabel.style.marginLeft = '0.6rem';
   traditions.forEach(t => {
     const opt = document.createElement('option');
     opt.value = t;
@@ -2296,6 +2349,8 @@ function buildHierarchy() {
   });
   controls.appendChild(label);
   controls.appendChild(select);
+  controls.appendChild(primaryOnly);
+  controls.appendChild(primaryLabel);
   container.appendChild(controls);
 
   const grid = document.createElement('div');
@@ -2323,6 +2378,10 @@ function buildHierarchy() {
 
       const ents = DB.entities.filter(e => {
         const hasTrad = tradKey === 'all' ? true : (e.tradition_vectors && e.tradition_vectors[tradKey]);
+        const isPrimary = getPrimaryTradition(e) === tradKey;
+        const onlyPrimary = document.getElementById('hier-primary-only') && document.getElementById('hier-primary-only').checked;
+        if (onlyPrimary && tradKey !== 'all') return hasTrad && isPrimary && ((e.hierarchical_level || 7) === lvl);
+        if (onlyPrimary && tradKey === 'all') return getPrimaryTradition(e) && ((e.hierarchical_level || 7) === lvl);
         return hasTrad && ((e.hierarchical_level || 7) === lvl);
       });
 
@@ -2361,6 +2420,9 @@ function buildHierarchy() {
       }
     });
   });
+
+  // re-render when primary-only toggled
+  primaryOnly.addEventListener('change', () => { buildHierarchy(); });
 }
 
 // ═══════════════════════════════════════════════════════
