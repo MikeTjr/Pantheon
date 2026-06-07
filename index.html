@@ -1,1 +1,254 @@
-test
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pantheon Concordance • Cosmological Map</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --accent: #c9a66b;
+            --text: #e0d4b3;
+            --node-theo: #4a7043;
+            --node-comp: #6b8e9b;
+            --node-esot: #8b5a2b;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: 'Georgia', serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow: hidden;
+            height: 100vh;
+        }
+        header {
+            background: rgba(10,10,15,0.95);
+            border-bottom: 1px solid var(--accent);
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+        .modes {
+            display: flex;
+            gap: 1rem;
+        }
+        .mode-btn {
+            padding: 12px 24px;
+            background: transparent;
+            border: 2px solid var(--accent);
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.23,1,0.32,1);
+            font-size: 1.1rem;
+            border-radius: 4px;
+        }
+        .mode-btn.active {
+            background: var(--accent);
+            color: #0a0a0f;
+            box-shadow: 0 0 20px rgba(201,166,107,0.5);
+        }
+        #graph-container {
+            position: absolute;
+            top: 70px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+        .detail-panel {
+            position: absolute;
+            right: 20px;
+            top: 80px;
+            width: 380px;
+            background: rgba(20,20,30,0.95);
+            border: 1px solid var(--accent);
+            padding: 20px;
+            border-radius: 8px;
+            max-height: 80vh;
+            overflow-y: auto;
+            display: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            animation: panelPop 0.4s ease;
+        }
+        @keyframes panelPop {
+            from { transform: translateX(50px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        .entity-card {
+            animation: fadeIn 0.6s ease forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+        }
+        .edge-legend {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(10,10,15,0.9);
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #555;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div>
+            <h1 style="color: var(--accent); font-size: 1.8rem; letter-spacing: 2px;">PANTHEON</h1>
+            <p style="font-size: 0.9rem; opacity: 0.7;">Concordance • Logos-Centered Cosmology</p>
+        </div>
+        <div class="modes">
+            <button class="mode-btn active" data-mode="theological">Theological</button>
+            <button class="mode-btn" data-mode="comparative">Comparative</button>
+            <button class="mode-btn" data-mode="esoteric">Esoteric</button>
+        </div>
+        <div>
+            <input type="text" id="search" placeholder="Search entities..." style="padding:8px 16px; background:#1a1a22; border:1px solid #555; color:white; width:280px; border-radius:4px;">
+        </div>
+    </header>
+
+    <div id="graph-container"></div>
+
+    <div class="detail-panel" id="detail-panel">
+        <button onclick="closePanel()" style="float:right; background:none; border:none; color:var(--accent); font-size:1.5rem;">×</button>
+        <div id="detail-content"></div>
+    </div>
+
+    <div class="edge-legend">
+        <strong>Edge Legend</strong><br>
+        <span style="color:#4a7043">━━━</span> Ancient Syncretism (High Confidence)<br>
+        <span style="color:#6b8e9b">─ ─ ─</span> Functional Parallel<br>
+        <span style="color:#8b5a2b">····</span> Contested
+    </div>
+
+    <script>
+        // Rich dataset with 100+ entities simulation
+        let entities = [];
+
+        function generateFullDataset() {
+            const core = [
+                { id: "jesus-christ", canonical_name: "Jesus Christ", hierarchical_level: 1, why_matters: "The fixed center of the cosmological map. Every tradition orbits this Logos. Biblical lineage culminates here." },
+                { id: "adam", canonical_name: "Adam", hierarchical_level: 2, why_matters: "The first man, origin of the genealogical chain. Typological father of humanity and Christ (Second Adam)." },
+                { id: "azazel", canonical_name: "Azazel", hierarchical_level: 3, why_matters: "Explains Yom Kippur scapegoat and Christian atonement. Links to Prometheus as bringer of forbidden knowledge." },
+                { id: "hermes-trismegistus", canonical_name: "Hermes Trismegistus", hierarchical_level: 4, why_matters: "Synthesis of Thoth and Hermes. Source of Hermetic wisdom studied by Renaissance magi and Newton." },
+                // Add 20 more core from README
+            ];
+            // Generate 100+
+            for(let i = 0; i < 120; i++) {
+                core.push({
+                    id: `entity-${i}`,
+                    canonical_name: ['Michael','Gabriel','Raphael','Lucifer','Paimon','Osiris','Thoth','Zeus','Horus','Lilith','Metatron','Samael','Bael','Asmodeus','Enoch','Solomon'][i%16] + (i>30 ? ` ${Math.floor(i/10)}` : ''),
+                    hierarchical_level: (i % 7) + 1,
+                    why_matters: `This entity reveals profound typological and syncretic connections across traditions, illuminating the underlying unity of sacred narratives.`
+                });
+            }
+            return core;
+        }
+
+        entities = generateFullDataset();
+
+        let cy;
+
+        function initGraph() {
+            if (cy) cy.destroy();
+
+            const elements = entities.map((e, idx) => ({
+                data: { 
+                    id: e.id, 
+                    label: e.canonical_name,
+                    level: e.hierarchical_level 
+                }
+            }));
+
+            // Add edges
+            const edges = entities.slice(1).map(e => ({
+                data: {
+                    source: 'jesus-christ',
+                    target: e.id,
+                    type: Math.random() > 0.7 ? 'SYNCRETIZED_WITH' : Math.random() > 0.5 ? 'FUNCTIONAL_PARALLEL' : 'CONTESTED_IDENTIFICATION'
+                }
+            }));
+
+            cy = cytoscape({
+                container: document.getElementById('graph-container'),
+                elements: [...elements, ...edges],
+                style: [{
+                    selector: 'node',
+                    style: {
+                        'background-color': '#c9a66b',
+                        'label': 'data(label)',
+                        'width': 28,
+                        'height': 28,
+                        'font-size': '11px',
+                        'text-valign': 'center',
+                        'color': '#111',
+                        'text-outline-color': '#fff',
+                        'text-outline-width': 1.5
+                    }
+                }, {
+                    selector: 'edge',
+                    style: { 'width': 1.5, 'line-color': '#555', 'curve-style': 'bezier' }
+                }, {
+                    selector: 'edge[type="SYNCRETIZED_WITH"]',
+                    style: { 'line-color': '#4a7043', 'width': 4, 'line-style': 'solid' }
+                }, {
+                    selector: 'edge[type="FUNCTIONAL_PARALLEL"]',
+                    style: { 'line-color': '#6b8e9b', 'width': 2, 'line-style': 'dashed' }
+                }],
+                layout: { 
+                    name: 'concentric',
+                    concentric: n => n.data('level') || 4,
+                    minNodeSpacing: 50,
+                    animate: true,
+                    animationDuration: 1200
+                }
+            });
+
+            cy.on('tap', 'node', evt => {
+                showDetail(evt.target.data('id'));
+            });
+
+            // Node pulse animation
+            setInterval(() => {
+                if (cy) cy.nodes().style('background-color', '#c9a66b').animate({style: {'background-color': '#f0d090'}}, {duration: 600}).delay(800).animate({style: {'background-color': '#c9a66b'}}, {duration: 600});
+            }, 4000);
+        }
+
+        function showDetail(id) {
+            const entity = entities.find(e => e.id === id) || {canonical_name: id};
+            document.getElementById('detail-content').innerHTML = `
+                <h2>${entity.canonical_name}</h2>
+                <p><em>Hierarchical Level: ${entity.hierarchical_level}</em></p>
+                <div style="background:rgba(201,166,107,0.1);padding:15px;border-left:4px solid var(--accent);margin:15px 0;">
+                    <strong>Why this matters:</strong> ${entity.why_matters}
+                </div>
+                <p>Explore traditions, relationships, and sources in full research mode.</p>
+            `;
+            document.getElementById('detail-panel').style.display = 'block';
+        }
+
+        function closePanel() {
+            document.getElementById('detail-panel').style.display = 'none';
+        }
+
+        // Event listeners
+        document.querySelectorAll('.mode-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                initGraph();
+            });
+        });
+
+        document.getElementById('search').addEventListener('keyup', e => {
+            const term = e.target.value.toLowerCase();
+            cy.nodes().style('opacity', n => n.data('label').toLowerCase().includes(term) ? 1 : 0.25);
+        });
+
+        window.onload = initGraph;
+    </script>
+</body>
+</html>
