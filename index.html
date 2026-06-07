@@ -204,7 +204,7 @@ h1 {
 
 /* ─── SEARCH VIEW ─── */
 .search-wrap {
-  max-width: 700px;
+  max-width: 900px;
   margin: 0 auto 2.5rem;
 }
 
@@ -216,6 +216,162 @@ h1 {
   color: var(--faint);
   text-align: center;
   margin-bottom: 1rem;
+}
+
+.entry-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.entry-card {
+  background: linear-gradient(145deg, #1e1911, #17130f);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1.3rem;
+  cursor: pointer;
+  transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+  position: relative;
+}
+
+.entry-card:hover {
+  border-color: var(--border-strong);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.entry-card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  margin-bottom: 1rem;
+  background: rgba(201,152,58,0.15);
+  color: var(--gold-light);
+  font-size: 1.2rem;
+}
+
+.entry-card-title {
+  font-family: var(--font-heading);
+  font-size: 0.92rem;
+  color: var(--gold-light);
+  margin-bottom: 0.5rem;
+}
+
+.entry-card-desc {
+  font-size: 0.92rem;
+  color: var(--dim);
+  line-height: 1.6;
+}
+
+.entry-card.selected {
+  border-color: var(--gold);
+  background: rgba(201,152,58,0.08);
+}
+
+.source-tier {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.18rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-family: var(--font-heading);
+  margin-bottom: 0.4rem;
+}
+
+.source-tier-high {
+  background: rgba(80,200,120,0.16);
+  color: #a8ffb8;
+  border: 1px solid rgba(80,200,120,0.35);
+}
+
+.source-tier-medium {
+  background: rgba(200,180,80,0.16);
+  color: #ffdb8a;
+  border: 1px solid rgba(200,180,80,0.35);
+}
+
+.source-tier-low {
+  background: rgba(200,80,80,0.16);
+  color: #f8b8b8;
+  border: 1px solid rgba(200,80,80,0.35);
+}
+
+.lineage-panel {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.lineage-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.lineage-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border: 1px solid var(--border);
+  background: rgba(0,0,0,0.22);
+  border-radius: 4px;
+  padding: 1rem;
+}
+
+.lineage-track {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.lineage-step {
+  background: rgba(0,0,0,0.16);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1rem;
+  position: relative;
+}
+
+.lineage-step::after {
+  content: '';
+  position: absolute;
+  right: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 2px;
+  background: var(--border);
+}
+
+.lineage-step:last-child::after { display: none; }
+
+.lineage-name {
+  font-family: var(--font-heading);
+  color: var(--gold-light);
+  margin-bottom: 0.4rem;
+}
+
+.lineage-meta {
+  color: var(--dim);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+  .entry-grid {
+    grid-template-columns: 1fr;
+  }
+  .lineage-track {
+    grid-template-columns: 1fr;
+  }
 }
 
 .search-box-wrap {
@@ -1155,17 +1311,32 @@ edge {
   <button class="nav-btn active" data-view="search">⊕ Search</button>
   <button class="nav-btn" data-view="graph">⊛ Graph</button>
   <button class="nav-btn" data-view="hierarchy">⊗ Hierarchy</button>
-  <button class="nav-btn" data-view="about">⊜ About</button>
-</nav>
-
-<!-- APP CONTAINER -->
+    <button class="nav-btn" data-view="lineage">↺ Lineage</button>
 <div id="app">
 
   <!-- ── SEARCH VIEW ── -->
   <section id="view-search" class="view active">
 
     <div class="search-wrap">
-      <p class="search-title">Search by name, domain, tradition, or epithet</p>
+      <p class="search-title">Choose one of three entry points</p>
+      <div class="entry-grid" id="entry-grid">
+        <button class="entry-card" data-entry="theological">
+          <span class="entry-card-icon">✠</span>
+          <div class="entry-card-title">Theological</div>
+          <div class="entry-card-desc">Explore scriptural and doctrinal figures, sacred hierarchies, and canonical angelology across traditions.</div>
+        </button>
+        <button class="entry-card" data-entry="comparative">
+          <span class="entry-card-icon">↔</span>
+          <div class="entry-card-title">Comparative</div>
+          <div class="entry-card-desc">Trace cross-cultural correspondences, syncretic pairings, and typological parallels between belief systems.</div>
+        </button>
+        <button class="entry-card" data-entry="esoteric">
+          <span class="entry-card-icon">⚚</span>
+          <div class="entry-card-title">Esoteric / Occult</div>
+          <div class="entry-card-desc">Enter the world of grimoires, Kabbalah, Hermeticism, and planetary/Goetic lineages.</div>
+        </button>
+      </div>
+      <p class="search-title" style="margin-top:2rem;">Refine the selected entry point or search directly</p>
       <div class="search-box-wrap">
         <span class="search-icon">◉</span>
         <input type="text" id="search-input" placeholder="e.g. Hermes, psychopomp, watcher, goetic king…" autocomplete="off" spellcheck="false">
@@ -1231,6 +1402,19 @@ edge {
   <!-- ── HIERARCHY VIEW ── -->
   <section id="view-hierarchy" class="view">
     <div class="hierarchy-view" id="hierarchy-container"></div>
+  </section>
+
+  <!-- ── LINEAGE VIEW ── -->
+  <section id="view-lineage" class="view">
+    <div class="lineage-panel">
+      <div class="lineage-toolbar">
+        <label for="lineage-root-select" style="color:var(--faint);font-family:var(--font-heading);font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase">Lineage focus:</label>
+        <select id="lineage-root-select" style="background:#0f0d0a;border:1px solid var(--border);color:var(--vellum);padding:0.4rem 0.6rem;border-radius:2px;min-width:240px"></select>
+        <button class="graph-btn" id="lineage-reset">Reset chain</button>
+      </div>
+      <div class="lineage-card" id="lineage-summary"></div>
+      <div class="lineage-track" id="lineage-track"></div>
+    </div>
   </section>
 
   <!-- ── ABOUT VIEW ── -->
@@ -1350,6 +1534,10 @@ edge {
         <p class="detail-section-title">Research Notes</p>
         <p class="research-note" id="d-notes"></p>
       </div>
+      <div class="detail-section" id="d-why-section">
+        <p class="detail-section-title">Why This Matters</p>
+        <p style="color:var(--vellum);line-height:1.7" id="d-why"></p>
+      </div>
       <div class="detail-section" id="d-comparative-section">
         <p class="detail-section-title">Comparative Beliefs</p>
         <div id="d-comparative"></div>
@@ -1373,6 +1561,8 @@ let fuse = null;
 let cy = null;
 let currentFilter = 'all';
 let currentEdgeFilter = 'all';
+let currentEntryPoint = null;
+let currentLineageRoot = null;
 
 const TRADITION_LABELS = {
   greek: 'Greek', roman: 'Roman', egyptian: 'Egyptian',
@@ -2077,12 +2267,34 @@ function getFilteredEntities() {
   return DB.entities.filter(e => e.tradition_vectors && e.tradition_vectors[currentFilter]);
 }
 
+function getEntryPointEntities(pool) {
+  if (!currentEntryPoint || currentEntryPoint === 'all') return pool;
+
+  return pool.filter(entity => {
+    const tv = entity.tradition_vectors || {};
+    const domains = (entity.functional_domains || []).join(' ').toLowerCase();
+    if (currentEntryPoint === 'theological') {
+      return ['biblical_angel', 'islamic', 'gnostic', 'kabbalistic'].some(trad => tv[trad]) || (entity.relationships || []).some(rel => ['DESCENDED_FROM', 'COMMANDS', 'TAUGHT_BY'].includes(rel.edge_type));
+    }
+    if (currentEntryPoint === 'comparative') {
+      const heritageMatches = Object.keys(tv).length >= 2;
+      const comparativeRel = (entity.relationships || []).some(rel => ['SYNCRETIZED_WITH', 'FUNCTIONAL_PARALLEL', 'CONTESTED_IDENTIFICATION', 'POLEMIC_EQUIVALENT', 'CORRESPONDS_TO'].includes(rel.edge_type));
+      return heritageMatches || comparativeRel;
+    }
+    if (currentEntryPoint === 'esoteric') {
+      return ['goetic', 'hermetic', 'enochian', 'planetary'].some(trad => tv[trad]) || domains.includes('magic') || domains.includes('sorcery') || domains.includes('occult') || domains.includes('alchemy');
+    }
+    return true;
+  });
+}
+
 function renderSearch(query) {
   const pool = getFilteredEntities();
+  const filteredPool = getEntryPointEntities(pool);
   let results;
 
   if (!query) {
-    results = [...pool].sort((a,b) => a.hierarchical_level - b.hierarchical_level);
+    results = [...filteredPool].sort((a,b) => a.hierarchical_level - b.hierarchical_level);
   } else {
     const fuseResults = fuse.search(query);
     const ids = new Set(pool.map(e => e.id));
