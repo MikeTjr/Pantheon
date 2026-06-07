@@ -1,254 +1,1607 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pantheon Concordance • Cosmological Map</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        :root {
-            --bg: #0a0a0f;
-            --accent: #c9a66b;
-            --text: #e0d4b3;
-            --node-theo: #4a7043;
-            --node-comp: #6b8e9b;
-            --node-esot: #8b5a2b;
-        }
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body {
-            font-family: 'Georgia', serif;
-            background: var(--bg);
-            color: var(--text);
-            overflow: hidden;
-            height: 100vh;
-        }
-        header {
-            background: rgba(10,10,15,0.95);
-            border-bottom: 1px solid var(--accent);
-            padding: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 100;
-        }
-        .modes {
-            display: flex;
-            gap: 1rem;
-        }
-        .mode-btn {
-            padding: 12px 24px;
-            background: transparent;
-            border: 2px solid var(--accent);
-            color: var(--text);
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.23,1,0.32,1);
-            font-size: 1.1rem;
-            border-radius: 4px;
-        }
-        .mode-btn.active {
-            background: var(--accent);
-            color: #0a0a0f;
-            box-shadow: 0 0 20px rgba(201,166,107,0.5);
-        }
-        #graph-container {
-            position: absolute;
-            top: 70px;
-            left: 0;
-            right: 0;
-            bottom: 0;
-        }
-        .detail-panel {
-            position: absolute;
-            right: 20px;
-            top: 80px;
-            width: 380px;
-            background: rgba(20,20,30,0.95);
-            border: 1px solid var(--accent);
-            padding: 20px;
-            border-radius: 8px;
-            max-height: 80vh;
-            overflow-y: auto;
-            display: none;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-            animation: panelPop 0.4s ease;
-        }
-        @keyframes panelPop {
-            from { transform: translateX(50px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        .entity-card {
-            animation: fadeIn 0.6s ease forwards;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-        }
-        .edge-legend {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            background: rgba(10,10,15,0.9);
-            padding: 15px;
-            border-radius: 6px;
-            border: 1px solid #555;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Pantheon Concordance — Syncretic Mythology, Genealogy & Theology</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/7.0.0/fuse.min.js"></script>
+<style>
+/* ══════════════════════════════════════════
+   DESIGN TOKENS
+══════════════════════════════════════════ */
+:root {
+  --ink:        #1a1410;
+  --ink-deep:   #0f0d0a;
+  --vellum:     #f0e6cc;
+  --parchment:  #e4d6b0;
+  --aged:       #d4c49a;
+  --foxed:      #c4a96e;
+  --sepia:      #8b6914;
+  --rust:       #7a3b1e;
+  --crimson:    #8b1a1a;
+  --gold:       #c9983a;
+  --gold-light: #e4b85a;
+  --gold-bright:#f0cc70;
+  --dim:        #7a6a4a;
+  --faint:      #a89870;
+
+  --border:       rgba(196,169,110,0.22);
+  --border-mid:   rgba(196,169,110,0.45);
+  --border-strong:rgba(196,169,110,0.75);
+
+  --shadow:      0 4px 24px rgba(10,8,4,0.4);
+  --shadow-deep: 0 12px 60px rgba(10,8,4,0.7);
+
+  --font-display: 'Cinzel Decorative', serif;
+  --font-heading: 'Cinzel', serif;
+  --font-body:    'EB Garamond', serif;
+
+  --radius: 2px;
+  --transition: 0.2s ease;
+
+  /* Base font — 20px = ~18% above original 17px */
+  --base: 20px;
+}
+
+/* ══════════════════════════════════════════
+   RESET
+══════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: var(--base); scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--ink-deep);
+  color: var(--vellum);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.7;
+}
+
+body::before {
+  content:'';
+  position: fixed; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 38px, rgba(196,169,110,0.025) 38px, rgba(196,169,110,0.025) 39px);
+  pointer-events: none; z-index: 0;
+}
+
+/* ══════════════════════════════════════════
+   SCROLLBAR
+══════════════════════════════════════════ */
+::-webkit-scrollbar { width: 7px; }
+::-webkit-scrollbar-track { background: var(--ink-deep); }
+::-webkit-scrollbar-thumb { background: var(--sepia); border-radius: 4px; }
+* { scrollbar-width: thin; scrollbar-color: var(--sepia) var(--ink-deep); }
+
+/* ══════════════════════════════════════════
+   HEADER
+══════════════════════════════════════════ */
+#header {
+  position: relative; text-align: center;
+  padding: 3rem 2rem 2.5rem;
+  border-bottom: 1px solid var(--border-mid);
+  background: linear-gradient(180deg, #0a0806 0%, #1a1410 100%);
+  overflow: hidden;
+  z-index: 1;
+}
+#header::before, #header::after {
+  content:''; position:absolute; left:50%; transform:translateX(-50%);
+  width:82%; height:1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+#header::before { top:1rem; } #header::after { bottom:1rem; }
+
+.header-sigil { font-size:2.2rem; letter-spacing:0.5em; color:var(--gold); opacity:0.45; margin-bottom:0.5rem; display:block; }
+
+h1 {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 4.5vw, 2.6rem);
+  font-weight:700; color:var(--gold-bright);
+  letter-spacing:0.04em; line-height:1.15;
+  text-shadow: 0 0 50px rgba(201,152,58,0.35);
+}
+.header-verse {
+  font-family: var(--font-body);
+  font-size: 1rem; font-style: italic;
+  color: var(--faint); margin-top:0.7rem; line-height:1.5;
+}
+.header-verse cite { font-style:normal; font-family:var(--font-heading); font-size:0.72rem; letter-spacing:0.1em; color:var(--sepia); display:block; margin-top:0.25rem; }
+.header-meta { margin-top:1rem; font-size:0.88rem; color:var(--dim); font-style:italic; font-family:var(--font-heading); letter-spacing:0.05em; }
+
+/* ══════════════════════════════════════════
+   NAV
+══════════════════════════════════════════ */
+#nav {
+  display:flex; justify-content:center;
+  background:#0c0a07;
+  border-bottom:1px solid var(--border);
+  position:sticky; top:0; z-index:200;
+  overflow-x:auto; -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+#nav::-webkit-scrollbar { display:none; }
+
+.nav-btn {
+  font-family:var(--font-heading);
+  font-size:0.78rem; letter-spacing:0.18em;
+  text-transform:uppercase; color:var(--faint);
+  background:none; border:none;
+  border-bottom:2px solid transparent;
+  padding:1rem 2rem; cursor:pointer;
+  transition:var(--transition); white-space:nowrap;
+  min-height:48px; /* touch target */
+  -webkit-tap-highlight-color:transparent;
+}
+.nav-btn:hover { color:var(--vellum); }
+.nav-btn.active { color:var(--gold-light); border-bottom-color:var(--gold); }
+
+/* ══════════════════════════════════════════
+   LAYOUT
+══════════════════════════════════════════ */
+#app { position:relative; z-index:1; max-width:1400px; margin:0 auto; padding:0 1.2rem; }
+.view { display:none; padding:2.5rem 0; }
+.view.active { display:block; }
+
+/* ══════════════════════════════════════════
+   SEARCH VIEW
+══════════════════════════════════════════ */
+.search-wrap { max-width:720px; margin:0 auto 2.5rem; }
+
+.search-title {
+  font-family:var(--font-heading); font-size:0.76rem;
+  letter-spacing:0.28em; text-transform:uppercase;
+  color:var(--faint); text-align:center; margin-bottom:1rem;
+}
+
+.search-box-wrap { position:relative; }
+
+#search-input {
+  width:100%;
+  background:#0c0a07;
+  border:1px solid var(--border-mid);
+  border-radius:var(--radius);
+  padding:1rem 1.4rem 1rem 3.2rem;
+  font-family:var(--font-body);
+  font-size:1.15rem;
+  color:var(--vellum); outline:none;
+  transition:border-color var(--transition);
+  -webkit-appearance:none;
+}
+#search-input::placeholder { color:var(--dim); font-style:italic; }
+#search-input:focus { border-color:var(--gold); }
+
+.search-icon { position:absolute; left:1.1rem; top:50%; transform:translateY(-50%); color:var(--faint); font-size:1.1rem; pointer-events:none; }
+
+/* Filter bar */
+.filter-bar { display:flex; flex-wrap:wrap; gap:0.45rem; justify-content:center; margin-bottom:2rem; }
+
+.filter-btn {
+  font-family:var(--font-heading); font-size:0.67rem;
+  letter-spacing:0.12em; text-transform:uppercase;
+  color:var(--faint); background:transparent;
+  border:1px solid var(--border); border-radius:1px;
+  padding:0.38rem 0.8rem; cursor:pointer;
+  transition:var(--transition);
+  min-height:40px; /* touch target */
+  -webkit-tap-highlight-color:transparent;
+}
+.filter-btn:hover { color:var(--vellum); border-color:var(--border-mid); }
+.filter-btn.active { color:var(--gold-light); border-color:var(--gold); background:rgba(201,152,58,0.1); }
+
+.results-count {
+  font-family:var(--font-heading); font-size:0.72rem;
+  letter-spacing:0.2em; text-transform:uppercase;
+  color:var(--dim); text-align:center; margin-bottom:1.6rem;
+}
+
+/* Results grid */
+#results-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(310px,1fr)); gap:1.1rem; }
+
+/* ══════════════════════════════════════════
+   ENTITY CARD
+══════════════════════════════════════════ */
+.entity-card {
+  background:linear-gradient(148deg,#1f1a11,#16120d);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:1.35rem 1.3rem 2rem;
+  cursor:pointer;
+  transition:border-color var(--transition), transform var(--transition), box-shadow var(--transition);
+  position:relative; overflow:hidden;
+  animation:fade-up 0.3s ease both;
+  -webkit-tap-highlight-color:transparent;
+}
+.entity-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  opacity:0; transition:opacity var(--transition);
+}
+.entity-card:hover { border-color:var(--border-strong); transform:translateY(-3px); box-shadow:var(--shadow); }
+.entity-card:hover::before { opacity:1; }
+
+/* Special: Jesus card gets gold left border */
+.entity-card.card-jesus {
+  border-left:3px solid var(--gold);
+  background:linear-gradient(148deg,#221a0d,#1a1308);
+}
+
+.card-level {
+  font-family:var(--font-heading); font-size:0.62rem;
+  letter-spacing:0.22em; text-transform:uppercase;
+  color:var(--sepia); margin-bottom:0.4rem;
+}
+.card-name {
+  font-family:var(--font-heading); font-size:1.12rem;
+  font-weight:600; color:var(--gold-light);
+  margin-bottom:0.25rem; line-height:1.25;
+}
+.card-aliases { font-size:0.88rem; color:var(--dim); font-style:italic; margin-bottom:0.65rem; }
+.card-domains { display:flex; flex-wrap:wrap; gap:0.35rem; margin-bottom:0.85rem; }
+
+.domain-tag {
+  font-family:var(--font-heading); font-size:0.59rem;
+  letter-spacing:0.09em; text-transform:uppercase;
+  color:var(--faint); border:1px solid var(--border);
+  padding:0.18rem 0.5rem; border-radius:1px;
+}
+
+.card-traditions { display:flex; flex-wrap:wrap; gap:0.3rem; }
+
+.trad-pip {
+  font-family:var(--font-heading); font-size:0.58rem;
+  letter-spacing:0.07em; text-transform:uppercase;
+  padding:0.17rem 0.55rem; border-radius:1px; font-weight:600;
+}
+
+/* tradition colors */
+.trad-greek         { background:rgba(212,168,50,0.18); color:#d4a832; border:1px solid rgba(212,168,50,0.3); }
+.trad-roman         { background:rgba(196,112,58,0.18); color:#c4703a; border:1px solid rgba(196,112,58,0.3); }
+.trad-egyptian      { background:rgba(58,184,184,0.18); color:#3ab8b8; border:1px solid rgba(58,184,184,0.3); }
+.trad-biblical_angel{ background:rgba(160,136,216,0.18); color:#a088d8; border:1px solid rgba(160,136,216,0.3); }
+.trad-enochian      { background:rgba(192,96,96,0.18); color:#c06060; border:1px solid rgba(192,96,96,0.3); }
+.trad-kabbalistic   { background:rgba(80,184,112,0.18); color:#50b870; border:1px solid rgba(80,184,112,0.3); }
+.trad-hermetic      { background:rgba(212,170,48,0.18); color:#d4aa30; border:1px solid rgba(212,170,48,0.3); }
+.trad-gnostic       { background:rgba(144,96,192,0.18); color:#9060c0; border:1px solid rgba(144,96,192,0.3); }
+.trad-goetic        { background:rgba(208,64,64,0.18); color:#d04040; border:1px solid rgba(208,64,64,0.3); }
+.trad-islamic       { background:rgba(48,160,192,0.18); color:#30a0c0; border:1px solid rgba(48,160,192,0.3); }
+.trad-planetary     { background:rgba(96,136,216,0.18); color:#6088d8; border:1px solid rgba(96,136,216,0.3); }
+.trad-mesopotamian  { background:rgba(168,104,58,0.18); color:#d9a07a; border:1px solid rgba(168,104,58,0.28); }
+
+/* Research depth badge (replaces completeness %) */
+.card-depth {
+  position:absolute; bottom:0.6rem; right:0.8rem;
+  font-family:var(--font-heading); font-size:0.6rem;
+  letter-spacing:0.08em; text-transform:uppercase;
+  padding:0.15rem 0.5rem; border-radius:1px;
+}
+.depth-primary   { background:rgba(201,152,58,0.2); color:var(--gold-light); border:1px solid rgba(201,152,58,0.4); }
+.depth-secondary { background:rgba(139,105,20,0.15); color:var(--sepia); border:1px solid rgba(139,105,20,0.3); }
+.depth-partial   { background:rgba(80,60,20,0.15); color:var(--dim); border:1px solid rgba(80,60,20,0.3); }
+
+/* ══════════════════════════════════════════
+   DETAIL OVERLAY
+══════════════════════════════════════════ */
+#detail-overlay {
+  display:none; position:fixed; inset:0;
+  background:rgba(8,6,4,0.9);
+  z-index:500; overflow-y:auto;
+  padding:1.5rem 1rem;
+  -webkit-overflow-scrolling:touch;
+}
+#detail-overlay.open { display:block; }
+
+#detail-panel {
+  max-width:900px; margin:0 auto;
+  background:linear-gradient(160deg,#1f1810,#141009);
+  border:1px solid var(--border-strong);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow-deep);
+  overflow:hidden;
+  animation:panel-in 0.25s ease;
+}
+
+@keyframes panel-in {
+  from { opacity:0; transform:translateY(18px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+.detail-header {
+  background:linear-gradient(90deg,#100d08,#1e1810,#100d08);
+  padding:1.8rem 2rem;
+  border-bottom:1px solid var(--border-mid);
+  position:relative;
+}
+.detail-level {
+  font-family:var(--font-heading); font-size:0.66rem;
+  letter-spacing:0.28em; text-transform:uppercase;
+  color:var(--sepia); margin-bottom:0.45rem;
+}
+.detail-name {
+  font-family:var(--font-display);
+  font-size:clamp(1.5rem,4.5vw,2.2rem);
+  color:var(--gold-bright); line-height:1.1;
+  text-shadow:0 0 35px rgba(201,152,58,0.3);
+}
+.detail-aliases {
+  margin-top:0.5rem; font-style:italic;
+  color:var(--dim); font-size:0.96rem;
+  font-family:var(--font-body);
+}
+
+/* Action buttons in header */
+.detail-actions {
+  position:absolute; top:1.2rem; right:1.5rem;
+  display:flex; gap:0.5rem; align-items:center;
+}
+.detail-close {
+  background:none; border:1px solid var(--border);
+  color:var(--faint); font-family:var(--font-heading);
+  font-size:0.68rem; letter-spacing:0.15em; text-transform:uppercase;
+  padding:0.4rem 0.8rem; cursor:pointer; border-radius:1px;
+  transition:var(--transition); min-height:40px;
+}
+.detail-close:hover { color:var(--vellum); border-color:var(--border-mid); }
+
+.detail-graph-btn {
+  background:rgba(201,152,58,0.12);
+  border:1px solid var(--gold);
+  color:var(--gold-light); font-family:var(--font-heading);
+  font-size:0.68rem; letter-spacing:0.12em; text-transform:uppercase;
+  padding:0.4rem 0.8rem; cursor:pointer; border-radius:1px;
+  transition:var(--transition); min-height:40px;
+}
+.detail-graph-btn:hover { background:rgba(201,152,58,0.25); color:var(--gold-bright); }
+
+.detail-body { padding:2rem; }
+
+/* Genealogy block */
+.genealogy-block {
+  background:rgba(0,0,0,0.3);
+  border:1px solid var(--border-mid);
+  border-left:4px solid var(--gold);
+  padding:1rem 1.2rem;
+  margin-bottom:1rem;
+  border-radius:var(--radius);
+}
+.genealogy-line {
+  font-family:var(--font-body); font-size:0.96rem;
+  color:var(--vellum); line-height:1.7;
+  margin-bottom:0.4rem;
+}
+.genealogy-line strong {
+  font-family:var(--font-heading); font-size:0.68rem;
+  letter-spacing:0.1em; text-transform:uppercase;
+  color:var(--gold); display:inline-block; margin-right:0.5rem;
+}
+
+/* Detail sections */
+.detail-section { margin-bottom:2rem; }
+.detail-section-title {
+  font-family:var(--font-heading); font-size:0.7rem;
+  letter-spacing:0.25em; text-transform:uppercase;
+  color:var(--gold); border-bottom:1px solid var(--border);
+  padding-bottom:0.45rem; margin-bottom:1.1rem;
+}
+
+/* Research depth meter (replaces completeness bar) */
+.depth-meter { margin-top:0.5rem; }
+.depth-meter-label {
+  font-family:var(--font-heading); font-size:0.68rem;
+  letter-spacing:0.12em; text-transform:uppercase;
+  color:var(--faint); margin-bottom:0.4rem; display:block;
+}
+.depth-pips { display:flex; gap:0.3rem; }
+.depth-pip {
+  height:8px; flex:1; border-radius:1px;
+  background:var(--border);
+  transition:background 0.4s ease;
+}
+.depth-pip.filled { background:linear-gradient(90deg,var(--sepia),var(--gold)); }
+.depth-description {
+  font-size:0.92rem; color:var(--dim);
+  margin-top:0.6rem; font-style:italic; line-height:1.6;
+}
+
+/* Tradition blocks */
+.trad-block {
+  background:rgba(0,0,0,0.22);
+  border:1px solid var(--border);
+  border-left:3px solid var(--gold);
+  padding:1rem 1.1rem;
+  margin-bottom:0.8rem;
+  border-radius:var(--radius);
+}
+.trad-block-header {
+  display:flex; justify-content:space-between;
+  align-items:center; margin-bottom:0.6rem; flex-wrap:wrap; gap:0.4rem;
+}
+.trad-block-name {
+  font-family:var(--font-heading); font-size:0.7rem;
+  letter-spacing:0.18em; text-transform:uppercase;
+}
+.focus-graph-btn {
+  font-family:var(--font-heading); font-size:0.6rem;
+  letter-spacing:0.1em; text-transform:uppercase;
+  color:var(--gold); background:rgba(201,152,58,0.1);
+  border:1px solid rgba(201,152,58,0.4);
+  padding:0.25rem 0.6rem; border-radius:1px;
+  cursor:pointer; transition:var(--transition); white-space:nowrap;
+}
+.focus-graph-btn:hover { background:rgba(201,152,58,0.22); color:var(--gold-bright); }
+
+.trad-block-fields { display:grid; gap:0.35rem; }
+.trad-field { display:flex; gap:0.9rem; font-size:0.96rem; line-height:1.55; }
+.trad-field-key {
+  font-family:var(--font-heading); font-size:0.68rem;
+  letter-spacing:0.09em; text-transform:uppercase;
+  color:var(--faint); min-width:108px;
+  padding-top:0.12rem; flex-shrink:0;
+}
+.trad-field-val { color:var(--vellum); font-style:italic; }
+
+/* Relationship edges */
+.edge-item {
+  border:1px solid var(--border);
+  padding:0.9rem 1.1rem; margin-bottom:0.55rem;
+  border-radius:var(--radius); background:rgba(0,0,0,0.18);
+}
+.edge-type {
+  font-family:var(--font-heading); font-size:0.63rem;
+  letter-spacing:0.14em; text-transform:uppercase;
+  display:inline-block; padding:0.17rem 0.55rem;
+  border-radius:1px; margin-bottom:0.45rem;
+}
+.edge-SYNCRETIZED_WITH       { background:rgba(80,200,120,0.12); color:#50c878; border:1px solid rgba(80,200,120,0.3); }
+.edge-FUNCTIONAL_PARALLEL    { background:rgba(128,168,216,0.12); color:#80a8d8; border:1px solid rgba(128,168,216,0.3); }
+.edge-DESCENDED_FROM         { background:rgba(200,160,64,0.12); color:#c8a040; border:1px solid rgba(200,160,64,0.3); }
+.edge-EMANATED_FROM          { background:rgba(184,128,216,0.12); color:#b880d8; border:1px solid rgba(184,128,216,0.3); }
+.edge-POLEMIC_EQUIVALENT     { background:rgba(200,96,96,0.12); color:#d07070; border:1px solid rgba(200,96,96,0.3); }
+.edge-MANIFESTED_AS          { background:rgba(200,160,64,0.12); color:#c8a040; border:1px solid rgba(200,160,64,0.3); }
+.edge-FALLEN_FORM_OF         { background:rgba(192,80,80,0.12); color:#c05050; border:1px solid rgba(192,80,80,0.3); }
+.edge-TAUGHT_BY              { background:rgba(80,176,176,0.12); color:#50b0b0; border:1px solid rgba(80,176,176,0.3); }
+.edge-COMMANDS               { background:rgba(176,96,64,0.12); color:#b06040; border:1px solid rgba(176,96,64,0.3); }
+.edge-CORRESPONDS_TO         { background:rgba(112,144,208,0.12); color:#7090d0; border:1px solid rgba(112,144,208,0.3); }
+.edge-CONTESTED_IDENTIFICATION{ background:rgba(192,144,64,0.12); color:#c09040; border:1px solid rgba(192,144,64,0.3); }
+
+.edge-target { font-family:var(--font-heading); font-size:0.86rem; color:var(--vellum); margin-bottom:0.3rem; }
+.edge-target a { color:var(--gold-light); cursor:pointer; text-decoration:underline; text-decoration-color:rgba(228,184,90,0.35); text-underline-offset:3px; }
+.edge-meta { font-size:0.88rem; color:var(--dim); line-height:1.55; }
+.edge-notes { margin-top:0.35rem; font-style:italic; color:var(--faint); font-size:0.86rem; line-height:1.55; }
+
+/* Domains */
+.domains-list { display:flex; flex-wrap:wrap; gap:0.55rem; }
+.domain-tag-large {
+  font-family:var(--font-heading); font-size:0.7rem;
+  letter-spacing:0.11em; text-transform:uppercase;
+  color:var(--faint); border:1px solid var(--border-mid);
+  padding:0.32rem 0.75rem; border-radius:1px;
+}
+
+.research-note {
+  font-size:0.97rem; color:var(--vellum);
+  background:rgba(0,0,0,0.2);
+  border-left:3px solid var(--sepia);
+  padding:0.9rem 1.1rem; line-height:1.75;
+  font-style:italic;
+}
+
+.source-list { list-style:none; padding:0; }
+.source-list li {
+  font-size:0.94rem; color:var(--dim);
+  padding:0.22rem 0 0.22rem 1.1rem;
+  position:relative; line-height:1.55;
+}
+.source-list li::before {
+  content:'◆'; position:absolute; left:0;
+  color:var(--sepia); font-size:0.5rem; top:0.5rem;
+}
+
+/* Theological significance box */
+.theo-box {
+  background:rgba(201,152,58,0.06);
+  border:1px solid rgba(201,152,58,0.3);
+  border-left:4px solid var(--gold);
+  padding:1rem 1.2rem; margin-bottom:1rem;
+  border-radius:var(--radius);
+}
+.theo-box p { font-size:1rem; color:var(--vellum); line-height:1.75; }
+.theo-box .theo-label {
+  font-family:var(--font-heading); font-size:0.68rem;
+  letter-spacing:0.2em; text-transform:uppercase;
+  color:var(--gold); margin-bottom:0.5rem; display:block;
+}
+
+/* ══════════════════════════════════════════
+   GRAPH FULLSCREEN OVERLAY
+══════════════════════════════════════════ */
+#graph-overlay {
+  display:none; position:fixed; inset:0;
+  background:#0a0806; z-index:600;
+  flex-direction:column;
+}
+#graph-overlay.open { display:flex; }
+
+.graph-overlay-header {
+  background:#0c0a07;
+  border-bottom:1px solid var(--border);
+  padding:0.6rem 1rem;
+  display:flex; align-items:center;
+  gap:0.6rem; flex-wrap:wrap;
+  flex-shrink:0;
+  min-height:52px;
+}
+.graph-overlay-title {
+  font-family:var(--font-heading); font-size:0.72rem;
+  letter-spacing:0.2em; text-transform:uppercase;
+  color:var(--gold); margin-right:0.5rem;
+}
+.graph-close-btn {
+  margin-left:auto;
+  background:rgba(201,152,58,0.1); border:1px solid var(--gold);
+  color:var(--gold-light); font-family:var(--font-heading);
+  font-size:0.68rem; letter-spacing:0.12em; text-transform:uppercase;
+  padding:0.4rem 0.9rem; cursor:pointer; border-radius:1px;
+  transition:var(--transition); white-space:nowrap; min-height:40px;
+}
+.graph-close-btn:hover { background:rgba(201,152,58,0.25); }
+
+.graph-btn {
+  font-family:var(--font-heading); font-size:0.62rem;
+  letter-spacing:0.1em; text-transform:uppercase;
+  color:var(--faint); background:transparent;
+  border:1px solid var(--border); padding:0.35rem 0.75rem;
+  cursor:pointer; transition:var(--transition); border-radius:1px;
+  white-space:nowrap; min-height:36px;
+  -webkit-tap-highlight-color:transparent;
+}
+.graph-btn:hover { color:var(--vellum); border-color:var(--border-mid); }
+.graph-btn.active { color:var(--gold-light); border-color:var(--gold); background:rgba(201,152,58,0.1); }
+
+.graph-trad-select {
+  background:#0f0d0a; border:1px solid var(--border);
+  color:var(--vellum); padding:0.35rem 0.6rem;
+  border-radius:2px; font-family:var(--font-heading);
+  font-size:0.62rem; letter-spacing:0.08em;
+  height:36px;
+}
+
+#cy-fullscreen {
+  flex:1; width:100%;
+  background:#0a0806;
+  touch-action:none; /* let cytoscape handle touch */
+}
+
+.graph-reset-fab {
+  position:absolute;
+  bottom:20px; right:20px;
+  background:var(--gold); color:var(--ink-deep);
+  border:none; border-radius:50%;
+  width:52px; height:52px;
+  font-size:1.4rem; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:var(--shadow); z-index:10;
+  transition:transform var(--transition), box-shadow var(--transition);
+  -webkit-tap-highlight-color:transparent;
+}
+.graph-reset-fab:hover { transform:scale(1.1); box-shadow:var(--shadow-deep); }
+.graph-reset-fab:active { transform:scale(0.93); }
+
+.graph-legend-strip {
+  background:#0c0a07; border-top:1px solid var(--border);
+  padding:0.5rem 1rem;
+  display:flex; flex-wrap:wrap; gap:0.6rem;
+  flex-shrink:0;
+}
+.legend-item {
+  display:flex; align-items:center; gap:0.4rem;
+  font-family:var(--font-heading); font-size:0.6rem;
+  letter-spacing:0.09em; text-transform:uppercase; color:var(--faint);
+}
+.legend-dot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+
+/* ══════════════════════════════════════════
+   HIERARCHY VIEW
+══════════════════════════════════════════ */
+.hier-controls {
+  display:flex; flex-wrap:wrap; gap:0.6rem;
+  align-items:center; margin-bottom:1.4rem;
+}
+.hier-controls label {
+  font-family:var(--font-heading); font-size:0.7rem;
+  letter-spacing:0.15em; text-transform:uppercase; color:var(--faint);
+}
+.hier-select {
+  background:#0f0d0a; border:1px solid var(--border);
+  color:var(--vellum); padding:0.45rem 0.7rem;
+  border-radius:2px; font-family:var(--font-body);
+  font-size:0.9rem;
+}
+
+/* Per-tradition hierarchy accordion */
+.trad-hier-section { margin-bottom:1rem; }
+.trad-hier-header {
+  background:linear-gradient(90deg,#130f09,#1a1510);
+  border:1px solid var(--border-mid);
+  border-radius:var(--radius);
+  padding:0.75rem 1.1rem;
+  cursor:pointer;
+  display:flex; align-items:center; gap:0.7rem;
+  transition:border-color var(--transition);
+  -webkit-tap-highlight-color:transparent;
+}
+.trad-hier-header:hover { border-color:var(--border-strong); }
+.trad-hier-header.open { border-bottom-left-radius:0; border-bottom-right-radius:0; }
+.trad-hier-toggle { color:var(--gold); font-size:0.9rem; min-width:16px; }
+.trad-hier-title {
+  font-family:var(--font-heading); font-size:0.84rem;
+  font-weight:600;
+}
+.trad-hier-count { margin-left:auto; font-family:var(--font-heading); font-size:0.62rem; letter-spacing:0.1em; color:var(--dim); }
+
+.trad-hier-body {
+  display:none;
+  border:1px solid var(--border-mid);
+  border-top:none;
+  border-radius:0 0 var(--radius) var(--radius);
+  overflow:hidden;
+}
+.trad-hier-body.open { display:block; }
+
+.hier-level-group { border-bottom:1px solid var(--border); }
+.hier-level-group:last-child { border-bottom:none; }
+.hier-level-label {
+  font-family:var(--font-heading); font-size:0.65rem;
+  letter-spacing:0.18em; text-transform:uppercase;
+  color:var(--sepia); padding:0.55rem 1rem 0.3rem;
+  background:rgba(0,0,0,0.15);
+}
+.hier-entity-row {
+  display:flex; align-items:center; gap:0.55rem;
+  padding:0.45rem 1rem 0.45rem 1.4rem;
+  cursor:pointer; transition:background var(--transition);
+  -webkit-tap-highlight-color:transparent;
+  min-height:44px; /* touch target */
+}
+.hier-entity-row:hover { background:rgba(201,152,58,0.07); }
+.hier-trad-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+.hier-entity-name { font-size:1rem; color:var(--vellum); font-family:var(--font-body); }
+.hier-entity-domain { font-size:0.82rem; color:var(--dim); font-style:italic; margin-left:auto; }
+
+/* ══════════════════════════════════════════
+   ABOUT VIEW
+══════════════════════════════════════════ */
+.about-content { max-width:820px; margin:0 auto; font-size:1.05rem; line-height:1.85; color:var(--vellum); }
+.about-content h2 {
+  font-family:var(--font-heading); font-size:0.78rem;
+  letter-spacing:0.28em; text-transform:uppercase;
+  color:var(--gold); border-bottom:1px solid var(--border);
+  padding-bottom:0.45rem; margin:2.2rem 0 1.1rem;
+}
+.about-content p { margin-bottom:1.1rem; }
+.about-content blockquote {
+  border-left:3px solid var(--sepia); padding:0.9rem 1.3rem;
+  margin:1.8rem 0; background:rgba(0,0,0,0.22);
+  font-style:italic; color:var(--faint);
+}
+
+/* ══════════════════════════════════════════
+   EMPTY STATE / ORNAMENT
+══════════════════════════════════════════ */
+.empty-state { text-align:center; padding:4rem 2rem; color:var(--dim); }
+.empty-state .empty-glyph { font-size:2.8rem; margin-bottom:1rem; opacity:0.35; }
+.empty-state p { font-style:italic; font-size:1rem; }
+.ornament { text-align:center; color:var(--sepia); font-size:0.95rem; letter-spacing:0.5em; margin:1.8rem 0; opacity:0.55; }
+
+/* ══════════════════════════════════════════
+   ANIMATIONS
+══════════════════════════════════════════ */
+@keyframes fade-up {
+  from { opacity:0; transform:translateY(14px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* ══════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════ */
+@media (max-width:640px) {
+  :root { --base: 18px; }
+  .nav-btn { padding:0.85rem 1.1rem; font-size:0.7rem; }
+  .detail-body { padding:1.3rem; }
+  .trad-field { flex-direction:column; gap:0.12rem; }
+  .trad-field-key { min-width:unset; }
+  #results-grid { grid-template-columns:1fr; }
+  .detail-actions { position:static; margin-top:0.8rem; }
+  .detail-header { padding:1.3rem; }
+  .graph-overlay-header { padding:0.5rem; gap:0.4rem; }
+}
+@media (max-width:400px) {
+  :root { --base: 17px; }
+  .nav-btn { padding:0.75rem 0.85rem; font-size:0.65rem; letter-spacing:0.12em; }
+}
+</style>
 </head>
 <body>
-    <header>
-        <div>
-            <h1 style="color: var(--accent); font-size: 1.8rem; letter-spacing: 2px;">PANTHEON</h1>
-            <p style="font-size: 0.9rem; opacity: 0.7;">Concordance • Logos-Centered Cosmology</p>
-        </div>
-        <div class="modes">
-            <button class="mode-btn active" data-mode="theological">Theological</button>
-            <button class="mode-btn" data-mode="comparative">Comparative</button>
-            <button class="mode-btn" data-mode="esoteric">Esoteric</button>
-        </div>
-        <div>
-            <input type="text" id="search" placeholder="Search entities..." style="padding:8px 16px; background:#1a1a22; border:1px solid #555; color:white; width:280px; border-radius:4px;">
-        </div>
-    </header>
 
-    <div id="graph-container"></div>
+<!-- HEADER -->
+<header id="header">
+  <span class="header-sigil">✦ ✧ ✦</span>
+  <h1>Pantheon Concordance</h1>
+  <p class="header-verse">
+    "For by him all things were created, in heaven and on earth, visible and invisible... all things were created through him and for him."
+    <cite>— Colossians 1:16 (ESV)</cite>
+  </p>
+  <p class="header-meta">A cross-traditional reference database — <span id="entity-count-meta">—</span></p>
+</header>
 
-    <div class="detail-panel" id="detail-panel">
-        <button onclick="closePanel()" style="float:right; background:none; border:none; color:var(--accent); font-size:1.5rem;">×</button>
-        <div id="detail-content"></div>
+<!-- NAV -->
+<nav id="nav">
+  <button class="nav-btn active" data-view="search">⊕ Search</button>
+  <button class="nav-btn" data-view="hierarchy">⊗ Hierarchy</button>
+  <button class="nav-btn" data-view="about">⊜ About</button>
+</nav>
+
+<!-- APP -->
+<div id="app">
+
+  <!-- ── SEARCH VIEW ── -->
+  <section id="view-search" class="view active">
+    <div class="search-wrap">
+      <p class="search-title">Search by name, domain, tradition, epithet, or scripture</p>
+      <div class="search-box-wrap">
+        <span class="search-icon">◉</span>
+        <input type="text" id="search-input" placeholder="e.g. Jesus, Logos, psychopomp, watcher, Kabbalah…" autocomplete="off" spellcheck="false">
+      </div>
     </div>
-
-    <div class="edge-legend">
-        <strong>Edge Legend</strong><br>
-        <span style="color:#4a7043">━━━</span> Ancient Syncretism (High Confidence)<br>
-        <span style="color:#6b8e9b">─ ─ ─</span> Functional Parallel<br>
-        <span style="color:#8b5a2b">····</span> Contested
+    <div class="filter-bar" id="filter-bar">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="biblical_angel">Biblical</button>
+      <button class="filter-btn" data-filter="greek">Greek</button>
+      <button class="filter-btn" data-filter="roman">Roman</button>
+      <button class="filter-btn" data-filter="egyptian">Egyptian</button>
+      <button class="filter-btn" data-filter="enochian">Enochian</button>
+      <button class="filter-btn" data-filter="kabbalistic">Kabbalah</button>
+      <button class="filter-btn" data-filter="hermetic">Hermetic</button>
+      <button class="filter-btn" data-filter="gnostic">Gnostic</button>
+      <button class="filter-btn" data-filter="goetic">Goetic</button>
+      <button class="filter-btn" data-filter="islamic">Islamic</button>
+      <button class="filter-btn" data-filter="planetary">Planetary</button>
+      <button class="filter-btn" data-filter="mesopotamian">Mesopotamian</button>
     </div>
+    <p class="results-count" id="results-count"></p>
+    <div id="results-grid"></div>
+  </section>
 
-    <script>
-        // Rich dataset with 100+ entities simulation
-        let entities = [];
+  <!-- ── HIERARCHY VIEW ── -->
+  <section id="view-hierarchy" class="view">
+    <div id="hierarchy-container"></div>
+  </section>
 
-        function generateFullDataset() {
-            const core = [
-                { id: "jesus-christ", canonical_name: "Jesus Christ", hierarchical_level: 1, why_matters: "The fixed center of the cosmological map. Every tradition orbits this Logos. Biblical lineage culminates here." },
-                { id: "adam", canonical_name: "Adam", hierarchical_level: 2, why_matters: "The first man, origin of the genealogical chain. Typological father of humanity and Christ (Second Adam)." },
-                { id: "azazel", canonical_name: "Azazel", hierarchical_level: 3, why_matters: "Explains Yom Kippur scapegoat and Christian atonement. Links to Prometheus as bringer of forbidden knowledge." },
-                { id: "hermes-trismegistus", canonical_name: "Hermes Trismegistus", hierarchical_level: 4, why_matters: "Synthesis of Thoth and Hermes. Source of Hermetic wisdom studied by Renaissance magi and Newton." },
-                // Add 20 more core from README
-            ];
-            // Generate 100+
-            for(let i = 0; i < 120; i++) {
-                core.push({
-                    id: `entity-${i}`,
-                    canonical_name: ['Michael','Gabriel','Raphael','Lucifer','Paimon','Osiris','Thoth','Zeus','Horus','Lilith','Metatron','Samael','Bael','Asmodeus','Enoch','Solomon'][i%16] + (i>30 ? ` ${Math.floor(i/10)}` : ''),
-                    hierarchical_level: (i % 7) + 1,
-                    why_matters: `This entity reveals profound typological and syncretic connections across traditions, illuminating the underlying unity of sacred narratives.`
-                });
-            }
-            return core;
+  <!-- ── ABOUT VIEW ── -->
+  <section id="view-about" class="view">
+    <div class="about-content">
+      <blockquote>
+        "He is the image of the invisible God, the firstborn over all creation. For in him all things were created: things in heaven and on earth, visible and invisible, whether thrones or powers or rulers or authorities; all things have been created through him and for him. He is before all things, and in him all things hold together."
+        <br><cite>— Colossians 1:15–17 (NIV)</cite>
+      </blockquote>
+
+      <h2>Theological Center: Jesus Christ</h2>
+      <p>This concordance is structured with Jesus Christ at its theological center — not as one figure among equals, but as the ontological ground from which all other figures derive their ultimate meaning. Colossians 1:16–17 makes an absolute claim: <em>all things</em> were created through him and for him, and in him all things hold together. This includes every divine name, every angelic hierarchy, every cosmic principle mapped in this database.</p>
+      <p>This does not flatten the historical data. Pagan deities, angelic orders, esoteric traditions, and occult systems are documented on their own terms, with their own source texts. But every tradition vector can be read through a Christo-centric lens: pagan deities as corrupted or partial perceptions of the one true source; angelic orders as servants of the same sovereign; esoteric traditions as groping toward what the Incarnation revealed plainly.</p>
+
+      <h2>Genealogical Structure</h2>
+      <p>This database tracks the biblical genealogical chain from Adam through the patriarchs to Jesus Christ — the spine of salvation history. Matthew 1 and Luke 3 give two genealogies that together establish both royal legitimacy (Davidic covenant) and full humanity (descent from Adam). Key nodes: <strong>Adam → Enoch → Noah → Abraham → David → Christ</strong>.</p>
+      <p>Each patriarch is cross-referenced with their appearances in other tradition tracks — Enoch in Enochian and Islamic literature, Abraham in Kabbalistic and Islamic correspondence, Noah across Enochian and Islamic prophecy. This genealogical thread is the red line running through the entire concordance.</p>
+
+      <h2>Research Depth Rating</h2>
+      <p>The <strong>Research Depth</strong> meter on each entry replaces a simple percentage. It communicates how thoroughly an entry has been documented across its tradition tracks:</p>
+      <p><strong style="color:var(--gold-light)">Primary Source</strong> — Extensively attested in multiple primary texts with full tradition-vector coverage and cross-referenced relationships.<br>
+      <strong style="color:var(--sepia)">Secondary Source</strong> — Well-documented but missing one or more tradition vectors; some relationships need further sourcing.<br>
+      <strong style="color:var(--dim)">Partial</strong> — Entry exists with basic data; further research needed for full coverage.</p>
+
+      <h2>Methodology</h2>
+      <p>Three principles govern every entry. <strong style="color:var(--gold-light)">Source transparency:</strong> every correspondence is tagged with the tradition and text making the claim — ancient syncretisms, modern scholarly parallels, and polemical equivalences are each marked differently. <strong style="color:var(--gold-light)">Contested claims are preserved, not resolved:</strong> where scholars disagree, both positions are stored and flagged. <strong style="color:var(--gold-light)">History of ideas, not advocacy:</strong> mapping Augustine's claim that Zeus is a demon does not endorse that theology; every tradition is treated with scholarly care.</p>
+
+      <h2>Graph Visualization</h2>
+      <p>Click <strong>Focus in Graph</strong> on any entity or tradition block to open the full-screen graph viewer centered on that node's connections. Use <strong>pinch to zoom</strong> on mobile or <strong>scroll wheel</strong> on desktop. The reset button (⟳) always returns to the full view. Edge colors indicate relationship type; node colors indicate primary tradition.</p>
+
+      <h2>Deployment</h2>
+      <p>Single static HTML file — no build step, no server. Push to GitHub, enable Pages from Settings → Pages → Source: main branch. Updates: edit the embedded JSON data and recommit.</p>
+
+      <div class="ornament">✦ ✧ ✦</div>
+      <p style="font-size:0.88rem;color:var(--dim);text-align:center;font-style:italic">Pantheon Concordance — Schema v0.5 · For comparative literature, history of ideas, and theological research.</p>
+    </div>
+  </section>
+
+</div>
+
+<!-- ══ ENTITY DETAIL OVERLAY ══ -->
+<div id="detail-overlay">
+  <div id="detail-panel">
+    <div class="detail-header">
+      <p class="detail-level" id="d-level"></p>
+      <h2 class="detail-name" id="d-name"></h2>
+      <p class="detail-aliases" id="d-aliases"></p>
+      <div class="detail-actions">
+        <button class="detail-graph-btn" id="d-graph-btn" onclick="openGraphForCurrent()">⊛ Focus in Graph</button>
+        <button class="detail-close" onclick="closeDetail()">✕ Close</button>
+      </div>
+    </div>
+    <div class="detail-body">
+      <div class="detail-section" id="d-theo-section" style="display:none">
+        <p class="detail-section-title">Theological Significance</p>
+        <div id="d-theo"></div>
+      </div>
+      <div class="detail-section" id="d-genealogy-section" style="display:none">
+        <p class="detail-section-title">Genealogy &amp; Biblical Lineage</p>
+        <div id="d-genealogy"></div>
+      </div>
+      <div class="detail-section">
+        <p class="detail-section-title">Functional Domains</p>
+        <div class="domains-list" id="d-domains"></div>
+      </div>
+      <div class="detail-section">
+        <p class="detail-section-title">Tradition Vectors</p>
+        <div id="d-traditions"></div>
+      </div>
+      <div class="detail-section">
+        <p class="detail-section-title">Relationships &amp; Cross-Traditional Connections</p>
+        <div id="d-relations"></div>
+      </div>
+      <div class="detail-section">
+        <p class="detail-section-title">Primary Source Attestations</p>
+        <ul class="source-list" id="d-sources"></ul>
+      </div>
+      <div class="detail-section">
+        <p class="detail-section-title">Research Notes</p>
+        <p class="research-note" id="d-notes"></p>
+      </div>
+      <div class="detail-section">
+        <p class="detail-section-title">Research Depth</p>
+        <div class="depth-meter">
+          <span class="depth-meter-label" id="d-depth-label">—</span>
+          <div class="depth-pips" id="d-depth-pips"></div>
+          <p class="depth-description" id="d-depth-desc"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ GRAPH FULLSCREEN OVERLAY ══ -->
+<div id="graph-overlay">
+  <div class="graph-overlay-header">
+    <span class="graph-overlay-title">Relationship Graph</span>
+    <span id="graph-focus-label" style="font-family:var(--font-body);font-size:0.88rem;color:var(--faint);font-style:italic"></span>
+    <!-- Edge filter -->
+    <select id="graph-edge-select" class="graph-trad-select">
+      <option value="all">All edges</option>
+      <option value="SYNCRETIZED_WITH">Syncretized</option>
+      <option value="FUNCTIONAL_PARALLEL">Parallel</option>
+      <option value="DESCENDED_FROM">Descent</option>
+      <option value="COMMANDS">Commands</option>
+      <option value="POLEMIC_EQUIVALENT">Polemic</option>
+      <option value="CONTESTED_IDENTIFICATION">Contested</option>
+      <option value="MANIFESTED_AS">Manifested As</option>
+    </select>
+    <!-- Tradition filter -->
+    <select id="graph-trad-select" class="graph-trad-select">
+      <option value="all">All traditions</option>
+      <option value="biblical_angel">Biblical</option>
+      <option value="greek">Greek</option>
+      <option value="roman">Roman</option>
+      <option value="egyptian">Egyptian</option>
+      <option value="enochian">Enochian</option>
+      <option value="kabbalistic">Kabbalah</option>
+      <option value="hermetic">Hermetic</option>
+      <option value="gnostic">Gnostic</option>
+      <option value="goetic">Goetic</option>
+      <option value="islamic">Islamic</option>
+      <option value="planetary">Planetary</option>
+      <option value="mesopotamian">Mesopotamian</option>
+    </select>
+    <button class="graph-close-btn" onclick="closeGraph()">✕ Close Graph</button>
+  </div>
+  <div style="position:relative;flex:1;display:flex;flex-direction:column;">
+    <div id="cy-fullscreen"></div>
+    <button class="graph-reset-fab" onclick="resetGraph()" title="Reset view">⟳</button>
+  </div>
+  <div class="graph-legend-strip" id="graph-legend"></div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════════════════════
+let DB = { entities: [] };
+let fuse = null;
+let cy = null;
+let currentFilter = 'all';
+let currentDetailId = null;
+
+const TRADITION_LABELS = {
+  greek:'Greek', roman:'Roman', egyptian:'Egyptian', mesopotamian:'Mesopotamian',
+  biblical_angel:'Biblical', enochian:'Enochian', kabbalistic:'Kabbalah',
+  hermetic:'Hermetic', gnostic:'Gnostic', goetic:'Goetic',
+  islamic:'Islamic', planetary:'Planetary'
+};
+
+const TRADITION_ORDER = ['biblical_angel','enochian','kabbalistic','hermetic','gnostic','greek','roman','egyptian','mesopotamian','goetic','islamic','planetary'];
+
+const LEVEL_LABELS = {
+  1:'Level I — Primordial Source & Supreme Principle',
+  2:'Level II — First Emanations / Highest Orders',
+  3:'Level III — Sovereign Rulers & Cosmic Archons',
+  4:'Level IV — Mediators, Patriarchs & Liminal Figures',
+  5:'Level V — Powers of Nature & Domain Deities',
+  6:'Level VI — Grimoiric Hierarchy & Named Spirits',
+  7:'Level VII — Regional, Chthonic & Folkloric'
+};
+
+const NODE_COLORS = {
+  greek:'#d4a832', roman:'#c4703a', egyptian:'#3ab8b8', mesopotamian:'#d9a07a',
+  biblical_angel:'#a088d8', enochian:'#c06060', kabbalistic:'#50b870',
+  hermetic:'#d4aa30', gnostic:'#9060c0', goetic:'#d04040',
+  islamic:'#30a0c0', planetary:'#6088d8', default:'#c9983a'
+};
+
+const EDGE_COLORS = {
+  SYNCRETIZED_WITH:'#50c878', FUNCTIONAL_PARALLEL:'#80a8d8',
+  DESCENDED_FROM:'#c8a040', EMANATED_FROM:'#b880d8',
+  POLEMIC_EQUIVALENT:'#d07070', MANIFESTED_AS:'#c8b040',
+  FALLEN_FORM_OF:'#c05050', TAUGHT_BY:'#50b0b0',
+  COMMANDS:'#b06040', CORRESPONDS_TO:'#7090d0',
+  CONTESTED_IDENTIFICATION:'#c09040'
+};
+
+// ══════════════════════════════════════════════════════════════
+//  DATA INJECTION POINT
+// ══════════════════════════════════════════════════════════════
+const CONCORDANCE_DATA = {"version": "0.4", "last_updated": "2026-06", "entity_count": 26, "entities": [{"id": "jesus-christ", "canonical_name": "Jesus Christ", "aliases": ["Jesus of Nazareth", "The Logos", "Christ", "The Word Made Flesh", "Son of God", "Son of Man", "Alpha and Omega", "Lamb of God", "Prince of Peace", "King of Kings"], "genealogy": {"paternal_divine": "God the Father \u2014 eternal begetting, not created (John 1:1\u20133; Colossians 1:15\u201317)", "maternal_human": "Mary of Nazareth, of the lineage of David through Joseph (legal), Luke 3 traces line through Mary to Adam", "davidic_line": "Matthew 1:1\u201317 traces legal genealogy through Joseph: Abraham \u2192 David \u2192 Solomon \u2192 Josiah \u2192 Zerubbabel \u2192 Joseph", "lucan_line": "Luke 3:23\u201338 traces through Nathan son of David \u2192 Heli \u2192 Adam \u2192 God (biological/Marian line per many interpreters)", "significance": "The two genealogies establish both royal legal claim (Matthew: Joseph/kingly line) and biological humanity (Luke: to Adam, affirming full humanity). Christ fulfills Davidic covenant (2 Samuel 7:12\u201316) as eternal king."}, "tradition_vectors": {"biblical_angel": {"name": "Jesus Christ \u2014 The Logos Incarnate", "rank": "Son of God / Second Person of the Trinity", "canonical_function": "Eternal Son and Logos (Word) through whom all things were created (John 1:1\u20133; Col 1:16\u201317). Incarnated as fully human and fully divine. Crucified, died, buried, resurrected on the third day. Ascended to the right hand of the Father. Will return as Judge of the living and dead (Nicene Creed, 381 CE).", "source_texts": ["Gospel of John 1:1\u201318 (Logos prologue)", "Colossians 1:15\u201320 (Firstborn over all creation, all things created through and for him)", "Hebrews 1:1\u20134 (Heir of all things, through whom the universe was made)", "Philippians 2:5\u201311 (Kenosis \u2014 emptying of divine prerogatives in incarnation)", "Revelation 1:8, 22:13 (Alpha and Omega)", "Isaiah 53 (Suffering Servant \u2014 typological prophecy)", "Nicene Creed (325/381 CE)"]}, "kabbalistic": {"sephira": "Tiphareth", "divine_name": "YHVH Eloah ve-Da'ath", "angelic_order": "Central node of the Tree of Life \u2014 the divine mediator between Kether and Malkuth", "source_texts": ["Christian Kabbalah \u2014 Pico della Mirandola Conclusiones (1486)", "Giovanni Pico, Heptaplus", "Johannes Reuchlin De Arte Cabalistica (1517)", "Athanasius Kircher Oedipus Aegyptiacus"]}, "hermetic": {"role": "The incarnate Logos \u2014 divine reason and creative intelligence made flesh; the ultimate expression of 'as above so below' in that the infinite condescends into the finite", "corpus_hermeticum_ref": "Structural parallel to the Nous (divine intellect) that illuminates the fallen soul; Hermetic prisca theologia traditions (Ficino, Agrippa) placed Christ at the apex of the ancient wisdom lineage", "agrippan_attribution": "Agrippa, Three Books of Occult Philosophy III.36 \u2014 Christ as the supreme name above all names"}, "gnostic": {"name": "Christos / The Savior / Logos", "system": "Various", "classification": "Soteriological Aeon", "source_texts": ["Gospel of Thomas (Nag Hammadi NHC II.2) \u2014 sayings tradition", "Gospel of Philip (NHC II.3) \u2014 sacramental theology", "Pistis Sophia \u2014 Christ as revealer of hidden light", "Valentinian Gospel of Truth \u2014 Christ as teacher who reveals the Father"]}, "islamic": {"name_arabic": "\u0639\u064a\u0633\u0649 \u0627\u0644\u0645\u0633\u064a\u062d", "name_transliterated": "\u02bf\u012as\u0101 al-Mas\u012b\u1e25", "classification": "Prophet", "quranic_reference": "Quran 3:45\u201347 (Annunciation); 4:171 (Word of God, Spirit from Him); 5:110 (miracles); 19:16\u201334 (Nativity); 43:61 (sign of the Hour)", "isra_iliyyat_link": "Islamic tradition affirms virgin birth, miracles, ascension; denies crucifixion-death (4:157). \u02bf\u012as\u0101 is Word of God (kalimatu'Ll\u0101h) and Spirit from Him (r\u016b\u1e25un minhu) \u2014 titles unique in the Quran."}, "planetary": {"planet": "Sun", "zodiac_rulership": ["Leo (light, sovereignty)", "Pisces (Ichthys symbol, Age of Pisces)"], "day_of_week": "Sunday (Lord's Day \u2014 resurrection)", "metal": "Gold", "color": "Gold / White / Crimson", "agrippa_book_ref": "Agrippa OCPhil III.36 \u2014 the Name of Christ above all magical names"}}, "functional_domains": ["Incarnation of the Eternal Logos", "Soteriology \u2014 Atonement and Redemption", "Mediation between God and Humanity", "Death, Resurrection, and Eternal Life", "Fulfillment of Mosaic Law and Prophets", "Universal Lordship \u2014 King of Kings", "Return and Final Judgment", "Cosmic Creatorship (all things made through him)"], "hierarchical_level": 1, "relationships": [{"target_id": "michael-archangel", "edge_type": "COMMANDS", "source_tradition": "Biblical Angelology", "source_text": "Revelation 12:7\u20139; Jude 1:9; 1 Thessalonians 4:16", "notes": "Michael serves as commander of the heavenly host under Christ's ultimate lordship. Some patristic writers (Origen, some modern scholars) have proposed Michael-Christ identification, but mainstream orthodoxy holds them distinct."}, {"target_id": "gabriel", "edge_type": "COMMANDS", "source_tradition": "Biblical Angelology", "source_text": "Luke 1:19, 1:26 \u2014 Gabriel announces the Incarnation", "notes": "Gabriel is sent by God to announce Christ's birth to Mary \u2014 the Annunciation. Gabriel's role as divine messenger is fulfilled most climactically in the Incarnation announcement."}, {"target_id": "metatron", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Jewish Mysticism / Christian Kabbalah", "source_text": "3 Enoch; Christian Kabbalistic syncretic sources (Pico, Reuchlin)", "notes": "Both Metatron and Christ serve as supreme mediators between the divine throne and humanity. Christian Kabbalists explicitly mapped Christ onto Metatron's role. The parallel is typological, not doctrinal in mainstream Christianity."}, {"target_id": "osiris", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Comparative Religion", "source_text": "Frazer, The Golden Bough (1890); modern nuanced treatments in Assmann, Hornung", "notes": "Both involve death, resurrection motif, judgment of the dead, and divine kingship. Scholars emphasize fundamental differences: Osiris undergoes physical reassembly, Christ's resurrection is bodily glorification. The parallel is structural and comparative, not historical derivation."}, {"target_id": "hermes-trismegistus", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Renaissance Hermeticism", "source_text": "Ficino, Theologia Platonica; Agrippa OCPhil III", "notes": "Renaissance Christian Hermeticists placed Christ as the apex of the prisca theologia lineage, with Hermes Trismegistus as a prophetic anticipation of the Logos. Ficino saw Hermeticism as preparation for Christian revelation."}, {"target_id": "lucifer", "edge_type": "CONTESTED_IDENTIFICATION", "source_tradition": "Biblical / Eschatological", "source_text": "Revelation 22:16 (Christ calls himself the 'bright morning star'); Isaiah 14:12 (Lucifer/Helel)", "notes": "Christ claims the title 'Morning Star' in Revelation 22:16, the same astronomical image used in Isaiah 14:12 for 'Helel ben Shahar.' This creates a deliberate typological inversion: what Satan usurped, Christ legitimately holds. The identification is antithetical, not equivalence."}], "source_attestations": ["Gospel of John 1:1\u201318", "Colossians 1:15\u201320", "Hebrews 1:1\u20134", "Philippians 2:5\u201311", "Isaiah 53 (typological prophecy)", "Revelation 1:8, 22:13", "Nicene Creed (325/381 CE)", "Chalcedonian Definition (451 CE)", "Matthew 1:1\u201317 (genealogy)", "Luke 3:23\u201338 (genealogy)"], "research_notes": "In this concordance, Jesus Christ occupies the theological center: Colossians 1:16\u201317 states explicitly that 'all things were created through him and for him... and in him all things hold together.' This is not a claim about one deity among many, but the claim that the Logos is the ontological ground of all that exists \u2014 including all the figures mapped in this database. Every tradition vector mapped here can be read through this lens: pagan deities as corrupted or partial perceptions of the same reality; angelic orders as servants of the same sovereign; esoteric traditions as groping toward what Christ revealed plainly. The genealogies of Matthew and Luke establish his historical particularity \u2014 the Logos became flesh at a specific time, in a specific lineage, in a specific place. This guards against pure abstraction.", "completeness_score": 95}, {"id": "hermes-trismegistus", "canonical_name": "Hermes Trismegistus", "aliases": ["Thrice-Greatest Hermes", "The Antediluvian Sage", "Mercurius ter Maximus"], "tradition_vectors": {"greek": {"name": "Hermes", "class": "Olympian", "epithets": ["Psychopompos", "Logios", "Chthonios", "Trismegistos"], "source_texts": ["Homeric Hymn IV", "Hesiod Theogony 938"]}, "roman": {"name": "Mercury", "interpretatio_type": "Direct", "source_texts": ["Ovid Metamorphoses I", "Virgil Aeneid IV"]}, "egyptian": {"name": "Thoth", "theology": "Hermopolitan", "ennead_position": "Scribe of the Gods", "source_texts": ["Book of the Dead Ch. 1", "Coffin Texts"]}, "biblical_angel": {"name": "Metatron", "rank": "Archangel", "canonical_function": "Heavenly scribe, divine chancellor, angel of the presence", "source_texts": ["3 Enoch", "Talmud Hagigah 15a"]}, "enochian": {"name": "Enoch", "classification": "Other", "enoch_book": "1 Enoch", "sin_or_role": "Translated to heaven without death; became Metatron", "chapter_reference": "1 Enoch 12\u201316, 70\u201371"}, "kabbalistic": {"sephira": "Hod", "angelic_order": "Bene Elohim", "divine_name": "Elohim Tzabaoth", "source_texts": ["Sefer Yetzirah", "Zohar I:21b"]}, "hermetic": {"role": "Revealer of divine wisdom; author of Hermetic corpus", "corpus_hermeticum_ref": "Poimandres (CH I)", "agrippan_attribution": "Rules over all writing, magic, and hidden knowledge", "alchemical_symbol": "Quicksilver / Mercury"}, "islamic": {"name_arabic": "\u0625\u062f\u0631\u064a\u0633", "name_transliterated": "Idris", "classification": "Prophet", "quranic_reference": "Quran 19:56\u201357, 21:85", "isra_iliyyat_link": "Identified with Enoch in classical Islamic scholarship (al-Tabari, al-Tha'labi)"}, "planetary": {"planet": "Mercury", "zodiac_rulership": ["Gemini", "Virgo"], "day_of_week": "Wednesday", "metal": "Quicksilver", "color": "Orange / Mixed", "agrippa_book_ref": "OCPhil II.10"}}, "functional_domains": ["Psychopomp", "Divine Scribe", "Messenger", "Magic and Sorcery", "Sacred Geometry", "Astrology", "Alchemy"], "hierarchical_level": 4, "relationships": [{"target_id": "thoth", "edge_type": "SYNCRETIZED_WITH", "source_tradition": "Hellenistic Egypt", "source_text": "Herodotus Histories II.67; Iamblichus De Mysteriis VIII", "notes": "One of the most well-attested ancient syncretisms"}, {"target_id": "metatron", "edge_type": "MANIFESTED_AS", "source_tradition": "Jewish Mysticism", "source_text": "3 Enoch 3\u201315", "notes": "Enoch's apotheosis into Metatron maps the Hermetic sage into the angelic hierarchy"}, {"target_id": "idris-prophet", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Islamic Isra'iliyyat", "source_text": "al-Tabari Tarikh al-Rusul", "notes": "Identification is strong in Islamic scholarship but not universal"}, {"target_id": "jesus-christ", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Comparative Soteriology", "source_text": "Typological and Logos parallels noted by Christian Hermeticists", "notes": "Hermes Trismegistus functions as a wisdom revealer and divine Logos-parallel in some comparative traditions."}], "source_attestations": ["Corpus Hermeticum I\u2013XVIII", "1 Enoch 12\u201316", "3 Enoch", "Quran 19:56", "Homeric Hymn IV"], "research_notes": "The figure of Hermes Trismegistus is itself a synthesis \u2014 the Hermetic texts were likely composed in Egypt 1st\u20133rd century CE, blending Platonic philosophy with Egyptian priestly wisdom attributed to Thoth.", "completeness_score": 92}, {"id": "azazel", "canonical_name": "Azazel", "aliases": ["Azael", "Azaziel", "Hazazel", "Azzazel"], "tradition_vectors": {"greek": {"name": "Prometheus", "class": "Titan", "epithets": ["Pyrphoros (Fire-bearer)", "Epimetheus (Afterthought's brother)"], "source_texts": ["Hesiod Theogony 521\u2013616", "Aeschylus Prometheus Bound"]}, "biblical_angel": {"name": "Azazel", "rank": "Angel", "canonical_function": "Levitical scapegoat recipient; wilderness entity", "source_texts": ["Leviticus 16:8\u201310", "Mishnah Yoma"]}, "enochian": {"name": "Azazel", "classification": "Fallen Watcher", "enoch_book": "1 Enoch", "sin_or_role": "Taught humanity metalworking, weapons, cosmetics, and sorcery. Bound under desert of Dudael until final judgment.", "chapter_reference": "1 Enoch 8:1\u20133, 10:4\u20138"}, "kabbalistic": {"sephira": "Geburah", "qliphoth_counterpart": "Golachab", "angelic_order": "Fallen Seraphim (per some traditions)", "source_texts": ["Zohar II:237b", "Sefer ha-Bahir"]}, "planetary": {"planet": "Mars", "metal": "Iron", "color": "Red", "agrippa_book_ref": "OCPhil II.10"}}, "functional_domains": ["Forbidden Knowledge Transmission", "Weapons and War Technology", "Scapegoat Sacrifice", "Rebellion Against Divine Order", "Metalcraft"], "hierarchical_level": 3, "relationships": [{"target_id": "prometheus", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Comparative Mythology", "source_text": "Forsyth The Old Enemy (1987); Hanegraaff Fallen Angels (2010)", "notes": "Structural parallel \u2014 both transmit forbidden technology and are punished. Not claimed by any ancient source."}, {"target_id": "semjaza", "edge_type": "COMMANDS", "source_tradition": "Enochian", "source_text": "1 Enoch 6\u20138", "notes": "Azazel is among the 200 Watchers; his sin is treated as more corrupting than Semjaza's"}, {"target_id": "lucifer", "edge_type": "CONTESTED_IDENTIFICATION", "source_tradition": "Christian Demonology", "source_text": "Various Early Modern grimoires", "notes": "Some traditions conflate; treated as distinct entities here per primary Enochian text"}], "source_attestations": ["Leviticus 16", "1 Enoch 6\u201310", "Apocalypse of Abraham 13\u201314", "Zohar II:237b"], "research_notes": "The Leviticus 'Azazel' may be a place-name, a function, or a proper demon name \u2014 heavily contested. See St\u00f6kl Ben Ezra (2003) for the definitive treatment.", "completeness_score": 71}, {"id": "thoth", "canonical_name": "Thoth", "aliases": ["Djehuty", "Tahuti", "Zehuti", "Lord of Khemenu"], "tradition_vectors": {"greek": {"name": "Hermes", "class": "Olympian", "epithets": ["Psychopompos", "Trismegistos"], "source_texts": ["Herodotus Histories II.67"]}, "roman": {"name": "Mercury", "interpretatio_type": "Direct", "source_texts": ["Cicero De Natura Deorum III"]}, "egyptian": {"name": "Thoth", "theology": "Hermopolitan", "ennead_position": "Scribe and Vizier of Ra; arbiter of the gods", "source_texts": ["Book of the Dead", "Coffin Texts", "Pyramid Texts"]}, "hermetic": {"role": "Divine origin of all Hermetic wisdom", "corpus_hermeticum_ref": "Asclepius; Kore Kosmou (Stobaean Excerpts)", "alchemical_symbol": "Quicksilver"}, "planetary": {"planet": "Mercury", "zodiac_rulership": ["Gemini", "Virgo"], "day_of_week": "Wednesday", "metal": "Quicksilver", "color": "Yellow / Mixed"}}, "functional_domains": ["Divine Scribe", "Lord of Writing and Language", "Magic and Heka", "Lunar Calculation", "Weighing of the Soul"], "hierarchical_level": 4, "relationships": [{"target_id": "hermes-trismegistus", "edge_type": "SYNCRETIZED_WITH", "source_tradition": "Hellenistic Egypt", "source_text": "Herodotus Histories II.67", "notes": "Foundation of all Hermetic tradition"}, {"target_id": "anubis", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Egyptian", "source_text": "Book of the Dead Ch. 125", "notes": "Both present at the Weighing of the Heart; Thoth records, Anubis guides"}, {"target_id": "jesus-christ", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Comparative Wisdom Traditions", "source_text": "Studies on sacred scribal Logos figures", "notes": "Thoth as divine scribe parallels Logos/Christic functions in typological comparisons."}], "source_attestations": ["Pyramid Texts", "Coffin Texts", "Book of the Dead", "Herodotus Histories II"], "research_notes": "Thoth's association with the moon and lunar calendar distinguishes him from Hermes' solar-mercurial qualities. The syncretism is functional, not cosmological.", "completeness_score": 78}, {"id": "lucifer", "canonical_name": "Lucifer / The Light-Bringer", "aliases": ["Helel ben Shahar", "Phosphorus", "Morning Star", "Son of the Dawn"], "tradition_vectors": {"greek": {"name": "Phosphoros / Eosphoros", "class": "Other", "epithets": ["Light-Bringer", "Dawn-Bearer"], "source_texts": ["Hesiod Theogony 381", "Homeric Hymn to Selene"]}, "roman": {"name": "Lucifer", "interpretatio_type": "Direct", "source_texts": ["Ovid Metamorphoses II.115", "Virgil Aeneid II"]}, "biblical_angel": {"name": "Helel ben Shahar", "rank": "Angel", "canonical_function": "Taunt-poem figure; later tradition developed into fallen angel", "source_texts": ["Isaiah 14:12\u201315"]}, "enochian": {"name": "Gadreel / Shemihaza tradition", "classification": "Fallen Watcher", "enoch_book": "1 Enoch", "sin_or_role": "Some traditions link the Light-Bringer motif to Gadreel who led Eve astray", "chapter_reference": "1 Enoch 69:6"}, "kabbalistic": {"sephira": "Tiphareth", "qliphoth_counterpart": "Thagirion (Belial / Sorath)", "divine_name": "YHVH Eloah ve-Da'ath", "source_texts": ["Zohar III:227a", "Etz Chaim"]}, "gnostic": {"name": "Sophia (Lower Aspect) / Yaldabaoth (pride parallel)", "system": "Valentinian", "classification": "Archon", "source_texts": ["Apocryphon of John", "On the Origin of the World"]}, "goetic": {"name": "Lucifer", "rank": "King", "legions": 0, "primary_functions": ["Illumination", "Pride", "Rebellion"], "grimoire_source": "Grand Grimoire"}, "planetary": {"planet": "Venus", "zodiac_rulership": ["Taurus", "Libra"], "day_of_week": "Friday", "metal": "Copper", "color": "Green / Emerald"}}, "functional_domains": ["Forbidden Knowledge", "Pride and Self-Deification", "Rebellion Against Hierarchy", "Morning Star / Dawn", "Illumination"], "hierarchical_level": 3, "relationships": [{"target_id": "azazel", "edge_type": "CONTESTED_IDENTIFICATION", "source_tradition": "Christian Demonology", "source_text": "Origen De Principiis I.5", "notes": "Conflation common in later Christian demonology; primary sources treat separately"}, {"target_id": "yaldabaoth", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Gnosticism", "source_text": "Apocryphon of John NHC II.1", "notes": "Both represent misappropriation of divine light; structural not claimed parallel"}, {"target_id": "prometheus", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Comparative Mythology", "source_text": "Forsyth The Old Enemy (1987)", "notes": "Fire-bringer parallel widely noted by scholars"}], "source_attestations": ["Isaiah 14:12", "Luke 10:18", "Revelation 12:9", "Grand Grimoire", "Zohar III:227a"], "research_notes": "Isaiah 14:12 is a taunt directed at the King of Babylon; the 'fallen angel' interpretation is entirely a later Christian development, not present in the Hebrew text. The Latin 'Lucifer' simply means 'morning star.'", "completeness_score": 83}, {"id": "zeus-jupiter", "canonical_name": "Zeus / Jupiter", "aliases": ["Jupiter Optimus Maximus", "Zeus Olympios", "Jove", "Dias"], "tradition_vectors": {"greek": {"name": "Zeus", "class": "Olympian", "epithets": ["Olympios", "Kronides", "Pater Andr\u014dn te The\u014dn te", "Keraunos (Thunderer)"], "source_texts": ["Hesiod Theogony 886\u2013929", "Homer Iliad I", "Homeric Hymn to Zeus"]}, "roman": {"name": "Jupiter", "interpretatio_type": "Direct", "source_texts": ["Virgil Aeneid I", "Ovid Metamorphoses I"]}, "egyptian": {"name": "Amun-Ra", "theology": "Theban", "ennead_position": "King of the Gods", "source_texts": ["Hymn to Amun (Papyrus Leiden I 350)"]}, "biblical_angel": {"name": "Beelzebub (Patristic identification)", "rank": "Power", "canonical_function": "Patristic demonology identified Baal/Zeus as Beelzebub, Lord of Flies", "source_texts": ["Origen Contra Celsum VII", "Augustine City of God II"]}, "kabbalistic": {"sephira": "Chesed", "angelic_order": "Chasmalim", "divine_name": "El", "source_texts": ["Zohar", "Sefer Yetzirah"]}, "gnostic": {"name": "Yaldabaoth / Demiurge parallel", "system": "Sethian", "classification": "Demiurge", "source_texts": ["Apocryphon of John"], "notes": "Gnostic systems often map the chief Archon onto the sky-god of competing traditions"}, "goetic": {"name": "Bael", "rank": "King", "legions": 66, "primary_functions": ["Invisibility", "Cunning speech", "Commanding spirits"], "grimoire_source": "Ars Goetia"}, "islamic": {"name_arabic": "\u0628\u0639\u0644", "name_transliterated": "Ba'al", "classification": "Other", "quranic_reference": "Quran 37:125 (Baal mentioned as false god)"}, "planetary": {"planet": "Jupiter", "zodiac_rulership": ["Sagittarius", "Pisces"], "day_of_week": "Thursday", "metal": "Tin", "color": "Blue / Royal", "agrippa_book_ref": "OCPhil II.10"}}, "functional_domains": ["Sky Sovereignty", "Thunder and Lightning", "Law and Justice", "Divine Kingship", "Oaths and Covenants"], "hierarchical_level": 3, "relationships": [{"target_id": "baal-hadad", "edge_type": "SYNCRETIZED_WITH", "source_tradition": "Hellenistic Syria", "source_text": "Philo of Byblos Phoenician History (via Eusebius)", "notes": "Ba'al Hadad and Zeus were formally identified throughout the Hellenistic Near East"}, {"target_id": "osiris", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Greco-Roman Egypt", "source_text": "Plutarch De Iside et Osiride", "notes": "Both divine kings; Plutarch himself explores the comparison"}], "source_attestations": ["Hesiod Theogony", "Homer Iliad I", "Virgil Aeneid I", "Pausanias Description of Greece V"], "research_notes": "The Patristic identification of Zeus/Jupiter with demonic forces (Beelzebub, etc.) is a polemical move documented extensively from Justin Martyr onward and is tagged POLEMIC_EQUIVALENT in all edges.", "completeness_score": 88}, {"id": "hecate", "canonical_name": "Hecate", "aliases": ["Hekate", "Trivia", "Antaia", "Brimo", "Queen of the Night"], "tradition_vectors": {"greek": {"name": "Hecate", "class": "Chthonic", "epithets": ["Trioditis (of the three ways)", "Phosphoros (light-bearing)", "Chthonia", "Kleidouchos (key-holder)"], "source_texts": ["Hesiod Theogony 411\u2013452", "Homeric Hymn to Demeter", "Apollonius Rhodius Argonautica III"]}, "roman": {"name": "Trivia", "interpretatio_type": "Direct", "source_texts": ["Virgil Aeneid VI", "Ovid Metamorphoses VII"]}, "egyptian": {"name": "Nephthys", "theology": "Heliopolitan", "ennead_position": "Lady of the Temple Enclosure", "source_texts": ["Pyramid Texts 606"]}, "kabbalistic": {"sephira": "Malkuth", "qliphoth_counterpart": "Lilith / Nahemah", "angelic_order": "Ashim (souls of fire)", "source_texts": ["Zohar I:55a", "Treatise on the Left Emanation"]}, "hermetic": {"role": "World-Soul in its chthonic aspect; guardian of thresholds", "corpus_hermeticum_ref": "CH XVI (on daemons)", "alchemical_symbol": "Salt (chthonic fixity)"}, "planetary": {"planet": "Moon", "zodiac_rulership": ["Cancer"], "day_of_week": "Monday", "metal": "Silver", "color": "Silver / Black", "agrippa_book_ref": "OCPhil II.10"}}, "functional_domains": ["Crossroads and Liminal Spaces", "Witchcraft and Magic", "Lunar Phases", "Necromancy", "Dogs and Night Animals", "Herbology and Poison"], "hierarchical_level": 5, "relationships": [{"target_id": "lilith", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Western Esotericism", "source_text": "Agrippa OCPhil III; Renaissance grimoires", "notes": "Both rule the nocturnal feminine, crossroads, and sorcery; identification made in early modern occultism"}, {"target_id": "isis", "edge_type": "SYNCRETIZED_WITH", "source_tradition": "Hellenistic Egypt", "source_text": "PGM (Greek Magical Papyri) multiple", "notes": "In the magical papyri Hecate and Isis are frequently invoked as the same goddess"}], "source_attestations": ["Hesiod Theogony 411\u2013452", "Greek Magical Papyri (PGM)", "Chaldean Oracles", "Virgil Aeneid VI"], "research_notes": "Hesiod grants Hecate unusual prominence for a pre-Olympian figure, giving her dominion over earth, sea, and sky. Her triple-form iconography likely postdates Hesiod.", "completeness_score": 74}, {"id": "michael-archangel", "canonical_name": "Michael", "aliases": ["Mikha'el", "Mikhail", "Saint Michael", "The Prince of the Host"], "tradition_vectors": {"biblical_angel": {"name": "Michael", "rank": "Archangel", "canonical_function": "Warrior archangel, protector of Israel, commander of divine armies", "source_texts": ["Daniel 10:13, 12:1", "Revelation 12:7", "Jude 1:9"]}, "enochian": {"name": "Michael", "classification": "Archangel", "enoch_book": "1 Enoch", "sin_or_role": "One of the four presences before God; binds Azazel and Semjaza", "chapter_reference": "1 Enoch 9:1, 10:11\u201313, 54:6"}, "kabbalistic": {"sephira": "Chesed", "angelic_order": "Seraphim (per some Kabbalistic sources)", "divine_name": "El", "source_texts": ["Zohar I:149a", "Sefer Raziel ha-Malakh"]}, "hermetic": {"role": "Solar warrior principle; guardian against adverse forces", "agrippa_book_ref": "OCPhil III.24"}, "islamic": {"name_arabic": "\u0645\u064a\u0643\u0627\u0626\u064a\u0644", "name_transliterated": "Mika'il", "classification": "Malak", "quranic_reference": "Quran 2:98", "isra_iliyyat_link": "One of the four cardinal angels; rules over rain and sustenance in Islamic angelology"}, "planetary": {"planet": "Sun", "color": "Gold / White", "metal": "Gold", "day_of_week": "Sunday"}}, "functional_domains": ["Divine Warfare", "Protection of the Righteous", "Weighing of Souls (Catholic tradition)", "Binding of Fallen Angels", "Champion of God"], "hierarchical_level": 3, "relationships": [{"target_id": "metatron", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Jewish Mysticism", "source_text": "3 Enoch; Talmud Yoma 77a", "notes": "Both function as chief angelic intercessors; different traditions give the prime position to each"}, {"target_id": "horus", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Comparative Religion", "source_text": "Assmann Egyptian Theology; Hornung Conceptions of God", "notes": "Both are divine warrior sons who battle the embodiment of chaos (Set / Satan)"}], "source_attestations": ["Daniel 10\u201312", "1 Enoch 9\u201310", "Revelation 12", "Quran 2:98", "3 Enoch"], "research_notes": "Michael's role expands significantly from the Hebrew Bible through Enochian literature and into Christian angelology. His identification as 'prince of the host' is established in Daniel; his warrior role against Satan is Revelation.", "completeness_score": 80}, {"id": "osiris", "canonical_name": "Osiris", "aliases": ["Asar", "Wsir", "Onnophris (the eternally good)", "Lord of the Duat"], "tradition_vectors": {"greek": {"name": "Dionysus (partial)", "class": "Olympian", "epithets": ["Dismembered god", "Dying and rising deity"], "source_texts": ["Plutarch De Iside et Osiride", "Herodotus Histories II.42"]}, "roman": {"name": "Bacchus / Dis Pater (partial)", "interpretatio_type": "Partial", "source_texts": ["Plutarch De Iside et Osiride"]}, "egyptian": {"name": "Osiris", "theology": "Heliopolitan", "ennead_position": "Son of Geb and Nut; Husband of Isis; Father of Horus; Lord of the Dead", "source_texts": ["Pyramid Texts", "Book of the Dead", "Coffin Texts"]}, "kabbalistic": {"sephira": "Tiphareth", "qliphoth_counterpart": "Thagirion", "divine_name": "YHVH Eloah ve-Da'ath", "source_texts": ["Golden Dawn correspondence tables (Liber 777)"]}, "planetary": {"planet": "Sun", "color": "Gold / Green", "metal": "Gold", "day_of_week": "Sunday"}}, "functional_domains": ["Death and Resurrection", "Underworld Sovereignty", "Agriculture and Grain", "Divine Kingship", "Judgment of the Dead"], "hierarchical_level": 3, "relationships": [{"target_id": "dionysus", "edge_type": "SYNCRETIZED_WITH", "source_tradition": "Greco-Roman Egypt", "source_text": "Herodotus II.42; Plutarch De Iside et Osiride ch. 13", "notes": "Plutarch explicitly identifies them as aspects of the same divine principle"}, {"target_id": "horus", "edge_type": "DESCENDED_FROM", "source_tradition": "Egyptian", "source_text": "Pyramid Texts utterance 219", "notes": "Horus as son and avenger of Osiris is one of the core Egyptian mythological relationships"}, {"target_id": "jesus-christ", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Comparative Religion", "source_text": "Scholarly literature on dying-and-rising deities", "notes": "Osiris is often compared structurally to savior/resurrection motifs found in Christian tradition; parallels are comparative, not identity claims."}], "source_attestations": ["Pyramid Texts", "Coffin Texts", "Book of the Dead", "Plutarch De Iside et Osiride"], "research_notes": "Osiris is among the most cosmologically complex Egyptian deities \u2014 solar deity, grain deity, and chthonic judge simultaneously. The dying-and-rising god parallel to Christ was a central argument in early 20th century comparative religion (Fraser), now treated with more nuance.", "completeness_score": 72}, {"id": "lilith", "canonical_name": "Lilith", "aliases": ["Lilit", "Laylah", "Labartu (possible cognate)", "Queen of Demons"], "tradition_vectors": {"biblical_angel": {"name": "Lilit", "rank": "Angel", "canonical_function": "Night creature; appears once in Isaiah 34:14 as wilderness demon", "source_texts": ["Isaiah 34:14"]}, "enochian": {"name": "Naamah (related tradition)", "classification": "Other", "enoch_book": "1 Enoch", "sin_or_role": "Naamah identified in some Kabbalistic texts as one of the Watcher-brides; associated with Lilith as dual night-queens", "chapter_reference": "1 Enoch 7:1 (general)"}, "kabbalistic": {"sephira": "Malkuth", "qliphoth_counterpart": "Lilith / Nahemah (Lilith IS the Qliphah of Malkuth)", "divine_name": "Adonai ha-Aretz (positive); Lilith (shadow)", "source_texts": ["Zohar I:55a, III:19a", "Treatise on the Left Emanation (Kabbalist Isaac ben Jacob ha-Kohen)", "Alphabet of Ben Sira (medieval)"]}, "hermetic": {"role": "Nocturnal feminine force; embodiment of unbound female power", "alchemical_symbol": "Night, untransformed matter"}, "planetary": {"planet": "Moon", "zodiac_rulership": ["Scorpio (partial)"], "day_of_week": "Monday", "metal": "Silver", "color": "Black / Crimson"}}, "functional_domains": ["Night and Darkness", "Unbound Feminine", "Child Mortality Demon (folk tradition)", "Sexual Sorcery", "Crossroads (with Hecate)", "First Wife of Adam (Midrashic)"], "hierarchical_level": 5, "relationships": [{"target_id": "hecate", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Western Esotericism", "source_text": "Agrippa OCPhil III; Picatrix", "notes": "Both rule nocturnal feminine power and witchcraft; identification made explicitly in early modern occultism"}, {"target_id": "ereshkigal", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Comparative Mythology", "source_text": "Black The Literature of Ancient Sumer", "notes": "Possible Mesopotamian origin of Lilith figure debated; Ereshkigal as dark-feminine archetype parallel"}], "source_attestations": ["Isaiah 34:14", "Zohar I:55a", "Alphabet of Ben Sira", "Treatise on the Left Emanation"], "research_notes": "Lilith as 'first wife of Adam' is medieval legend, not biblical \u2014 originating in the Alphabet of Ben Sira (7th\u201310th century CE). Her Babylonian antecedent Ardat Lili is debated. The Kabbalistic Lilith is the most developed form.", "completeness_score": 68}, {"id": "metatron", "canonical_name": "Metatron", "aliases": ["Youth (Na'ar)", "Lesser YHVH", "Angel of the Presence", "Heavenly Scribe"], "tradition_vectors": {"biblical_angel": {"name": "Metatron", "rank": "Archangel", "canonical_function": "Highest-ranking angel; chancellor of heaven; sits on a throne beside God (controversial)", "source_texts": ["3 Enoch 3\u201315", "Talmud Hagigah 15a", "Talmud Sanhedrin 38b"]}, "enochian": {"name": "Enoch-Metatron", "classification": "Archangel", "enoch_book": "2 Enoch", "sin_or_role": "Enoch translated alive into heaven, transformed into fiery angel Metatron", "chapter_reference": "3 Enoch 3\u201315; 2 Enoch 22"}, "kabbalistic": {"sephira": "Kether", "angelic_order": "Chayot ha-Kodesh (or above all orders)", "divine_name": "Ehyeh", "source_texts": ["Zohar I:21b", "Sefer Raziel", "Pardes Rimonim"]}, "hermetic": {"role": "The Nous made personal; divine intellect as angelic being", "corpus_hermeticum_ref": "CH I (Poimandres parallel)", "agrippan_attribution": "OCPhil III.16"}, "planetary": {"planet": "Saturn (some) / Sun (others)", "color": "White / Blinding", "metal": "Gold"}}, "functional_domains": ["Heavenly Scribe", "Divine Chancellor", "Mystical Vision (Merkabah)", "Transformation of the Human into the Divine", "Guardian of the Throne"], "hierarchical_level": 2, "relationships": [{"target_id": "hermes-trismegistus", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Comparative Esotericism", "source_text": "Idel Kabbalah: New Perspectives", "notes": "Both are human sages translated to divine status as celestial scribes"}, {"target_id": "michael-archangel", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Jewish Mysticism", "source_text": "3 Enoch; Talmud", "notes": "Rival traditions give primacy to each as chief of the heavenly court"}, {"target_id": "jesus-christ", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Comparative Christology", "source_text": "Christian mystical and Kabbalistic syncretic sources", "notes": "Metatron and Christ are both mediating, salvific figures in differing traditions; comparison is typological and not doctrinal."}], "source_attestations": ["3 Enoch", "Talmud Hagigah 15a", "Zohar I:21b", "Sefer Raziel ha-Malakh"], "research_notes": "Metatron's name is etymologically disputed: possibly from Greek 'meta thronon' (beside the throne), Latin 'metator' (one who marks out), or the Aramaic 'matron.' His near-divine status caused rabbinic controversy \u2014 the heretic Elisha ben Abuya saw him enthroned and concluded 'there are two powers in heaven.'", "completeness_score": 77}, {"id": "paimon", "canonical_name": "Paimon", "aliases": ["Paymon", "Paimonia"], "tradition_vectors": {"goetic": {"name": "Paimon", "rank": "King", "legions": 200, "seal_reference": "Ars Goetia Seal #9", "primary_functions": ["All arts and sciences", "Secret and private things", "Binding of other spirits", "Knowledge of creation"], "grimoire_source": "Ars Goetia"}, "kabbalistic": {"sephira": "Chesed", "qliphoth_counterpart": "Gha'agsheblah", "source_texts": ["Sefer Shem ha-Mephorash correspondences"]}, "planetary": {"planet": "Sun", "color": "Gold", "metal": "Gold", "day_of_week": "Sunday"}}, "functional_domains": ["Universal Knowledge", "Arts and Sciences", "Commanding Spirits", "Revealing Hidden Things", "Binding Obedience"], "hierarchical_level": 6, "relationships": [{"target_id": "zeus-jupiter", "edge_type": "MANIFESTED_AS", "source_tradition": "Grimoiric / Comparative", "source_text": "McLean The Goetia of Dr. Rudd (2007)", "notes": "Paimon's role as king of universal knowledge parallels the Jovian-solar sovereign archetype"}], "source_attestations": ["Ars Goetia (Lemegeton)", "Pseudomonarchia Daemonum (Weyer, 1577)", "Goetia of Dr. Rudd"], "research_notes": "Paimon is described as riding a dromedary, crowned, with a fierce countenance, accompanied by two lesser kings Bebal and Abalam. His appearance facing west distinguishes him. The 200 legions figure is among the largest in the Goetia.", "completeness_score": 55}, {"id": "asmodeus", "canonical_name": "Asmodeus", "aliases": ["Asmodai", "Ashmedai", "Sydonai", "Chashmodai"], "tradition_vectors": {"biblical_angel": {"name": "Asmodeus", "rank": "Power", "canonical_function": "Demon of lust; slays seven husbands of Sarah; bound by Raphael", "source_texts": ["Tobit 3:8, 8:3"]}, "enochian": {"name": "Related to Gadreel / Lust-teaching Watchers", "classification": "Fallen Watcher", "enoch_book": "1 Enoch", "sin_or_role": "Connection to Watcher tradition of carnal sin and forbidden knowledge", "chapter_reference": "1 Enoch 69:4\u20136"}, "kabbalistic": {"sephira": "Geburah", "qliphoth_counterpart": "Golachab", "angelic_order": "Fallen from Seraphim or Thrones class", "source_texts": ["Zohar", "Treatise on the Left Emanation"]}, "goetic": {"name": "Asmodai", "rank": "King", "legions": 72, "seal_reference": "Ars Goetia Seal #32", "primary_functions": ["Arithmetic", "Astronomy", "Handicrafts", "Revealing treasure", "Making invisible"], "grimoire_source": "Ars Goetia"}, "hermetic": {"role": "Represents unbridled desire opposing the ordered cosmos", "alchemical_symbol": "Sulfur (burning passion)"}, "planetary": {"planet": "Mars", "zodiac_rulership": ["Scorpio (partial)"], "metal": "Iron", "color": "Red", "day_of_week": "Tuesday"}}, "functional_domains": ["Lust and Carnal Desire", "Destruction of Marriage", "Hidden Treasure", "Arithmetic and Mathematics", "Gambling"], "hierarchical_level": 6, "relationships": [{"target_id": "raphael", "edge_type": "CONTESTED_IDENTIFICATION", "source_tradition": "Biblical / Angelological", "source_text": "Tobit 8:3", "notes": "Raphael binds Asmodeus in Egypt \u2014 one of the few named angel-demon direct confrontations in canonical-adjacent scripture"}], "source_attestations": ["Tobit 3:8", "Ars Goetia #32", "Talmud Pesahim 110a", "Zohar"], "research_notes": "Asmodeus is one of the most attested demonic figures, appearing in the Book of Tobit, the Talmud (where he is said to have sat on Solomon's throne), and the Goetia. His Zoroastrian cognate A\u0113\u0161ma-da\u0113va (demon of wrath) is the probable origin.", "completeness_score": 73}, {"id": "horus", "canonical_name": "Horus", "aliases": ["Heru", "Har", "Horus the Elder (Haroeris)", "Horus the Younger (Harsiese)", "Ra-Horakhty"], "tradition_vectors": {"greek": {"name": "Apollo (partial)", "class": "Olympian", "epithets": ["Solar deity", "Divine son"], "source_texts": ["Plutarch De Iside et Osiride ch. 12"]}, "roman": {"name": "Apollo / Mars (partial)", "interpretatio_type": "Partial", "source_texts": ["Macrobius Saturnalia I"]}, "egyptian": {"name": "Horus", "theology": "Heliopolitan", "ennead_position": "Son of Osiris and Isis; divine king; Eye of Ra", "source_texts": ["Pyramid Texts", "Contending of Horus and Seth"]}, "kabbalistic": {"sephira": "Tiphareth", "divine_name": "YHVH Eloah ve-Da'ath", "source_texts": ["Golden Dawn Liber 777"]}, "planetary": {"planet": "Sun", "color": "Gold", "metal": "Gold", "day_of_week": "Sunday"}}, "functional_domains": ["Divine Kingship", "Solar Sovereignty", "Vengeance and Justice for the Father", "War", "Healing of Divine Wounds"], "hierarchical_level": 3, "relationships": [{"target_id": "osiris", "edge_type": "DESCENDED_FROM", "source_tradition": "Egyptian", "source_text": "Pyramid Texts utterance 219", "notes": "Son and avenger of Osiris; their myth is central to Egyptian kingship theology"}, {"target_id": "michael-archangel", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Comparative Religion", "source_text": "Assmann The Mind of Egypt", "notes": "Both are divine sons who battle the cosmic adversary (Set / Satan / Dragon)"}], "source_attestations": ["Pyramid Texts", "Coffin Texts", "Contending of Horus and Seth (Papyrus Chester Beatty I)", "Plutarch De Iside"], "research_notes": "There are multiple distinct Horus figures in Egyptian tradition: Horus the Elder (Haroeris), brother of Osiris; and Horus the Younger (Harsiese), son of Osiris and Isis. Later tradition merged them. The 'Eye of Horus' is distinct from the 'Eye of Ra.'", "completeness_score": 69}, {"id": "gabriel", "canonical_name": "Gabriel", "aliases": ["Jibril", "Gavriel", "Gabriel Seraph"], "tradition_vectors": {"biblical_angel": {"name": "Gabriel", "rank": "Archangel", "canonical_function": "Divine messenger; interpreter of visions; announces births (John the Baptist, Jesus)", "source_texts": ["Daniel 8:16, 9:21", "Luke 1:19, 1:26"]}, "enochian": {"name": "Gabriel", "classification": "Archangel", "enoch_book": "1 Enoch", "sin_or_role": "One of the four presences before God; sent to destroy the giants", "chapter_reference": "1 Enoch 9:1, 10:9"}, "kabbalistic": {"sephira": "Yesod", "angelic_order": "Kerubim", "divine_name": "Shaddai El Chai", "source_texts": ["Zohar I:119b", "Sefer Raziel"]}, "hermetic": {"role": "Lunar messenger; bridge between divine and human realms", "agrippa_book_ref": "OCPhil III.24"}, "islamic": {"name_arabic": "\u062c\u0628\u0631\u064a\u0644", "name_transliterated": "Jibril", "classification": "Malak", "quranic_reference": "Quran 2:97\u201398, 66:4", "isra_iliyyat_link": "Transmits divine revelation to Muhammad; identified as the Holy Spirit in some classical Islamic scholarship"}, "planetary": {"planet": "Moon", "zodiac_rulership": ["Cancer"], "day_of_week": "Monday", "metal": "Silver", "color": "Silver / White"}}, "functional_domains": ["Divine Messenger", "Revelation and Prophecy", "Annunciation", "Transmission of Scripture", "Lunar Forces"], "hierarchical_level": 4, "relationships": [{"target_id": "hermes-trismegistus", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Comparative Angelology", "source_text": "Davidson Dictionary of Angels", "notes": "Both are divine messengers between the supreme and the human; Gabriel holds the Abrahamic role Hermes holds in Hellenic tradition"}], "source_attestations": ["Daniel 8\u20139", "Luke 1", "1 Enoch 9\u201310", "Quran 2:97\u201398"], "research_notes": "Gabriel is among the most cross-traditional of all named angels \u2014 appearing in Hebrew Bible, New Testament, Enochian literature, and Quran with consistent messenger function. His Quranic role (transmitting revelation to Muhammad) is his most exalted.", "completeness_score": 82}, {"id": "aphrodite-venus", "canonical_name": "Aphrodite / Venus", "aliases": ["Kypris", "Cytherea", "Venus Genetrix", "Urania (heavenly aspect)", "Pandemos (earthly aspect)"], "tradition_vectors": {"greek": {"name": "Aphrodite", "class": "Olympian", "epithets": ["Kypris", "Philommeid\u0113s (smile-loving)", "Urania", "Pandemos"], "source_texts": ["Hesiod Theogony 185\u2013206", "Homeric Hymn V", "Homer Iliad V"]}, "roman": {"name": "Venus", "interpretatio_type": "Direct", "source_texts": ["Virgil Aeneid I", "Lucretius De Rerum Natura I"]}, "egyptian": {"name": "Hathor / Isis (partial)", "theology": "Heliopolitan", "ennead_position": "Hathor as divine beauty and love", "source_texts": ["Plutarch De Iside et Osiride"]}, "kabbalistic": {"sephira": "Netzach", "angelic_order": "Elohim", "divine_name": "YHVH Tzabaoth", "source_texts": ["Sefer Yetzirah", "Zohar"]}, "goetic": {"name": "Duke Sitri", "rank": "Duke", "legions": 60, "primary_functions": ["Inflames with love and lust", "Reveals secrets of women"], "grimoire_source": "Ars Goetia"}, "planetary": {"planet": "Venus", "zodiac_rulership": ["Taurus", "Libra"], "day_of_week": "Friday", "metal": "Copper", "color": "Green / Rose", "agrippa_book_ref": "OCPhil II.10"}}, "functional_domains": ["Love and Desire", "Beauty and Aesthetics", "Fertility", "Sea and Seafarers (birthplace myth)", "War (Spartan cult)", "Music and the Arts"], "hierarchical_level": 5, "relationships": [{"target_id": "isis", "edge_type": "SYNCRETIZED_WITH", "source_tradition": "Hellenistic Egypt", "source_text": "Plutarch De Iside et Osiride; PGM IV", "notes": "Isis absorbed many Aphrodite attributes in the Hellenistic period; both rule love, magic, and the sea"}], "source_attestations": ["Hesiod Theogony 185", "Homeric Hymn V", "Virgil Aeneid I", "Lucretius De Rerum Natura I"], "research_notes": "The two Aphrodites \u2014 Urania (heavenly, spiritual love) and Pandemos (earthly, physical love) \u2014 originate in Plato's Symposium (180c\u2013185c) and became a standard distinction in Neoplatonic and Renaissance treatments.", "completeness_score": 77}, {"id": "belial", "canonical_name": "Belial", "aliases": ["Beliar", "Beli Ya'al", "Angel of Lawlessness", "Prince of Darkness (Dead Sea Scrolls)"], "tradition_vectors": {"biblical_angel": {"name": "Belial", "rank": "Power", "canonical_function": "Embodiment of worthlessness and wickedness; adversarial force", "source_texts": ["2 Corinthians 6:15", "Deuteronomy 13:13 (sons of Belial)", "Nahum 1:15"]}, "enochian": {"name": "Belial", "classification": "Fallen Watcher", "enoch_book": "Book of Jubilees", "sin_or_role": "In DSS War Scroll: Prince of Darkness ruling the forces of evil opposing the Sons of Light", "chapter_reference": "1QM (War Scroll) I:1, XIII:11"}, "kabbalistic": {"sephira": "Malkuth", "qliphoth_counterpart": "Lilith (first shell) / Nahemah", "source_texts": ["Treatise on the Left Emanation"]}, "goetic": {"name": "Belial", "rank": "King", "legions": 80, "seal_reference": "Ars Goetia Seal #68", "primary_functions": ["Distribution of senatorships and dignities", "Causes favor", "Distributes presentations and senatorships"], "grimoire_source": "Ars Goetia"}, "planetary": {"planet": "Saturn", "metal": "Lead", "color": "Black", "day_of_week": "Saturday"}}, "functional_domains": ["Lawlessness and Wickedness", "Opposition to Divine Order", "Earthly Power and Status", "Prince of This World (DSS)", "Corruption of Justice"], "hierarchical_level": 6, "relationships": [{"target_id": "lucifer", "edge_type": "CONTESTED_IDENTIFICATION", "source_tradition": "Christian Demonology", "source_text": "2 Cor 6:15; Milton Paradise Lost", "notes": "Paul uses 'Beliar' as near-equivalent to Satan; later tradition sometimes identifies, sometimes separates"}], "source_attestations": ["Dead Sea Scrolls War Scroll (1QM)", "2 Corinthians 6:15", "Testament of the Twelve Patriarchs", "Ars Goetia #68"], "research_notes": "'Beli ya'al' is a Hebrew compound meaning 'without worth' or 'without going up (to God).' In the Dead Sea Scrolls, Belial is a fully developed supernatural Prince of Darkness opposing the archangel Michael \u2014 the most developed pre-Christian angelological dualism.", "completeness_score": 70}, {"id": "anubis", "canonical_name": "Anubis", "aliases": ["Anpu", "Inpu", "Khenty-Imentiu (Foremost of the Westerners)", "Lord of the Sacred Land"], "tradition_vectors": {"greek": {"name": "Hermes Chthonios / Hermes Psychopompos", "class": "Chthonic", "epithets": ["Guide of souls", "Lord of the dead"], "source_texts": ["Plutarch De Iside et Osiride ch. 15"]}, "roman": {"name": "Mercury Chthonios / Dis Pater (partial)", "interpretatio_type": "Partial", "source_texts": ["Apuleius Golden Ass XI"]}, "egyptian": {"name": "Anubis", "theology": "Heliopolitan", "ennead_position": "Son of Osiris (or Ra); god of embalming; conductor of souls to judgment", "source_texts": ["Book of the Dead Ch. 125", "Pyramid Texts", "Coffin Texts"]}, "kabbalistic": {"sephira": "Yesod", "angelic_order": "Kerubim", "source_texts": ["Golden Dawn correspondence tables"]}, "planetary": {"planet": "Mercury", "zodiac_rulership": ["Virgo (partial)"], "day_of_week": "Wednesday", "metal": "Quicksilver", "color": "Black / Gold"}}, "functional_domains": ["Psychopomp / Soul Guide", "Embalming and Mummification", "Guardian of the Scales", "Threshold of the Duat", "Jackal of the Necropolis"], "hierarchical_level": 4, "relationships": [{"target_id": "thoth", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Egyptian", "source_text": "Book of the Dead Ch. 125", "notes": "Both present at the Weighing of the Heart \u2014 Anubis manages the scales, Thoth records the result"}, {"target_id": "hermes-trismegistus", "edge_type": "SYNCRETIZED_WITH", "source_tradition": "Hellenistic Egypt", "source_text": "Plutarch De Iside ch. 15; Apuleius Metamorphoses XI", "notes": "Anubis-Hermes syncretism attested in multiple Greco-Roman texts"}], "source_attestations": ["Pyramid Texts", "Book of the Dead", "Plutarch De Iside et Osiride", "Apuleius Golden Ass XI"], "research_notes": "Anubis lost his prominence as lord of the dead to Osiris over the course of Egyptian religious history; by the Middle Kingdom, Osiris is the supreme lord of the Duat and Anubis serves him. His role as embalmer and psychopomp remained constant.", "completeness_score": 71}, {"id": "saturn-kronos", "canonical_name": "Saturn / Kronos", "aliases": ["Cronus", "Father Time", "The Reaper", "El (Phoenician cognate)"], "tradition_vectors": {"greek": {"name": "Kronos", "class": "Titan", "epithets": ["Anchisteus (nearest of the Titans)", "Agrotera", "Harpe-bearer"], "source_texts": ["Hesiod Theogony 453\u2013506", "Homeric Hymn to Kronos"]}, "roman": {"name": "Saturn", "interpretatio_type": "Direct", "source_texts": ["Virgil Aeneid VIII", "Macrobius Saturnalia I"]}, "egyptian": {"name": "Geb (earth-time parallel)", "theology": "Heliopolitan", "ennead_position": "Father of Osiris, Isis, Set, Nephthys", "source_texts": ["Pyramid Texts"]}, "kabbalistic": {"sephira": "Binah", "angelic_order": "Aralim (Thrones)", "divine_name": "YHVH Elohim", "qliphoth_counterpart": "Satariel", "source_texts": ["Sefer Yetzirah", "Etz Chaim"]}, "gnostic": {"name": "Yaldabaoth (demiurgic parallel)", "system": "Sethian", "classification": "Archon", "source_texts": ["Apocryphon of John"]}, "hermetic": {"role": "Principle of limitation, form, and time; necessary for manifestation", "corpus_hermeticum_ref": "CH XVI", "agrippa_book_ref": "OCPhil II.10", "alchemical_symbol": "Lead"}, "planetary": {"planet": "Saturn", "zodiac_rulership": ["Capricorn", "Aquarius"], "day_of_week": "Saturday", "metal": "Lead", "color": "Black / Indigo", "agrippa_book_ref": "OCPhil II.10"}}, "functional_domains": ["Time and Limitation", "Agriculture and the Harvest", "Golden Age Rulership", "Devouring Father", "Structure and Form"], "hierarchical_level": 3, "relationships": [{"target_id": "zeus-jupiter", "edge_type": "DESCENDED_FROM", "source_tradition": "Greek", "source_text": "Hesiod Theogony 453\u2013506", "notes": "Zeus overthrows Kronos; the generational conflict is the central Greek cosmogonic myth"}, {"target_id": "yaldabaoth", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Gnosticism", "source_text": "Apocryphon of John NHC II.1", "notes": "Both are demiurgic father-gods who are ultimately displaced; Gnostic systems likely drew on this Titanic model"}], "source_attestations": ["Hesiod Theogony 453\u2013506", "Hesiod Works and Days 111\u2013120 (Golden Age)", "Macrobius Saturnalia I", "Virgil Aeneid VIII"], "research_notes": "The Greek Kronos / Roman Saturn split is more complex than simple direct correspondence \u2014 Saturn had a distinct Italian agricultural prehistory. Their merger was so complete that Saturn's festival (Saturnalia) was the most popular Roman holiday.", "completeness_score": 81}, {"id": "isis", "canonical_name": "Isis", "aliases": ["Aset", "Eset", "Weret-Kekau (Great of Magic)", "Meri (beloved)", "Star of the Sea"], "tradition_vectors": {"greek": {"name": "Demeter / Aphrodite / Selene (various syncretisms)", "class": "Olympian", "epithets": ["Isis-Demeter", "Isis-Aphrodite"], "source_texts": ["Plutarch De Iside et Osiride", "Diodorus Siculus I.27"]}, "roman": {"name": "Isis (retained own name)", "interpretatio_type": "Partial", "source_texts": ["Apuleius Golden Ass XI"]}, "egyptian": {"name": "Isis", "theology": "Heliopolitan", "ennead_position": "Daughter of Geb and Nut; wife and restorer of Osiris; mother of Horus; supreme magician", "source_texts": ["Pyramid Texts", "Book of the Dead", "Coffin Texts"]}, "kabbalistic": {"sephira": "Binah", "angelic_order": "Aralim (Thrones)", "divine_name": "YHVH Elohim", "source_texts": ["Golden Dawn Liber 777"]}, "hermetic": {"role": "World-Soul in its redemptive, loving aspect; guardian of the body of Osiris (divine knowledge)", "corpus_hermeticum_ref": "Kore Kosmou (Stobaean Fragment)", "alchemical_symbol": "Silver / Prima Materia (restorer)"}, "planetary": {"planet": "Moon", "zodiac_rulership": ["Cancer (partial)", "Virgo (partial)"], "day_of_week": "Monday", "metal": "Silver", "color": "Blue / Silver / Gold"}}, "functional_domains": ["Magic and Sorcery (supreme magician)", "Motherhood and Protection", "Healing", "Resurrection and Restoration", "Throne of the Pharaoh", "Navigation and the Sea (Hellenistic)"], "hierarchical_level": 3, "relationships": [{"target_id": "aphrodite-venus", "edge_type": "SYNCRETIZED_WITH", "source_tradition": "Hellenistic Egypt", "source_text": "PGM IV; Plutarch De Iside", "notes": "In the Hellenistic world, Isis absorbed nearly every major goddess attribute; Aphrodite identification particularly strong in magical papyri"}, {"target_id": "osiris", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Egyptian", "source_text": "Book of the Dead", "notes": "Isis and Osiris are the divine couple; she is the restorer, he the restored; their myth underlies all Egyptian resurrection theology"}], "source_attestations": ["Pyramid Texts", "Book of the Dead", "Plutarch De Iside et Osiride", "Apuleius Golden Ass XI", "PGM (Greek Magical Papyri)"], "research_notes": "Isis became the most universally worshipped deity of the Roman Empire by the 1st\u20133rd centuries CE \u2014 her cult spread to Britain, Germany, and the Rhine frontier. Apuleius' Metamorphoses Book XI is the most literary treatment of her mysteries.", "completeness_score": 84}, {"id": "semjaza", "canonical_name": "Semjaza / Samyaza", "aliases": ["Shemihaza", "Semihazah", "Shamhazai", "Leader of the Watchers"], "tradition_vectors": {"enochian": {"name": "Semjaza", "classification": "Fallen Watcher", "enoch_book": "1 Enoch", "sin_or_role": "Led the 200 Watchers in their descent to Mount Hermon; fathered Nephilim; bound until the Day of Judgment hanging between heaven and earth as the constellation Orion in some traditions", "chapter_reference": "1 Enoch 6:3\u20138, 7:1\u20136, 10:11\u201313"}, "kabbalistic": {"sephira": "Da'ath (Abyss)", "qliphoth_counterpart": "Thaumiel (dual contending force)", "source_texts": ["Late Kabbalistic demonology"]}, "planetary": {"planet": "Saturn", "metal": "Lead", "color": "Black"}}, "functional_domains": ["Leadership of Rebellion", "Sexual Union with Humanity", "Patriarch of Nephilim", "Founder of Giant Race"], "hierarchical_level": 4, "relationships": [{"target_id": "azazel", "edge_type": "COMMANDS", "source_tradition": "Enochian", "source_text": "1 Enoch 6\u20138", "notes": "Semjaza is the named leader; Azazel's transgressions are treated as more severe in 1 Enoch 10"}, {"target_id": "lucifer", "edge_type": "CONTESTED_IDENTIFICATION", "source_tradition": "Christian demonology / Comparative", "source_text": "Various patristic and medieval sources", "notes": "Some traditions conflate the Watcher rebellion with Lucifer's fall; 1 Enoch treats them as distinct events"}], "source_attestations": ["1 Enoch 6\u201310", "Book of Giants (4Q530\u2013532)", "Damascus Document (CD II:18)", "Genesis 6:1\u20134 (implied)"], "research_notes": "The Semjaza narrative in 1 Enoch is almost certainly a reinterpretation of Genesis 6:1\u20134. His name may derive from Aramaic 'shem' (name) + 'azza' (strong/daring) \u2014 'he who dares the Name of God.' The constellation identification (Orion) appears in later midrashic tradition.", "completeness_score": 60}, {"id": "adam", "canonical_name": "Adam", "aliases": ["Ha-Adam (The Human)", "First Man", "Father of Humanity"], "genealogy": {"origin": "Formed from dust of the ground (adamah), breath of life from God (Genesis 2:7)", "lineage": "Genesis 5 \u2014 Adam \u2192 Seth \u2192 Enosh \u2192 Kenan \u2192 Mahalalel \u2192 Jared \u2192 Enoch \u2192 Methuselah \u2192 Lamech \u2192 Noah", "to_christ": "Luke 3:38 terminates the Lucan genealogy of Jesus at 'the son of Adam, the son of God' \u2014 connecting Christ's humanity to the first man and through him to God"}, "tradition_vectors": {"biblical_angel": {"name": "Adam", "rank": "First Human", "canonical_function": "Created in the image of God (imago Dei \u2014 Genesis 1:26\u201327); federal head of humanity; through his disobedience sin entered the world (Romans 5:12); typological counterpart to Christ as 'Last Adam' (1 Corinthians 15:45\u201349)", "source_texts": ["Genesis 1\u20135", "Romans 5:12\u201321 (First and Last Adam)", "1 Corinthians 15:45\u201349", "Luke 3:38 (genealogy)"]}, "kabbalistic": {"sephira": "Malkuth", "divine_name": "Adonai ha-Aretz", "angelic_order": "Adam Kadmon \u2014 the Primordial Human of Lurianic Kabbalah; template for the divine anthropomorphic form", "source_texts": ["Sefer ha-Zohar I:34b", "Lurianic Kabbalah \u2014 Etz Chaim on Adam Kadmon", "Genesis Rabbah 8:1"]}, "gnostic": {"name": "Adam / Adamas (Heavenly Adam)", "system": "Sethian", "classification": "Pneuma", "source_texts": ["Apocryphon of John NHC II.1 \u2014 Yaldabaoth creates earthly Adam but divine spark placed within him", "Gospel of the Egyptians \u2014 Adamas as heavenly archetype"]}, "hermetic": {"role": "Primordial Man (Anthropos) who descended into matter; prototype of the soul's fall and potential return", "corpus_hermeticum_ref": "Corpus Hermeticum I (Poimandres) \u2014 the Anthropos who fell in love with Nature and became entangled in matter"}, "islamic": {"name_arabic": "\u0622\u062f\u0645", "name_transliterated": "\u0100dam", "classification": "Prophet", "quranic_reference": "Quran 2:30\u201339; 7:11\u201325; 20:115\u2013123 \u2014 first prophet; angels commanded to bow; Satan's refusal begins his enmity", "isra_iliyyat_link": "Islamic tradition preserves full Garden narrative; Adam and Eve's descent to earth frames all subsequent prophecy. Adam is first of the prophetic chain culminating in Muhammad."}}, "functional_domains": ["First Man / Image of God", "Federal Head of Humanity", "The Fall and Original Sin", "Typological Counterpart to Christ (Last Adam)", "Ancestor of all human genealogies"], "hierarchical_level": 3, "relationships": [{"target_id": "jesus-christ", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Pauline Theology", "source_text": "Romans 5:12\u201321; 1 Corinthians 15:45\u201349", "notes": "Paul's Adam-Christ typology: 'As in Adam all die, so in Christ all will be made alive' (1 Cor 15:22). Adam is the type, Christ is the antitype \u2014 the Last Adam who undoes what the first Adam broke. This is one of the most structurally significant theological relationships in the database."}, {"target_id": "semjaza", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Enochian / Comparative", "source_text": "1 Enoch 6\u20139; Genesis 6:1\u20134", "notes": "The Watcher descent into human women connects to Adam's line \u2014 the Nephilim are descendants of unions with humanity post-Fall. Some traditions link this to corruption of the Adamic image."}], "source_attestations": ["Genesis 1\u20135", "Romans 5:12\u201321", "1 Corinthians 15:45\u201349", "Luke 3:38", "Quran 2:30\u201339"], "research_notes": "Adam occupies a unique position as both the historical progenitor of all humanity and the theological type that makes Christ's work comprehensible. Paul's use of the Adam-Christ contrast (Romans 5, 1 Corinthians 15) is one of the most structurally sophisticated arguments in the New Testament \u2014 two representative heads, one of ruin, one of restoration. Kabbalistic tradition develops Adam Kadmon as the cosmic template preceding creation itself.", "completeness_score": 82}, {"id": "david-king", "canonical_name": "David (King of Israel)", "aliases": ["Jesse's son", "Sweet Psalmist of Israel", "Man after God's own heart"], "genealogy": {"lineage": "Ruth 4:18\u201322: Perez \u2192 Hezron \u2192 Ram \u2192 Amminadab \u2192 Nahshon \u2192 Salmon \u2192 Boaz \u2192 Obed \u2192 Jesse \u2192 David", "to_christ": "Matthew 1:6\u201316: David \u2192 Solomon \u2192 ... \u2192 Joseph (legal father of Jesus). Luke 3:31\u201332: David \u2192 Nathan \u2192 ... \u2192 Mary's line. The Davidic covenant (2 Samuel 7:12\u201316) promised David an eternal dynasty \u2014 fulfilled in Christ."}, "tradition_vectors": {"biblical_angel": {"name": "David", "rank": "King / Prophet", "canonical_function": "Second king of unified Israel; established Jerusalem as capital; received the covenant promise of an eternal dynasty (2 Samuel 7:12\u201316); author of many Psalms; ancestor of the Messiah", "source_texts": ["1\u20132 Samuel", "1 Chronicles", "Psalms (esp. 22, 110 \u2014 messianic psalms)", "2 Samuel 7:12\u201316 (Davidic Covenant)", "Matthew 1:1 'Son of David'", "Acts 2:29\u201331 (Peter's Pentecost sermon on David and resurrection)"]}, "kabbalistic": {"sephira": "Malkuth", "divine_name": "Adonai ha-Aretz", "source_texts": ["Zohar \u2014 David as the earthly king corresponding to the divine Kingdom (Malkuth)"]}, "islamic": {"name_arabic": "\u062f\u0627\u0648\u0648\u062f", "name_transliterated": "D\u0101w\u016bd", "classification": "Prophet", "quranic_reference": "Quran 4:163; 17:55 (given the Psalms/Zabur); 21:78\u201380; 27:15\u201316 (granted wisdom and speech of birds)", "isra_iliyyat_link": "D\u0101w\u016bd receives the Zabur (Psalms) as divine scripture; governs justly; prefigures Suleiman (Solomon). Islamic tradition emphasizes his repentance and musical worship."}}, "functional_domains": ["Royal Ancestor of Christ (Son of David)", "Covenant Recipient \u2014 Eternal Throne Promise", "Psalmist and Prophet", "Warrior-King and Shepherd", "Type of the Messianic King"], "hierarchical_level": 4, "relationships": [{"target_id": "jesus-christ", "edge_type": "DESCENDED_FROM", "source_tradition": "Biblical Genealogy", "source_text": "Matthew 1:1 \u2014 'The genealogy of Jesus the Messiah, the son of David, the son of Abraham'; Luke 1:32 'He will be great and will be called the Son of the Most High... the throne of David his father'", "notes": "The most direct genealogical connection in the database. The Davidic covenant of 2 Samuel 7 is fulfilled in Christ. Jesus is called 'Son of David' 16 times in the Gospels \u2014 the most common messianic title used to address him."}, {"target_id": "adam", "edge_type": "DESCENDED_FROM", "source_tradition": "Biblical Genealogy", "source_text": "Luke 3:31\u201338 traces the line from Jesus \u2192 David \u2192 Jesse \u2192 ... \u2192 Seth \u2192 Adam \u2192 God", "notes": "The Lucan genealogy makes the full chain explicit, grounding the Incarnation in all of human history from first man to Messiah."}], "source_attestations": ["2 Samuel 7:12\u201316", "Psalm 22 (messianic)", "Psalm 110 (messianic)", "Matthew 1:1\u201317", "Luke 1:32", "Acts 2:29\u201331"], "research_notes": "David's theological importance in this concordance is primarily genealogical and typological: the Davidic covenant guarantees that the Messiah would be of his lineage (royal), and multiple psalms attributed to David (especially 22 and 110) are read in the New Testament as messianic prophecy. The connection between David-as-shepherd-king and Christ-as-Good-Shepherd (John 10) is among the richest typological threads in Christian scripture.", "completeness_score": 78}, {"id": "enoch-patriarch", "canonical_name": "Enoch (Patriarch)", "aliases": ["Hanoch", "Seventh from Adam", "He who walked with God"], "genealogy": {"lineage": "Genesis 5:18\u201324: Seth \u2192 Enosh \u2192 Kenan \u2192 Mahalalel \u2192 Jared \u2192 Enoch \u2192 Methuselah \u2192 Lamech \u2192 Noah", "to_christ": "Luke 3:37 includes Enoch in the genealogical chain from Jesus to Adam"}, "tradition_vectors": {"biblical_angel": {"name": "Enoch", "rank": "Patriarch / Prophet", "canonical_function": "Seventh generation from Adam; 'walked faithfully with God; then he was no more, because God took him away' (Genesis 5:24) \u2014 one of two men in Scripture not to die. Father of Methuselah. Jude 14\u201315 quotes his prophecy about the Lord's return.", "source_texts": ["Genesis 5:21\u201324", "Hebrews 11:5 (by faith Enoch was taken from this life)", "Jude 1:14\u201315 (Enoch prophesied about the Second Coming)"]}, "enochian": {"name": "Enoch", "classification": "Other", "enoch_book": "1 Enoch", "sin_or_role": "Righteous patriarch taken up to heaven; receives cosmic visions and tours; given knowledge of the Watchers, celestial mechanics, and eschatology; intercedes for the fallen Watchers (unsuccessfully); becomes scribe of divine judgment", "chapter_reference": "1 Enoch 1\u201336 (Book of Watchers); 37\u201371 (Similitudes \u2014 Enoch identified with Son of Man)"}, "kabbalistic": {"sephira": "Kether", "angelic_order": "Becomes Metatron upon translation", "divine_name": "Ehyeh", "source_texts": ["3 Enoch 3\u201315 (transformation of Enoch into Metatron)", "Sefer Raziel"]}, "islamic": {"name_arabic": "\u0625\u062f\u0631\u064a\u0633", "name_transliterated": "Idr\u012bs", "classification": "Prophet", "quranic_reference": "Quran 19:56\u201357; 21:85", "isra_iliyyat_link": "Classical Islamic scholars (al-Tabari, al-Tha'labi) identify Idris with Enoch; credited with introducing writing, astronomy, and tailoring. Raised to a 'high station' \u2014 widely interpreted as translation without death."}}, "functional_domains": ["Translation Without Death", "Heavenly Scribe and Visionary", "Receiver of Cosmic Revelation", "Intercessor for Fallen Watchers", "Prophetic Ancestor in Christ's Genealogy"], "hierarchical_level": 4, "relationships": [{"target_id": "metatron", "edge_type": "MANIFESTED_AS", "source_tradition": "Jewish Mysticism", "source_text": "3 Enoch 3\u201315 \u2014 'I am Enoch the son of Jared... the Holy One took me from their midst to be a witness to the world'", "notes": "The transformation of the patriarch Enoch into the angel Metatron is the central event of 3 Enoch. This represents the most theologically significant human-to-angel transformation in Jewish mysticism."}, {"target_id": "hermes-trismegistus", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Comparative Esotericism", "source_text": "Agrippa OCPhil III; Renaissance syncretic sources", "notes": "Both Enoch and Hermes Trismegistus represent the archetype of the human sage translated to divine status as celestial scribe. Islamic identification of Idris-as-Enoch with Hermes strengthens this comparison."}, {"target_id": "jesus-christ", "edge_type": "DESCENDED_FROM", "source_tradition": "Biblical Genealogy", "source_text": "Luke 3:37", "notes": "Enoch is in the direct ancestral line of Jesus per Luke 3. His translation without death also provides a typological anticipation of the Resurrection and Ascension \u2014 the righteous body taken up into God's presence."}], "source_attestations": ["Genesis 5:21\u201324", "Hebrews 11:5", "Jude 1:14\u201315", "1 Enoch 1\u201336", "3 Enoch 3\u201315", "Quran 19:56\u201357"], "research_notes": "Enoch is the most cross-traditional figure in the entire database after Jesus: he appears in the canonical Bible, the pseudepigraphical 1 Enoch (used as Scripture by Jude), the Kabbalistic 3 Enoch, and the Quran as Idris. The Similitudes of Enoch (1 Enoch 37\u201371) use the phrase 'Son of Man' in a messianic context \u2014 the same title Jesus uses of himself in the Gospels, and scholars debate whether Jesus was consciously referencing 1 Enoch.", "completeness_score": 86}, {"id": "noah", "canonical_name": "Noah", "aliases": ["Noach", "Rest / Comfort (meaning)", "Second Father of Humanity"], "genealogy": {"lineage": "Genesis 5: Adam \u2192 Seth \u2192 Enosh \u2192 Kenan \u2192 Mahalalel \u2192 Jared \u2192 Enoch \u2192 Methuselah \u2192 Lamech \u2192 Noah", "to_christ": "Luke 3:36 \u2014 Jesus' genealogy runs through Shem, son of Noah \u2192 ... \u2192 David \u2192 Jesus"}, "tradition_vectors": {"biblical_angel": {"name": "Noah", "rank": "Patriarch / Prophet", "canonical_function": "Tenth generation from Adam; righteous man in corrupt generation; commanded to build the Ark; survivor of the Flood through which God judged and renewed creation; received Noahic Covenant (rainbow, Genesis 9:8\u201317); father of Shem, Ham, Japheth \u2014 ancestors of all post-diluvian nations", "source_texts": ["Genesis 6\u20139", "Hebrews 11:7", "1 Peter 3:20\u201321 (Ark as type of baptism)", "2 Peter 2:5 (Noah as preacher of righteousness)", "Matthew 24:37\u201338 (days of Noah as eschatological type)"]}, "enochian": {"name": "Noah", "classification": "Other", "enoch_book": "Book of Giants", "sin_or_role": "Son of Lamech; his exceptional whiteness and luminous eyes at birth led his father to fear he was a Watcher's son \u2014 Enoch reassures Lamech of Noah's true parentage. Noah survives the Flood judgment that destroys the Nephilim.", "chapter_reference": "1 Enoch 106\u2013107 (Birth of Noah); Book of Giants (4Q530)"}, "islamic": {"name_arabic": "\u0646\u0648\u062d", "name_transliterated": "N\u016b\u1e25", "classification": "Prophet", "quranic_reference": "Quran 7:59\u201364; 10:71\u201373; 11:25\u201348; Surah 71 (Al-Nuh \u2014 entire chapter)", "isra_iliyyat_link": "Nuh preaches for 950 years (Quran 29:14); his son's refusal to board the Ark is treated at length; the Flood establishes divine judgment and mercy as theological constants. Second most frequently mentioned prophet in the Quran after Moses."}}, "functional_domains": ["Preserver of Humanity through Judgment", "Covenant Recipient \u2014 Noahic Covenant (Rainbow)", "New Beginning / Second Adam of Post-Diluvian World", "Ancestor of All Nations", "Type of Salvation Through Baptism (1 Peter 3)"], "hierarchical_level": 4, "relationships": [{"target_id": "jesus-christ", "edge_type": "FUNCTIONAL_PARALLEL", "source_tradition": "Biblical Typology", "source_text": "1 Peter 3:20\u201321; Matthew 24:37\u201338", "notes": "Peter explicitly reads Noah and the Ark as a type (typos) of baptism and salvation. Jesus uses the 'days of Noah' as a prophetic parallel to conditions preceding his return. The Ark as vessel of salvation through water maps typologically onto baptism, the sacrament of entry into the new covenant community."}, {"target_id": "enoch-patriarch", "edge_type": "DESCENDED_FROM", "source_tradition": "Biblical Genealogy", "source_text": "Genesis 5:22\u201329", "notes": "Noah is the great-grandson of Enoch (Enoch \u2192 Methuselah \u2192 Lamech \u2192 Noah). Enoch was translated before the Flood; Noah survived through it \u2014 both escape the judgment of their generation through divine favor."}], "source_attestations": ["Genesis 6\u20139", "Hebrews 11:7", "1 Peter 3:20\u201321", "1 Enoch 106\u2013107", "Quran Surah 71"], "research_notes": "Noah's theological function in this concordance is primarily typological and genealogical. He is the hinge between the antediluvian world (Adam through Enoch) and the post-diluvian world from which all current nations and the Abrahamic lineage derive. Jesus' genealogy passes through Shem, establishing continuity of the chosen line through the Flood event.", "completeness_score": 79}, {"id": "abraham", "canonical_name": "Abraham", "aliases": ["Abram (birth name)", "Father of Many Nations", "Friend of God", "Father of the Faithful"], "genealogy": {"lineage": "Genesis 11: Shem \u2192 Arpachshad \u2192 Shelah \u2192 Eber \u2192 Peleg \u2192 Reu \u2192 Serug \u2192 Nahor \u2192 Terah \u2192 Abram/Abraham", "to_christ": "Matthew 1:1\u20132: 'The genealogy of Jesus the Messiah, the son of David, the son of Abraham: Abraham was the father of Isaac, Isaac the father of Jacob...' Christ's genealogy begins here in Matthew."}, "tradition_vectors": {"biblical_angel": {"name": "Abraham", "rank": "Patriarch / Prophet", "canonical_function": "Recipient of the Abrahamic Covenant (Genesis 12, 15, 17, 22); promised that through his seed all nations would be blessed (Genesis 12:3) \u2014 fulfilled in Christ (Galatians 3:16); father of Isaac through Sarah; father of Ishmael through Hagar; justified by faith not works (Genesis 15:6; Romans 4; Galatians 3); offered Isaac on Moriah \u2014 typological of the Father offering the Son", "source_texts": ["Genesis 12\u201325", "Genesis 22 (Binding of Isaac / Akedah)", "Romans 4 (Abraham justified by faith)", "Galatians 3:6\u201329 (the promise to Abraham's seed fulfilled in Christ)", "Hebrews 11:8\u201319", "John 8:56 (Abraham saw Christ's day and rejoiced)"]}, "kabbalistic": {"sephira": "Chesed", "divine_name": "El", "angelic_order": "Chasmalim", "source_texts": ["Zohar \u2014 Abraham corresponds to the sephira Chesed (loving-kindness), the attribute he exemplified"]}, "islamic": {"name_arabic": "\u0625\u0628\u0631\u0627\u0647\u064a\u0645", "name_transliterated": "Ibr\u0101h\u012bm", "classification": "Prophet", "quranic_reference": "Quran 2:124\u2013132; 3:65\u201368; 4:125 (Friend of God \u2014 Khal\u012bl All\u0101h); Surah 14 (Ibrahim); 6:74\u201383", "isra_iliyyat_link": "Ibr\u0101h\u012bm is 'Friend of God' (Khal\u012bl All\u0101h) and is considered a Hanif \u2014 a primordial monotheist before either Judaism or Islam as formal religions. He and Ishmael rebuild the Kaaba (2:127). The Quran claims the true religion of Ibrahim as the essence of Islam."}}, "functional_domains": ["Father of Three Abrahamic Faiths", "Recipient of the Abrahamic Covenant", "Justified by Faith \u2014 Theological Foundation of Paul's Soteriology", "Typological Prefiguration of the Father-Son Sacrifice (Akedah / Moriah)", "Ancestor of David and Christ"], "hierarchical_level": 4, "relationships": [{"target_id": "jesus-christ", "edge_type": "DESCENDED_FROM", "source_tradition": "Biblical Genealogy / Covenant Theology", "source_text": "Matthew 1:1\u20132; Galatians 3:16 \u2014 'The promises were spoken to Abraham and to his seed... meaning one person, who is Christ'", "notes": "Paul's argument in Galatians 3 makes the Abrahamic covenant explicitly about Christ: the singular 'seed' promised to Abraham is Christ himself. Matthew opens his entire Gospel by establishing Jesus as 'Son of Abraham,' rooting the Incarnation in covenant history."}, {"target_id": "david-king", "edge_type": "DESCENDED_FROM", "source_tradition": "Biblical Genealogy", "source_text": "Matthew 1:2\u20136 \u2014 Abraham \u2192 Isaac \u2192 Jacob \u2192 Judah \u2192 ... \u2192 Jesse \u2192 David", "notes": "The genealogical chain from Abraham to David is eleven generations in Matthew 1. Both figures are covenant recipients \u2014 Abrahamic covenant of blessing to all nations, Davidic covenant of eternal throne \u2014 and both point toward their fulfillment in Christ."}], "source_attestations": ["Genesis 12\u201325", "Genesis 22 (Akedah)", "Romans 4", "Galatians 3:6\u201329", "Hebrews 11:8\u201319", "Quran 2:124\u2013132", "Quran 4:125"], "research_notes": "Abraham is the genealogical and theological pivot of the entire Abrahamic tradition. The three monotheistic world religions \u2014 Judaism, Christianity, Islam \u2014 all trace their theological identity through him, making him the most historically consequential figure in the database after Jesus Christ. Paul's use of Abraham (Romans 4, Galatians 3) to argue that justification by faith predates the Mosaic law is one of the most structurally significant theological arguments in Christian thought. The Akedah (binding of Isaac) is interpreted in Christian typology as the most direct Old Testament prefiguration of Golgotha.", "completeness_score": 85}]};
+
+// ══════════════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════════════
+function init(data) {
+  DB = data;
+  augmentEntities();
+  document.getElementById('entity-count-meta').textContent =
+    `${DB.entities.length} entities · Schema v${DB.version}`;
+
+  fuse = new Fuse(DB.entities, {
+    keys:[
+      {name:'canonical_name',weight:2},{name:'aliases',weight:1.5},
+      {name:'functional_domains',weight:1},
+      {name:'tradition_vectors.greek.name',weight:0.8},
+      {name:'tradition_vectors.roman.name',weight:0.8},
+      {name:'tradition_vectors.egyptian.name',weight:0.8},
+      {name:'tradition_vectors.goetic.name',weight:0.8},
+      {name:'tradition_vectors.enochian.name',weight:0.8},
+      {name:'tradition_vectors.kabbalistic.sephira',weight:0.6},
+      {name:'tradition_vectors.goetic.rank',weight:0.5},
+      {name:'tradition_vectors.greek.epithets',weight:0.5},
+      {name:'tradition_vectors.islamic.name_transliterated',weight:0.8},
+      {name:'research_notes',weight:0.3}
+    ],
+    threshold:0.38, includeScore:true
+  });
+
+  renderSearch('');
+  buildHierarchy();
+
+  document.getElementById('search-input').addEventListener('input', e => renderSearch(e.target.value.trim()));
+
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFilter = btn.dataset.filter;
+      renderSearch(document.getElementById('search-input').value.trim());
+    });
+  });
+
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.getElementById('view-' + btn.dataset.view).classList.add('active');
+    });
+  });
+
+  document.getElementById('detail-overlay').addEventListener('click', e => {
+    if (e.target === document.getElementById('detail-overlay')) closeDetail();
+  });
+
+  // Graph controls
+  document.getElementById('graph-edge-select').addEventListener('change', () => updateGraphEdgeVisibility());
+  document.getElementById('graph-trad-select').addEventListener('change', () => updateGraphTradVisibility());
+}
+
+// Runtime-augment: add Mesopotamian/Egyptian family entries if missing
+function augmentEntities() {
+  const ids = new Set(DB.entities.map(e => e.id));
+  const extras = [
+    {id:'anu',canonical_name:'Anu',aliases:['An'],tradition_vectors:{mesopotamian:{name:'Anu',class:'Sky God / Father of Gods',source_texts:['Enuma Elish','Sumerian King List']}},functional_domains:['Sky Sovereignty','Fatherhood of the Gods','Divine Authority'],hierarchical_level:1,relationships:[{target_id:'enlil',edge_type:'DESCENDED_FROM',source_tradition:'mesopotamian',source_text:'Sumerian god lists',notes:'Enlil is descended from / subordinate to Anu in most Sumerian genealogical schemes.'}],source_attestations:['Enuma Elish'],research_notes:'Supreme sky-god and father of the Anunnaki in Sumerian cosmogony; head of the divine assembly. His worship center was Uruk.',completeness_score:85},
+    {id:'enlil',canonical_name:'Enlil',aliases:['Ellil','Lord of the Wind'],tradition_vectors:{mesopotamian:{name:'Enlil',class:'Air / Storm / Kingship',source_texts:['Sumerian Hymns','Enlil and Ninlil','Epic of Gilgamesh']}},functional_domains:['Storms','Conferring Kingship','Determination of Fates'],hierarchical_level:2,relationships:[{target_id:'anu',edge_type:'DESCENDED_FROM',source_tradition:'mesopotamian',source_text:'Sumerian god lists',notes:'Enlil is placed beneath Anu in the standard Sumerian divine hierarchy.'}],source_attestations:['Enlil and Ninlil','Sumerian Hymns'],research_notes:'Executive deity who grants kingship and decrees fates; his flood decision in Atrahasis parallels Genesis 6.',completeness_score:84},
+    {id:'enki',canonical_name:'Enki / Ea',aliases:['Ea','Lord of the Abzu'],tradition_vectors:{mesopotamian:{name:'Enki',class:'Wisdom / Freshwater / Magic',source_texts:['Eridu Genesis','Atrahasis','Enki and Ninmah']}},functional_domains:['Wisdom','Fresh Water','Creation of Humanity','Magical Incantation'],hierarchical_level:2,relationships:[{target_id:'enlil',edge_type:'DESCENDED_FROM',source_tradition:'mesopotamian',source_text:'Genealogical lists',notes:'Enki is placed among the older divine generation beneath Anu/Enlil.'}],source_attestations:['Eridu Genesis','Atrahasis'],research_notes:'Trickster-sage who repeatedly saves humanity from the divine council\'s wrath; warned Utnapishtim/Atrahasis of the Flood.',completeness_score:86},
+    {id:'inanna',canonical_name:'Inanna / Ishtar',aliases:['Ishtar','Queen of Heaven'],tradition_vectors:{mesopotamian:{name:'Inanna',class:'Love / War / Kingship',source_texts:['Descent of Inanna','Inanna and Dumuzi','Hymns of Enheduanna']}},functional_domains:['Fertility','War','Love','Royal Investiture','Venus Star'],hierarchical_level:2,relationships:[{target_id:'ereshkigal',edge_type:'FUNCTIONAL_PARALLEL',source_tradition:'mesopotamian',source_text:'Descent of Inanna',notes:'Inanna descends to Ereshkigal\'s realm; the two sisters represent complementary aspects of feminine divine power.'}],source_attestations:['Descent of Inanna','Hymns of Enheduanna'],research_notes:'Most extensively hymned Sumerian goddess; her descent narrative influenced dying-and-rising deity scholarship.',completeness_score:88},
+    {id:'ereshkigal',canonical_name:'Ereshkigal',aliases:['Irkalla','Queen of the Great Earth'],tradition_vectors:{mesopotamian:{name:'Ereshkigal',class:'Queen of the Dead',source_texts:['Descent of Inanna','Nergal and Ereshkigal']}},functional_domains:['Underworld Sovereignty','Death','Judgment of the Dead'],hierarchical_level:3,relationships:[{target_id:'inanna',edge_type:'FUNCTIONAL_PARALLEL',source_tradition:'mesopotamian',source_text:'Descent of Inanna',notes:'Ereshkigal and Inanna represent upper and lower world; life and death as complementary divine domains.'}],source_attestations:['Descent of Inanna'],research_notes:'Underworld queen whose domain Inanna must strip herself to enter. Parallel to Persephone/Hades dynamic.',completeness_score:78},
+    {id:'marduk',canonical_name:'Marduk',aliases:['Bel','Lord of Babylon'],tradition_vectors:{mesopotamian:{name:'Marduk',class:'Patron of Babylon / Creator',source_texts:['Enuma Elish','Babylonian Royal Hymns']}},functional_domains:['Creation from Chaos','Cosmic Order','Imperial Kingship'],hierarchical_level:1,relationships:[{target_id:'enki',edge_type:'DESCENDED_FROM',source_tradition:'mesopotamian',source_text:'Enuma Elish',notes:'Marduk is son of Enki/Ea in the Babylonian cosmic genealogy.'}],source_attestations:['Enuma Elish'],research_notes:'Slays Tiamat (primordial chaos) and creates the world from her body — the most explicit cosmogony-through-conquest in ancient Near East.',completeness_score:90},
+    {id:'ra',canonical_name:'Ra',aliases:['Re','Amun-Ra','Ra-Atum'],tradition_vectors:{egyptian:{name:'Ra',theology:'Heliopolitan',class:'Solar Creator',source_texts:['Pyramid Texts','Book of the Dead','Heliopolitan Hymns']}},functional_domains:['Solar Creation','Divine Kingship','Daily Cosmic Cycle'],hierarchical_level:1,relationships:[{target_id:'osiris',edge_type:'SYNCRETIZED_WITH',source_tradition:'egyptian',source_text:'Book of the Dead; New Kingdom solar theology',notes:'Ra and Osiris merge at midnight in New Kingdom solar theology as the unified sun-below-the-earth.'}],source_attestations:['Pyramid Texts','Heliopolitan Hymns'],research_notes:'Principal solar deity; fused with Amun as Amun-Ra in Theban theology. Regenerates nightly through the Duat.',completeness_score:90},
+    {id:'set-egypt',canonical_name:'Set (Seth)',aliases:['Set','Seth','Typhon (Greek identification)'],tradition_vectors:{egyptian:{name:'Set',theology:'Heliopolitan',class:'Chaos / Storm / Desert',source_texts:['Contending of Horus and Seth','Coffin Texts']}},functional_domains:['Chaos and Disorder','Desert and Foreign Lands','Strength of the Storm','Protector of Ra\'s Sun Boat'],hierarchical_level:3,relationships:[{target_id:'horus',edge_type:'CONTESTED_IDENTIFICATION',source_tradition:'egyptian',source_text:'Contending of Horus and Seth',notes:'Set and Horus represent the eternal conflict between chaos and order, usurpation and legitimate kingship, desert and fertile land.'}],source_attestations:['Contending of Horus and Seth','Coffin Texts'],research_notes:'Complex deity: in some periods protects Ra\'s sun boat against Apophis; in others embodies Seth as chaos-principle. His cult was suppressed and revived multiple times across Egyptian history.',completeness_score:76}
+  ];
+  extras.forEach(e => { if (!ids.has(e.id)) { DB.entities.push(e); ids.add(e.id); } });
+  DB.entity_count = DB.entities.length;
+}
+
+// ══════════════════════════════════════════════════════════════
+//  SEARCH RENDER
+// ══════════════════════════════════════════════════════════════
+function getFilteredEntities() {
+  if (currentFilter === 'all') return DB.entities;
+  return DB.entities.filter(e => e.tradition_vectors && e.tradition_vectors[currentFilter]);
+}
+
+function depthLabel(score) {
+  if (score >= 80) return 'primary';
+  if (score >= 60) return 'secondary';
+  return 'partial';
+}
+function depthText(score) {
+  if (score >= 80) return 'Primary Source';
+  if (score >= 60) return 'Secondary Source';
+  return 'Partial';
+}
+
+function renderSearch(query) {
+  const pool = getFilteredEntities();
+  let results;
+  if (!query) {
+    // Jesus always first
+    results = [...pool].sort((a,b) => {
+      if (a.id === 'jesus-christ') return -1;
+      if (b.id === 'jesus-christ') return 1;
+      return (a.hierarchical_level||7) - (b.hierarchical_level||7);
+    });
+  } else {
+    const fuseResults = fuse.search(query);
+    const ids = new Set(pool.map(e => e.id));
+    results = fuseResults.filter(r => ids.has(r.item.id)).map(r => r.item);
+  }
+
+  document.getElementById('results-count').textContent =
+    `${results.length} ${results.length===1?'entry':'entries'}${query?` matching "${query}"`:''}${currentFilter!=='all'?` · ${TRADITION_LABELS[currentFilter]||currentFilter}`:''}`;
+
+  const grid = document.getElementById('results-grid');
+  if (!results.length) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="empty-glyph">◉</div><p>No entries match. The tradition may not yet be populated.</p></div>`;
+    return;
+  }
+
+  grid.innerHTML = '';
+  results.forEach((entity, i) => {
+    const card = document.createElement('div');
+    const isJesus = entity.id === 'jesus-christ';
+    card.className = 'entity-card' + (isJesus ? ' card-jesus' : '');
+    card.style.animationDelay = `${Math.min(i*0.04,0.4)}s`;
+    card.onclick = () => openDetail(entity.id);
+
+    const tradKeys = Object.keys(entity.tradition_vectors||{});
+    const tradPips = tradKeys.map(k=>`<span class="trad-pip trad-${k}">${TRADITION_LABELS[k]||k}</span>`).join('');
+    const domains = (entity.functional_domains||[]).slice(0,3).map(d=>`<span class="domain-tag">${d}</span>`).join('');
+    const aliasStr = (entity.aliases||[]).slice(0,2).join(' · ');
+    const dl = depthLabel(entity.completeness_score||0);
+    const dt = depthText(entity.completeness_score||0);
+
+    card.innerHTML = `
+      <p class="card-level">${LEVEL_LABELS[entity.hierarchical_level]||'Level '+(entity.hierarchical_level||7)}</p>
+      <h3 class="card-name">${entity.canonical_name}</h3>
+      ${aliasStr?`<p class="card-aliases">${aliasStr}</p>`:''}
+      <div class="card-domains">${domains}</div>
+      <div class="card-traditions">${tradPips}</div>
+      <span class="card-depth depth-${dl}">${dt}</span>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+// ══════════════════════════════════════════════════════════════
+//  DETAIL PANEL
+// ══════════════════════════════════════════════════════════════
+function openDetail(id) {
+  const entity = DB.entities.find(e => e.id === id);
+  if (!entity) return;
+  currentDetailId = id;
+
+  document.getElementById('d-level').textContent = LEVEL_LABELS[entity.hierarchical_level]||'';
+  document.getElementById('d-name').textContent = entity.canonical_name;
+  document.getElementById('d-aliases').textContent = (entity.aliases||[]).join(' · ');
+
+  // Theological significance for biblical figures
+  const theoSec = document.getElementById('d-theo-section');
+  const theoEl = document.getElementById('d-theo');
+  if (entity.id === 'jesus-christ') {
+    theoSec.style.display = '';
+    theoEl.innerHTML = `
+      <div class="theo-box">
+        <span class="theo-label">Colossians 1:16–17</span>
+        <p>"For by him all things were created, in heaven and on earth, visible and invisible, whether thrones or powers or rulers or authorities — all things were created through him and for him. He is before all things, and in him all things hold together."</p>
+      </div>
+      <div class="theo-box" style="margin-top:0.8rem">
+        <span class="theo-label">John 1:1–3</span>
+        <p>"In the beginning was the Word, and the Word was with God, and the Word was God. He was with God in the beginning. Through him all things were made; without him nothing was made that has been made."</p>
+      </div>
+      <p style="font-size:1rem;color:var(--vellum);line-height:1.75;margin-top:1rem">In this concordance, Jesus Christ is the ontological center — the Logos through whom every tradition track, every named figure, every angelic order, and every esoteric system ultimately coheres. The figures documented here — Greek, Egyptian, Enochian, Kabbalistic, Goetic — are mapped against this standard: some as typological anticipations, some as fallen or corrupted reflections, some as polemical reframings by later traditions. None occupies the center; all orbit it.</p>`;
+  } else if (entity.tradition_vectors?.biblical_angel || entity.id === 'adam' || entity.id === 'david-king' || entity.id === 'noah' || entity.id === 'abraham') {
+    theoSec.style.display = '';
+    const tv = entity.tradition_vectors?.biblical_angel;
+    if (tv?.canonical_function) {
+      theoEl.innerHTML = `<div class="theo-box"><span class="theo-label">Biblical Function</span><p>${tv.canonical_function}</p></div>`;
+    } else { theoSec.style.display = 'none'; }
+  } else {
+    theoSec.style.display = 'none';
+  }
+
+  // Genealogy
+  const genealogy = entity.genealogy;
+  const geneEl = document.getElementById('d-genealogy');
+  const geneSec = document.getElementById('d-genealogy-section');
+  if (genealogy) {
+    geneSec.style.display = '';
+    geneEl.innerHTML = '';
+    const block = document.createElement('div');
+    block.className = 'genealogy-block';
+    Object.entries(genealogy).forEach(([k,v]) => {
+      const row = document.createElement('p');
+      row.className = 'genealogy-line';
+      row.innerHTML = `<strong>${k.replace(/_/g,' ')}</strong>${v}`;
+      block.appendChild(row);
+    });
+    geneEl.appendChild(block);
+  } else {
+    geneSec.style.display = 'none';
+  }
+
+  // Domains
+  document.getElementById('d-domains').innerHTML =
+    (entity.functional_domains||[]).map(d=>`<span class="domain-tag-large">${d}</span>`).join('');
+
+  // Traditions
+  const tradEl = document.getElementById('d-traditions');
+  tradEl.innerHTML = '';
+  const tv = entity.tradition_vectors||{};
+  const tradOrder = TRADITION_ORDER.filter(k => tv[k]).concat(Object.keys(tv).filter(k => !TRADITION_ORDER.includes(k) && tv[k]));
+  tradOrder.forEach(tradKey => {
+    const tradData = tv[tradKey];
+    if (!tradData) return;
+    const block = document.createElement('div');
+    block.className = 'trad-block';
+    block.style.borderLeftColor = NODE_COLORS[tradKey]||'var(--gold)';
+
+    const fields = Object.entries(tradData)
+      .filter(([k,v]) => v && k !== 'source_texts')
+      .map(([k,v]) => {
+        const val = Array.isArray(v) ? v.join(', ') : v;
+        return `<div class="trad-field"><span class="trad-field-key">${k.replace(/_/g,' ')}</span><span class="trad-field-val">${val}</span></div>`;
+      }).join('');
+
+    const srcs = (tradData.source_texts||[])
+      .map(s => `<div class="trad-field"><span class="trad-field-key">source</span><span class="trad-field-val">${s}</span></div>`).join('');
+
+    block.innerHTML = `
+      <div class="trad-block-header">
+        <p class="trad-block-name" style="color:${NODE_COLORS[tradKey]||'#c9983a'}">${TRADITION_LABELS[tradKey]||tradKey}</p>
+        <button class="focus-graph-btn" onclick="openGraphFocused('${entity.id}','${tradKey}')">⊛ Focus in Graph</button>
+      </div>
+      <div class="trad-block-fields">${fields}${srcs}</div>
+    `;
+    tradEl.appendChild(block);
+  });
+
+  // Relations
+  const relEl = document.getElementById('d-relations');
+  relEl.innerHTML = '';
+  if (!(entity.relationships||[]).length) {
+    relEl.innerHTML = '<p style="color:var(--dim);font-style:italic;font-size:0.96rem">No cross-traditional relationships recorded yet.</p>';
+  } else {
+    (entity.relationships||[]).forEach(rel => {
+      const targetEntity = DB.entities.find(e => e.id === rel.target_id);
+      const targetName = targetEntity ? targetEntity.canonical_name : rel.target_id.replace(/-/g,' ');
+      const item = document.createElement('div');
+      item.className = 'edge-item';
+      item.innerHTML = `
+        <span class="edge-type edge-${rel.edge_type}">${rel.edge_type.replace(/_/g,' ')}</span>
+        <p class="edge-target">→ <a onclick="openDetail('${rel.target_id}')">${targetName}</a></p>
+        <p class="edge-meta"><strong style="color:var(--faint);font-family:var(--font-heading);font-size:0.66rem;letter-spacing:0.1em;text-transform:uppercase">Source: </strong>${rel.source_text}</p>
+        ${rel.notes?`<p class="edge-notes">${rel.notes}</p>`:''}
+      `;
+      relEl.appendChild(item);
+    });
+  }
+
+  // Sources
+  document.getElementById('d-sources').innerHTML =
+    (entity.source_attestations||[]).map(s=>`<li>${s}</li>`).join('');
+
+  // Notes
+  document.getElementById('d-notes').textContent = entity.research_notes||'No research notes recorded.';
+
+  // Research Depth
+  const score = entity.completeness_score||0;
+  const pips = document.getElementById('d-depth-pips');
+  pips.innerHTML = '';
+  const numPips = 8;
+  const filled = Math.round(score / (100/numPips));
+  for (let i=0; i<numPips; i++) {
+    const pip = document.createElement('div');
+    pip.className = 'depth-pip' + (i < filled ? ' filled' : '');
+    pips.appendChild(pip);
+  }
+
+  const dl = depthLabel(score);
+  document.getElementById('d-depth-label').textContent = depthText(score) + ` (${score}% documented)`;
+  document.getElementById('d-depth-desc').textContent =
+    score>=80 ? 'This entry has extensive primary source documentation across multiple tradition tracks. Relationships are well-sourced and research notes provide scholarly context.' :
+    score>=60 ? 'This entry is documented in its primary traditions but some vectors need further sourcing. Core relationships are established.' :
+    'This entry has basic identification data. Further research across tradition tracks is needed before this entry can be considered complete.';
+
+  document.getElementById('detail-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDetail() {
+  document.getElementById('detail-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ══════════════════════════════════════════════════════════════
+//  GRAPH — FULLSCREEN
+// ══════════════════════════════════════════════════════════════
+function getPrimaryTradition(entity) {
+  const tv = entity.tradition_vectors||{};
+  for (const k of TRADITION_ORDER) { if (tv[k]) return k; }
+  const keys = Object.keys(tv);
+  return keys[0] || 'default';
+}
+
+function buildGraph() {
+  if (cy) return; // already built
+
+  const elements = [];
+  DB.entities.forEach(entity => {
+    const trad = getPrimaryTradition(entity);
+    const isJesus = entity.id === 'jesus-christ';
+    elements.push({ data: {
+      id: entity.id,
+      label: entity.canonical_name.split(' / ')[0].split(' (')[0],
+      color: isJesus ? '#f0cc70' : (NODE_COLORS[trad]||NODE_COLORS.default),
+      tradition: trad,
+      level: entity.hierarchical_level||5,
+      isJesus: isJesus ? 1 : 0
+    }});
+  });
+
+  const addedEdges = new Set();
+  DB.entities.forEach(entity => {
+    (entity.relationships||[]).forEach(rel => {
+      const eid = [entity.id, rel.target_id, rel.edge_type].join('|');
+      const rev = [rel.target_id, entity.id, rel.edge_type].join('|');
+      if (addedEdges.has(rev)) return;
+      if (DB.entities.find(e => e.id === rel.target_id)) {
+        addedEdges.add(eid);
+        elements.push({ data: {
+          id: eid, source: entity.id, target: rel.target_id,
+          edgeType: rel.edge_type,
+          color: EDGE_COLORS[rel.edge_type]||'#888'
+        }});
+      }
+    });
+  });
+
+  cy = cytoscape({
+    container: document.getElementById('cy-fullscreen'),
+    elements,
+    style:[
+      {
+        selector:'node',
+        style:{
+          'background-color':'data(color)',
+          'label':'data(label)',
+          'color':'#f0e6cc',
+          'font-family':'Cinzel, serif',
+          'font-size': '11px',
+          'font-weight':'600',
+          'text-background-color':'#0f0d0a',
+          'text-background-opacity':0.85,
+          'text-background-padding':'3px',
+          'text-valign':'center',
+          'text-halign':'center',
+          'text-outline-color':'#0a0806',
+          'text-outline-width':'1px',
+          'width': (el) => {
+            const base = Math.max(24, 46 - (el.data('level')||5)*3);
+            return el.data('isJesus') ? 58 : base;
+          },
+          'height': (el) => {
+            const base = Math.max(24, 46 - (el.data('level')||5)*3);
+            return el.data('isJesus') ? 58 : base;
+          },
+          'border-width': (el) => el.data('isJesus') ? 3 : 2,
+          'border-color':'data(color)',
+          'border-opacity':0.7,
+          'z-index': (el) => el.data('isJesus') ? 999 : 1
         }
-
-        entities = generateFullDataset();
-
-        let cy;
-
-        function initGraph() {
-            if (cy) cy.destroy();
-
-            const elements = entities.map((e, idx) => ({
-                data: { 
-                    id: e.id, 
-                    label: e.canonical_name,
-                    level: e.hierarchical_level 
-                }
-            }));
-
-            // Add edges
-            const edges = entities.slice(1).map(e => ({
-                data: {
-                    source: 'jesus-christ',
-                    target: e.id,
-                    type: Math.random() > 0.7 ? 'SYNCRETIZED_WITH' : Math.random() > 0.5 ? 'FUNCTIONAL_PARALLEL' : 'CONTESTED_IDENTIFICATION'
-                }
-            }));
-
-            cy = cytoscape({
-                container: document.getElementById('graph-container'),
-                elements: [...elements, ...edges],
-                style: [{
-                    selector: 'node',
-                    style: {
-                        'background-color': '#c9a66b',
-                        'label': 'data(label)',
-                        'width': 28,
-                        'height': 28,
-                        'font-size': '11px',
-                        'text-valign': 'center',
-                        'color': '#111',
-                        'text-outline-color': '#fff',
-                        'text-outline-width': 1.5
-                    }
-                }, {
-                    selector: 'edge',
-                    style: { 'width': 1.5, 'line-color': '#555', 'curve-style': 'bezier' }
-                }, {
-                    selector: 'edge[type="SYNCRETIZED_WITH"]',
-                    style: { 'line-color': '#4a7043', 'width': 4, 'line-style': 'solid' }
-                }, {
-                    selector: 'edge[type="FUNCTIONAL_PARALLEL"]',
-                    style: { 'line-color': '#6b8e9b', 'width': 2, 'line-style': 'dashed' }
-                }],
-                layout: { 
-                    name: 'concentric',
-                    concentric: n => n.data('level') || 4,
-                    minNodeSpacing: 50,
-                    animate: true,
-                    animationDuration: 1200
-                }
-            });
-
-            cy.on('tap', 'node', evt => {
-                showDetail(evt.target.data('id'));
-            });
-
-            // Node pulse animation
-            setInterval(() => {
-                if (cy) cy.nodes().style('background-color', '#c9a66b').animate({style: {'background-color': '#f0d090'}}, {duration: 600}).delay(800).animate({style: {'background-color': '#c9a66b'}}, {duration: 600});
-            }, 4000);
+      },
+      {
+        selector:'node:selected',
+        style:{'border-width':4,'border-opacity':1}
+      },
+      {
+        selector:'edge',
+        style:{
+          'line-color':'data(color)',
+          'target-arrow-color':'data(color)',
+          'target-arrow-shape':'triangle',
+          'arrow-scale':0.9,
+          'width':2,
+          'opacity':0.75,
+          'curve-style':'bezier',
         }
+      },
+      {selector:'edge.hidden',style:{'opacity':0,'events':'no'}},
+      {selector:'node.dimmed',style:{'opacity':0.12,'text-opacity':0}},
+      {selector:'edge.dimmed',style:{'opacity':0.04}}
+    ],
+    layout:{
+      name:'breadthfirst',
+      directed:true,
+      roots: cy ? undefined : ['jesus-christ'],
+      spacingFactor:1.8,
+      padding:60,
+      animate:true,
+      animationDuration:600
+    },
+    // CRITICAL: use separate gesture handling for smooth UX
+    userZoomingEnabled:true,
+    userPanningEnabled:true,
+    minZoom:0.15,
+    maxZoom:5,
+    wheelSensitivity:0.08,  // slow, controlled zoom
+    boxSelectionEnabled:false,
+    touchTapThreshold:8,
+    desktopTapThreshold:4,
+    autolock:false,
+    autoungrabify:false,
+    autounselectify:false
+  });
 
-        function showDetail(id) {
-            const entity = entities.find(e => e.id === id) || {canonical_name: id};
-            document.getElementById('detail-content').innerHTML = `
-                <h2>${entity.canonical_name}</h2>
-                <p><em>Hierarchical Level: ${entity.hierarchical_level}</em></p>
-                <div style="background:rgba(201,166,107,0.1);padding:15px;border-left:4px solid var(--accent);margin:15px 0;">
-                    <strong>Why this matters:</strong> ${entity.why_matters}
-                </div>
-                <p>Explore traditions, relationships, and sources in full research mode.</p>
-            `;
-            document.getElementById('detail-panel').style.display = 'block';
+  cy.on('tap','node', evt => {
+    const id = evt.target.id();
+    // highlight neighbors
+    cy.elements().addClass('dimmed');
+    evt.target.removeClass('dimmed');
+    evt.target.connectedEdges().removeClass('dimmed').connectedNodes().removeClass('dimmed');
+    // open detail
+    openDetail(id);
+  });
+
+  cy.on('tap', evt => {
+    if (evt.target === cy) cy.elements().removeClass('dimmed');
+  });
+
+  // Build legend
+  const legendEl = document.getElementById('graph-legend');
+  legendEl.innerHTML = Object.entries(NODE_COLORS).filter(([k])=>k!=='default')
+    .map(([k,c])=>`<div class="legend-item"><div class="legend-dot" style="background:${c}"></div>${TRADITION_LABELS[k]||k}</div>`)
+    .join('');
+}
+
+function openGraphFocused(entityId, tradKey) {
+  // Close detail first
+  closeDetail();
+  openGraphOverlay(entityId);
+  // Apply tradition filter if given
+  if (tradKey) {
+    const sel = document.getElementById('graph-trad-select');
+    if (sel) { sel.value = tradKey; updateGraphTradVisibility(); }
+  }
+  // Center on node
+  if (cy) {
+    cy.ready(() => {
+      const node = cy.getElementById(entityId);
+      if (node && node.length) {
+        cy.$(':selected').unselect();
+        node.select();
+        const neighbors = node.connectedEdges().connectedNodes().union(node);
+        cy.elements().addClass('dimmed');
+        neighbors.removeClass('dimmed');
+        cy.fit(neighbors, 80);
+      }
+    });
+  }
+  // Update label
+  const entity = DB.entities.find(e => e.id === entityId);
+  if (entity) document.getElementById('graph-focus-label').textContent = `Focused: ${entity.canonical_name}${tradKey?' · '+TRADITION_LABELS[tradKey]:''}`;
+}
+
+function openGraphForCurrent() {
+  if (currentDetailId) openGraphFocused(currentDetailId, null);
+  else openGraphOverlay(null);
+}
+
+function openGraphOverlay(focusId) {
+  const overlay = document.getElementById('graph-overlay');
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  if (!cy) {
+    // Need to wait for DOM to be visible before init
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        buildGraph();
+        if (cy) {
+          cy.resize();
+          if (focusId) {
+            const node = cy.getElementById(focusId);
+            if (node && node.length) cy.fit(node.union(node.connectedEdges().connectedNodes()), 80);
+            else cy.fit(undefined, 60);
+          } else {
+            cy.fit(undefined, 60);
+          }
         }
+      });
+    });
+  } else {
+    cy.resize();
+    if (focusId) {
+      const node = cy.getElementById(focusId);
+      if (node && node.length) cy.fit(node.union(node.connectedEdges().connectedNodes()), 80);
+    } else {
+      cy.fit(undefined, 60);
+    }
+  }
+}
 
-        function closePanel() {
-            document.getElementById('detail-panel').style.display = 'none';
-        }
+function closeGraph() {
+  document.getElementById('graph-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+  document.getElementById('graph-focus-label').textContent = '';
+  // Reset filters
+  document.getElementById('graph-edge-select').value = 'all';
+  document.getElementById('graph-trad-select').value = 'all';
+  if (cy) {
+    cy.elements().removeClass('dimmed hidden');
+    cy.edges().removeClass('hidden');
+  }
+}
 
-        // Event listeners
-        document.querySelectorAll('.mode-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                initGraph();
-            });
-        });
+function resetGraph() {
+  if (!cy) return;
+  cy.elements().removeClass('dimmed hidden');
+  updateGraphEdgeVisibility();
+  updateGraphTradVisibility();
+  cy.fit(undefined, 60);
+  document.getElementById('graph-focus-label').textContent = '';
+  document.getElementById('graph-edge-select').value = 'all';
+  document.getElementById('graph-trad-select').value = 'all';
+}
 
-        document.getElementById('search').addEventListener('keyup', e => {
-            const term = e.target.value.toLowerCase();
-            cy.nodes().style('opacity', n => n.data('label').toLowerCase().includes(term) ? 1 : 0.25);
-        });
+function updateGraphEdgeVisibility() {
+  if (!cy) return;
+  const val = document.getElementById('graph-edge-select').value;
+  cy.edges().removeClass('hidden');
+  if (val !== 'all') {
+    cy.edges().forEach(e => { if (e.data('edgeType') !== val) e.addClass('hidden'); });
+  }
+}
 
-        window.onload = initGraph;
-    </script>
+function updateGraphTradVisibility() {
+  if (!cy) return;
+  const val = document.getElementById('graph-trad-select').value;
+  cy.elements().removeClass('dimmed');
+  if (val !== 'all') {
+    cy.nodes().forEach(n => {
+      if (n.data('tradition') !== val) n.addClass('dimmed');
+      else n.connectedEdges().removeClass('dimmed');
+    });
+    const visible = cy.nodes().filter(n => n.data('tradition') === val);
+    if (visible.length) cy.fit(visible, 60);
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  HIERARCHY — PER-TRADITION INTERNAL HIERARCHIES
+// ══════════════════════════════════════════════════════════════
+function buildHierarchy() {
+  const container = document.getElementById('hierarchy-container');
+  container.innerHTML = '';
+
+  // Intro text
+  const intro = document.createElement('p');
+  intro.style.cssText = 'font-family:var(--font-body);font-size:1rem;color:var(--dim);font-style:italic;margin-bottom:1.5rem;line-height:1.7';
+  intro.textContent = 'Each tradition is organized by its own internal hierarchy — ranked from supreme principle down to regional or specialized figures. Expand a tradition to browse its internal order. Click any entity to open its full profile.';
+  container.appendChild(intro);
+
+  // Per-tradition sections
+  const traditions = TRADITION_ORDER.filter(trad => DB.entities.some(e => e.tradition_vectors?.[trad]));
+  // Also add mesopotamian
+  const allTrads = [...new Set([...traditions, ...DB.entities.flatMap(e => Object.keys(e.tradition_vectors||{}))])];
+
+  allTrads.forEach(trad => {
+    const entities = DB.entities.filter(e => e.tradition_vectors?.[trad]);
+    if (!entities.length) return;
+
+    // Sort by hierarchical_level within tradition
+    entities.sort((a,b) => (a.hierarchical_level||5) - (b.hierarchical_level||5));
+
+    // Group by level
+    const byLevel = {};
+    entities.forEach(e => {
+      const lvl = e.hierarchical_level||5;
+      if (!byLevel[lvl]) byLevel[lvl] = [];
+      byLevel[lvl].push(e);
+    });
+
+    const section = document.createElement('div');
+    section.className = 'trad-hier-section';
+
+    const header = document.createElement('div');
+    header.className = 'trad-hier-header';
+    header.innerHTML = `
+      <span class="trad-hier-toggle">▶</span>
+      <span class="trad-hier-title" style="color:${NODE_COLORS[trad]||'#c9983a'}">${TRADITION_LABELS[trad]||trad}</span>
+      <span class="trad-hier-count">${entities.length} entries</span>
+    `;
+
+    const body = document.createElement('div');
+    body.className = 'trad-hier-body';
+
+    // Build level groups
+    Object.keys(byLevel).sort((a,b) => a-b).forEach(lvl => {
+      const grp = document.createElement('div');
+      grp.className = 'hier-level-group';
+      grp.innerHTML = `<div class="hier-level-label">${LEVEL_LABELS[parseInt(lvl)]||'Level '+lvl}</div>`;
+      byLevel[lvl].forEach(entity => {
+        const row = document.createElement('div');
+        row.className = 'hier-entity-row';
+        const primaryDomain = (entity.functional_domains||[])[0]||'';
+        row.innerHTML = `
+          <span class="hier-trad-dot" style="background:${NODE_COLORS[trad]||'#c9983a'}"></span>
+          <span class="hier-entity-name">${entity.canonical_name}</span>
+          <span class="hier-entity-domain">${primaryDomain}</span>
+        `;
+        row.onclick = () => openDetail(entity.id);
+        grp.appendChild(row);
+      });
+      body.appendChild(grp);
+    });
+
+    // Toggle behavior
+    header.addEventListener('click', () => {
+      const isOpen = body.classList.contains('open');
+      body.classList.toggle('open', !isOpen);
+      header.classList.toggle('open', !isOpen);
+      header.querySelector('.trad-hier-toggle').textContent = isOpen ? '▶' : '▼';
+    });
+
+    section.appendChild(header);
+    section.appendChild(body);
+    container.appendChild(section);
+  });
+
+  // Auto-open Biblical section
+  const firstBiblical = container.querySelector('.trad-hier-header');
+  if (firstBiblical) firstBiblical.click();
+}
+
+// ══════════════════════════════════════════════════════════════
+//  BOOT
+// ══════════════════════════════════════════════════════════════
+init(CONCORDANCE_DATA);
+</script>
 </body>
 </html>
