@@ -47,7 +47,6 @@ const EDGE_COLORS = {
 // ══════════════════════════════════════════════════════════════
 function init(data) {
   DB = data;
-  augmentEntities();
   document.getElementById('entity-count-meta').textContent =
     `${DB.entities.length} entities · Schema v${DB.version}`;
 
@@ -662,6 +661,5 @@ function buildHierarchy() {
 }
 
 // ══════════════════════════════════════════════════════════════
-//  BOOT
+//  BOOT — init() is called by js/data.js after fetching data/entities.json
 // ══════════════════════════════════════════════════════════════
-init(CONCORDANCE_DATA);
