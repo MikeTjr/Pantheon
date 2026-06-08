@@ -1,0 +1,736 @@
+/* ══════════════════════════════════════════════════════════════
+   MAGIC.CSS — Enhancement Layer · Pantheon Concordance
+   Append-only. Never modify styles.css.
+══════════════════════════════════════════════════════════════ */
+
+/* ── MODULE 1: SOUND TOGGLE ──────────────────────────────────*/
+.sound-toggle-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: 1px solid var(--border-mid);
+  color: var(--dim);
+  font-family: var(--font-heading);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.38rem 0.75rem;
+  cursor: pointer;
+  border-radius: var(--radius);
+  transition: color 0.2s ease, border-color 0.2s ease;
+  z-index: 10;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sound-toggle-btn:hover {
+  color: var(--gold);
+  border-color: var(--border-strong);
+}
+
+/* ── MODULE 4: HEADER SIGIL SVG ──────────────────────────────*/
+#header-sigil-svg-wrap {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0.8rem;
+  width: 90px;
+  height: 90px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.22;
+}
+#header-sigil-svg {
+  width: 100%;
+  height: 100%;
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  animation: m-sigil-breathe 7s ease-in-out infinite;
+  overflow: visible;
+}
+@keyframes m-sigil-breathe {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+/* ── MODULE 3 + 8: LORE / TIMELINE TOOLTIP ───────────────────*/
+#lore-tooltip {
+  position: fixed;
+  z-index: 3000;
+  background: var(--ink);
+  border: 1px solid var(--border-mid);
+  border-top: 2px solid var(--gold);
+  color: var(--faint);
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  padding: 0.6rem 0.9rem;
+  max-width: 280px;
+  box-shadow: var(--shadow);
+  border-radius: var(--radius);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.18s ease;
+}
+#lore-tooltip.visible { opacity: 1; }
+
+/* ── MODULE 5: SEARCH SUGGESTIONS ────────────────────────────*/
+.search-wrap { position: relative; }
+
+#search-suggestions {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: calc(100% - 0.5rem);
+  background: var(--ink);
+  border: 1px solid var(--border-strong);
+  border-top: none;
+  max-height: 320px;
+  overflow-y: auto;
+  z-index: 1500;
+  width: 100%;
+  max-width: 580px;
+  box-shadow: var(--shadow-deep);
+  border-radius: 0 0 var(--radius) var(--radius);
+  display: none;
+}
+#search-suggestions.visible {
+  display: block;
+  animation: m-sugg-in 0.12s ease;
+}
+@keyframes m-sugg-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(-4px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.55rem 1rem;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.12s ease;
+  min-height: 44px;
+}
+.suggestion-item:last-child { border-bottom: none; }
+.suggestion-item:hover,
+.suggestion-item.active { background: rgba(201,152,58,0.09); }
+.suggestion-name {
+  font-family: var(--font-heading);
+  color: var(--gold-light);
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  flex: 1;
+}
+.suggestion-level {
+  font-family: var(--font-heading);
+  font-size: 0.6rem;
+  color: var(--dim);
+  letter-spacing: 0.1em;
+  border: 1px solid var(--border);
+  padding: 0.1rem 0.3rem;
+  flex-shrink: 0;
+}
+.suggestion-pip {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.suggestion-domain {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 0.78rem;
+  color: var(--dim);
+  flex-shrink: 0;
+  max-width: 120px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── MODULE 6: INSIGHT BAR ────────────────────────────────────*/
+#insight-bar {
+  background: rgba(201,152,58,0.06);
+  border-top: 1px solid rgba(201,152,58,0.4);
+  border-bottom: 1px solid var(--border);
+  padding: 0 3rem;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+              padding-top 0.4s ease, padding-bottom 0.4s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  position: relative;
+}
+#insight-bar.open {
+  max-height: 90px;
+  padding-top: 0.7rem;
+  padding-bottom: 0.7rem;
+}
+.insight-text {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 0.93rem;
+  color: var(--parchment);
+  text-align: center;
+  line-height: 1.5;
+}
+.insight-dismiss {
+  position: absolute;
+  right: 0.8rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: var(--dim);
+  font-size: 1.1rem;
+  cursor: pointer;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s ease;
+}
+.insight-dismiss:hover { color: var(--gold); }
+
+/* ── MODULE 6: CONCORDANCE INSIGHT BANNER ────────────────────*/
+#concordance-insight-banner {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(16px);
+  background: var(--ink);
+  border: 1px solid var(--border-mid);
+  border-top: 2px solid var(--gold);
+  color: var(--faint);
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 0.9rem;
+  padding: 0.8rem 2.5rem 0.8rem 1.2rem;
+  max-width: min(90vw, 600px);
+  box-shadow: var(--shadow-deep);
+  z-index: 3500;
+  opacity: 0;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  line-height: 1.55;
+}
+#concordance-insight-banner.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+#concordance-insight-banner em {
+  color: var(--gold-light);
+  font-style: normal;
+  font-family: var(--font-heading);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+#concordance-insight-banner .cib-sigil { color: var(--gold); margin-right: 0.4rem; }
+#concordance-insight-banner .cib-close {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: var(--dim);
+  font-size: 1.1rem;
+  cursor: pointer;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s;
+}
+#concordance-insight-banner .cib-close:hover { color: var(--gold); }
+
+/* ── MODULE 7: COMPARE BUTTONS ───────────────────────────────*/
+.entity-card { position: relative; }
+.compare-btn {
+  position: absolute;
+  top: 0.45rem;
+  right: 0.45rem;
+  background: rgba(15,13,10,0.88);
+  border: 1px solid var(--border);
+  color: var(--dim);
+  font-size: 0.85rem;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: var(--radius);
+  opacity: 0;
+  transition: opacity 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  z-index: 5;
+  padding: 0;
+  line-height: 1;
+}
+.entity-card:hover .compare-btn { opacity: 1; }
+.compare-btn:hover { color: var(--gold); border-color: var(--border-mid); }
+
+/* ── MODULE 7: COMPARE BAR ───────────────────────────────────*/
+#compare-bar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: linear-gradient(180deg, rgba(10,8,4,0.97) 0%, #0a0806 100%);
+  border-top: 2px solid var(--gold);
+  padding: 0.65rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  z-index: 2600;
+  transform: translateY(100%);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 -6px 30px rgba(10,8,4,0.7);
+}
+#compare-bar.visible { transform: translateY(0); }
+.compare-bar-item {
+  font-family: var(--font-heading);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  color: var(--vellum);
+  background: rgba(201,152,58,0.09);
+  border: 1px solid var(--border-mid);
+  padding: 0.28rem 0.55rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.compare-remove {
+  background: transparent;
+  border: none;
+  color: var(--dim);
+  cursor: pointer;
+  font-size: 0.95rem;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.15s;
+  min-width: 20px;
+  min-height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.compare-remove:hover { color: var(--gold); }
+.compare-open-btn {
+  font-family: var(--font-heading);
+  font-size: 0.63rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  background: transparent;
+  border: 1px solid var(--border-strong);
+  padding: 0.4rem 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  min-height: 44px;
+}
+.compare-open-btn:hover { background: rgba(201,152,58,0.12); }
+.compare-clear-btn {
+  font-family: var(--font-heading);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dim);
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 0.35rem 0.8rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  min-height: 44px;
+}
+.compare-clear-btn:hover { color: var(--vellum); }
+
+/* ── MODULE 7: COMPARE OVERLAY ───────────────────────────────*/
+#compare-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10,8,4,0.97);
+  z-index: 4200;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+  overflow: hidden;
+}
+#compare-overlay.open { opacity: 1; pointer-events: all; }
+.compare-overlay-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 1.5rem;
+  border-bottom: 1px solid var(--border-mid);
+  flex-shrink: 0;
+}
+.compare-overlay-title {
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.compare-overlay-close {
+  font-family: var(--font-heading);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dim);
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 0.4rem 0.9rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  min-height: 44px;
+}
+.compare-overlay-close:hover { color: var(--vellum); }
+#compare-body { overflow-y: auto; flex: 1; padding: 1.5rem; }
+.compare-grid { display: grid; border: 1px solid var(--border); }
+.compare-col-header {
+  padding: 1rem 1.2rem;
+  border-right: 1px solid var(--border);
+  border-bottom: 2px solid var(--border-mid);
+}
+.compare-col-header:last-child { border-right: none; }
+.compare-col-level {
+  font-family: var(--font-heading);
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 0.3rem;
+}
+.compare-col-name {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  color: var(--gold-light);
+  letter-spacing: 0.04em;
+  margin-bottom: 0.5rem;
+}
+.compare-col-trads { display: flex; flex-wrap: wrap; gap: 0.25rem; }
+.compare-row-label {
+  background: rgba(201,152,58,0.05);
+  border-bottom: 1px solid var(--border);
+  border-top: 1px solid var(--border);
+  padding: 0.45rem 1.2rem;
+  font-family: var(--font-heading);
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.compare-cell {
+  padding: 0.75rem 1.2rem;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--vellum);
+}
+.compare-cell:last-child { border-right: none; }
+.compare-dim { color: var(--dim); font-style: italic; }
+.compare-shared {
+  background: rgba(201,152,58,0.16) !important;
+  border-color: var(--gold) !important;
+}
+.compare-trad-tag {
+  font-family: var(--font-heading);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--faint);
+  background: rgba(201,152,58,0.04);
+  border: 1px solid var(--border);
+  padding: 0.18rem 0.45rem;
+  display: inline-block;
+  margin: 2px;
+}
+.compare-rel {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  color: var(--faint);
+}
+
+/* ── MODULE 2: CONSTELLATION OVERLAY ─────────────────────────*/
+#constellation-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--ink-deep);
+  z-index: 4600;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+#constellation-overlay.open { opacity: 1; pointer-events: all; }
+.constellation-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border-mid);
+  flex-shrink: 0;
+}
+.constellation-title {
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  flex: 1;
+}
+.constellation-entity-label {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--faint);
+}
+.constellation-close {
+  font-family: var(--font-heading);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dim);
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 0.4rem 0.9rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  min-height: 44px;
+}
+.constellation-close:hover { color: var(--vellum); }
+#constellation-svg-wrap {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(ellipse at center, rgba(26,20,16,0.9) 0%, var(--ink-deep) 100%);
+}
+#constellation-legend {
+  padding: 0.55rem 1.2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+  background: rgba(10,8,4,0.8);
+  font-family: var(--font-heading);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+.constellation-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 1.2rem;
+  color: var(--dim);
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 1rem;
+}
+.constellation-empty-glyph {
+  font-size: 3rem;
+  color: var(--sepia);
+  opacity: 0.45;
+}
+.m-edge-tooltip {
+  position: absolute;
+  background: var(--ink);
+  border: 1px solid var(--border-mid);
+  color: var(--faint);
+  font-family: var(--font-heading);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.55rem;
+  pointer-events: none;
+  z-index: 20;
+  white-space: nowrap;
+}
+
+/* ── MODULE 10: EXPORT MODAL ─────────────────────────────────*/
+#export-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 5500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10,8,4,0.86);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+#export-modal.open { opacity: 1; pointer-events: all; }
+.export-modal-panel {
+  background: var(--ink);
+  border: 1px solid var(--border-strong);
+  border-top: 2px solid var(--gold);
+  width: 360px;
+  max-width: 94vw;
+  padding: 1.8rem;
+  box-shadow: var(--shadow-deep);
+}
+.export-modal-label {
+  font-family: var(--font-heading);
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-bottom: 0.25rem;
+}
+#export-modal-name {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: var(--gold-bright);
+  margin-bottom: 1.4rem;
+  letter-spacing: 0.04em;
+  display: block;
+}
+.export-options { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1rem; }
+.export-option-btn {
+  font-family: var(--font-heading);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--vellum);
+  background: transparent;
+  border: 1px solid var(--border-mid);
+  padding: 0.7rem 1.1rem;
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease;
+  text-align: left;
+  min-height: 44px;
+}
+.export-option-btn:hover {
+  background: rgba(201,152,58,0.09);
+  border-color: var(--border-strong);
+}
+#export-feedback {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 0.84rem;
+  color: var(--gold-light);
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  min-height: 1.3rem;
+  margin-bottom: 0.4rem;
+}
+.export-close-row {
+  text-align: center;
+  margin-top: 0.2rem;
+}
+.export-close-btn {
+  font-family: var(--font-heading);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dim);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.3rem 0;
+  transition: color 0.2s ease;
+  min-height: 32px;
+}
+.export-close-btn:hover { color: var(--vellum); }
+
+/* ── MODULE 8: TIMELINE ENHANCEMENTS ─────────────────────────*/
+#tl-jump-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  padding-top: 0.85rem;
+  margin-top: 0.35rem;
+}
+.tl-jump-btn {
+  font-family: var(--font-heading);
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dim);
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 0.3rem 0.65rem;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease;
+  min-height: 32px;
+}
+.tl-jump-btn:hover {
+  color: var(--gold);
+  border-color: var(--border-mid);
+}
+.tl-era-count {
+  font-family: var(--font-heading);
+  font-size: 0.52rem;
+  color: var(--sepia);
+  display: block;
+  margin-top: 0.15rem;
+  letter-spacing: 0.06em;
+}
+#tl-scroll-wrap { cursor: grab; user-select: none; }
+#tl-scroll-wrap.is-grabbing { cursor: grabbing; }
+
+/* ── MODULE 9: SCRIPTURE FILTER BUTTON ───────────────────────*/
+#scripture-filter-btn.active {
+  color: var(--parchment);
+  border-color: var(--gold-light);
+  background: rgba(201,152,58,0.16);
+}
+
+/* ── PRINT STYLES ─────────────────────────────────────────────*/
+@media print {
+  #nav, .detail-actions, #graph-overlay, #constellation-overlay,
+  #compare-overlay, #compare-bar, #export-modal, #insight-bar,
+  #concordance-insight-banner, #lore-tooltip, #search-suggestions,
+  .sound-toggle-btn, #header-sigil-svg-wrap, #tl-jump-strip,
+  body::before { display: none !important; }
+  #detail-overlay {
+    position: static !important;
+    background: white !important;
+  }
+  #detail-panel {
+    border: none !important;
+    box-shadow: none !important;
+    max-width: 100% !important;
+  }
+  * {
+    color: #111 !important;
+    border-color: #aaa !important;
+    background: white !important;
+    text-shadow: none !important;
+  }
+}
+
+/* ── RESPONSIVE ───────────────────────────────────────────────*/
+@media (max-width: 480px) {
+  .sound-toggle-btn { font-size: 0.52rem; padding: 0.3rem 0.5rem; }
+  #header-sigil-svg-wrap { width: 64px; height: 64px; }
+  #compare-bar { gap: 0.4rem; padding: 0.5rem 0.8rem; }
+  .compare-open-btn, .compare-clear-btn { font-size: 0.58rem; padding: 0.3rem 0.55rem; }
+  .export-modal-panel { padding: 1.3rem; }
+  #insight-bar.open { padding-left: 1rem; padding-right: 2.5rem; }
+  .constellation-title { font-size: 0.62rem; }
+}
