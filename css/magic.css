@@ -3,6 +3,190 @@
    Append-only. Never modify styles.css.
 ══════════════════════════════════════════════════════════════ */
 
+/* ── MODULE A: OPENING INVOCATION SEAL ──────────────────────*/
+#m-invocation-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  background: #08060400;
+  background: radial-gradient(ellipse at center, #0e0a06 0%, #060402 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+#m-invocation-overlay.m-invocation-dismissed {
+  opacity: 0;
+  pointer-events: none;
+}
+#m-invocation-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 38px,
+    rgba(196,169,110,0.018) 38px, rgba(196,169,110,0.018) 39px
+  );
+  pointer-events: none;
+}
+#m-invocation-inner {
+  position: relative;
+  text-align: center;
+  max-width: 580px;
+  padding: 2.5rem 2rem;
+  z-index: 1;
+}
+.m-seal-svg-wrap {
+  width: 160px;
+  height: 160px;
+  margin: 0 auto 2.2rem;
+  position: relative;
+}
+.m-seal-svg-wrap svg {
+  width: 100%;
+  height: 100%;
+}
+.m-seal-ring {
+  transform-origin: center;
+  animation: m-seal-spin 18s linear infinite;
+}
+.m-seal-ring:nth-child(2) { animation-direction: reverse; animation-duration: 26s; }
+.m-seal-ring:nth-child(3) { animation-duration: 40s; }
+@keyframes m-seal-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.m-seal-pulse {
+  animation: m-seal-breathe 4s ease-in-out infinite;
+}
+@keyframes m-seal-breathe {
+  0%, 100% { opacity: 0.75; }
+  50%       { opacity: 0.35; }
+}
+
+.m-invocation-line {
+  animation: m-line-reveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes m-line-reveal {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.m-invocation-label {
+  font-family: var(--font-heading);
+  font-size: 0.62rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--sepia);
+  margin-bottom: 1.4rem;
+  animation-delay: 0.4s;
+}
+.m-invocation-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 4vw, 2.1rem);
+  color: var(--gold-bright);
+  text-shadow: 0 0 60px rgba(201,152,58,0.4);
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+  margin-bottom: 1.2rem;
+  animation-delay: 0.7s;
+}
+.m-invocation-divider {
+  color: var(--gold);
+  opacity: 0.4;
+  letter-spacing: 0.5em;
+  font-size: 1.1rem;
+  margin-bottom: 1.4rem;
+  animation-delay: 1.1s;
+}
+.m-invocation-body {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--faint);
+  line-height: 1.75;
+  margin-bottom: 1rem;
+  animation-delay: 1.4s;
+}
+.m-invocation-body strong {
+  color: var(--parchment);
+  font-style: normal;
+  font-family: var(--font-heading);
+  font-size: 0.84em;
+  letter-spacing: 0.06em;
+}
+.m-invocation-warning {
+  font-family: var(--font-heading);
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rust);
+  opacity: 0.7;
+  margin-bottom: 2rem;
+  animation-delay: 1.8s;
+}
+.m-invocation-enter {
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  background: rgba(201,152,58,0.1);
+  border: 1px solid rgba(201,152,58,0.55);
+  padding: 0.9rem 2.5rem;
+  cursor: pointer;
+  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+  min-height: 52px;
+  animation: m-line-reveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: 2.2s;
+  opacity: 0;
+  animation-fill-mode: both;
+}
+.m-invocation-enter:hover {
+  background: rgba(201,152,58,0.22);
+  border-color: var(--gold-bright);
+  color: var(--gold-bright);
+  box-shadow: 0 0 30px rgba(201,152,58,0.2);
+}
+.m-invocation-subtext {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 0.78rem;
+  color: var(--sepia);
+  margin-top: 1.2rem;
+  animation-delay: 2.6s;
+}
+
+/* ── MODULE D: VIGNETTE & MARGINALIA ─────────────────────────*/
+#m-vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, transparent 40%, rgba(4,2,1,0.55) 100%),
+    radial-gradient(ellipse 100% 50% at 0% 50%, rgba(4,2,1,0.35) 0%, transparent 60%),
+    radial-gradient(ellipse 100% 50% at 100% 50%, rgba(4,2,1,0.35) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 40% at 50% 100%, rgba(4,2,1,0.6) 0%, transparent 70%);
+}
+
+.m-marginalia-glyph {
+  position: fixed;
+  font-size: 0.72rem;
+  color: var(--sepia);
+  opacity: 0.18;
+  pointer-events: none;
+  z-index: 0;
+  animation: m-marginalia-breathe 8s ease-in-out infinite;
+  font-family: var(--font-heading);
+  letter-spacing: 0;
+  user-select: none;
+}
+@keyframes m-marginalia-breathe {
+  0%, 100% { opacity: 0.18; }
+  50%       { opacity: 0.08; }
+}
+
 /* ── MODULE 1: SOUND TOGGLE ──────────────────────────────────*/
 .sound-toggle-btn {
   position: absolute;
@@ -26,10 +210,7 @@
   align-items: center;
   justify-content: center;
 }
-.sound-toggle-btn:hover {
-  color: var(--gold);
-  border-color: var(--border-strong);
-}
+.sound-toggle-btn:hover { color: var(--gold); border-color: var(--border-strong); }
 
 /* ── MODULE 4: HEADER SIGIL SVG ──────────────────────────────*/
 #header-sigil-svg-wrap {
@@ -52,7 +233,47 @@
 }
 @keyframes m-sigil-breathe {
   0%, 100% { opacity: 1; }
-  50%       { opacity: 0.5; }
+  50%       { opacity: 0.45; }
+}
+
+/* ── MODULE B: DANGER MARKS ──────────────────────────────────*/
+.m-danger-card {
+  border-color: rgba(139,26,26,0.5) !important;
+}
+.m-danger-card::before {
+  background: linear-gradient(90deg, transparent, var(--crimson), transparent) !important;
+  opacity: 0.55 !important;
+}
+.m-danger-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(148deg, rgba(139,26,26,0.05) 0%, transparent 60%);
+  pointer-events: none;
+  border-radius: var(--radius);
+}
+.m-danger-card:hover {
+  border-color: rgba(192,80,80,0.6) !important;
+  box-shadow: 0 8px 32px rgba(139,26,26,0.28) !important;
+}
+.m-danger-card .card-name { color: #d8908a !important; }
+
+/* Detail overlay danger state */
+#detail-overlay.m-detail-danger #d-name {
+  color: #d8908a !important;
+  text-shadow: 0 0 40px rgba(139,26,26,0.4) !important;
+}
+
+/* ── MODULE C: TYPEWRITER ─────────────────────────────────────*/
+.m-typewriter::after {
+  content: '|';
+  color: var(--gold);
+  animation: m-cursor-blink 0.6s step-end infinite;
+  margin-left: 1px;
+}
+@keyframes m-cursor-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
 }
 
 /* ── MODULE 3 + 8: LORE / TIMELINE TOOLTIP ───────────────────*/
@@ -66,9 +287,9 @@
   font-family: var(--font-body);
   font-style: italic;
   font-size: 0.88rem;
-  line-height: 1.55;
-  padding: 0.6rem 0.9rem;
-  max-width: 280px;
+  line-height: 1.6;
+  padding: 0.65rem 1rem;
+  max-width: 290px;
   box-shadow: var(--shadow);
   border-radius: var(--radius);
   pointer-events: none;
@@ -76,6 +297,17 @@
   transition: opacity 0.18s ease;
 }
 #lore-tooltip.visible { opacity: 1; }
+#lore-tooltip.m-tooltip-danger {
+  border-top-color: var(--crimson);
+  border-color: rgba(139,26,26,0.45);
+  background: linear-gradient(160deg, #130a0a, var(--ink));
+}
+.m-tooltip-danger-glyph {
+  color: var(--crimson);
+  font-style: normal;
+  margin-right: 0.3rem;
+  font-size: 0.75rem;
+}
 
 /* ── MODULE 5: SEARCH SUGGESTIONS ────────────────────────────*/
 .search-wrap { position: relative; }
@@ -88,7 +320,7 @@
   background: var(--ink);
   border: 1px solid var(--border-strong);
   border-top: none;
-  max-height: 320px;
+  max-height: 340px;
   overflow-y: auto;
   z-index: 1500;
   width: 100%;
@@ -118,6 +350,8 @@
 .suggestion-item:last-child { border-bottom: none; }
 .suggestion-item:hover,
 .suggestion-item.active { background: rgba(201,152,58,0.09); }
+.suggestion-item.suggestion-danger:hover,
+.suggestion-item.suggestion-danger.active { background: rgba(139,26,26,0.12); }
 .suggestion-name {
   font-family: var(--font-heading);
   color: var(--gold-light);
@@ -125,6 +359,7 @@
   letter-spacing: 0.05em;
   flex: 1;
 }
+.suggestion-item.suggestion-danger .suggestion-name { color: #cc9090; }
 .suggestion-level {
   font-family: var(--font-heading);
   font-size: 0.6rem;
@@ -151,11 +386,16 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.m-danger-pip {
+  color: var(--crimson);
+  font-size: 0.7rem;
+  flex-shrink: 0;
+}
 
 /* ── MODULE 6: INSIGHT BAR ────────────────────────────────────*/
 #insight-bar {
-  background: rgba(201,152,58,0.06);
-  border-top: 1px solid rgba(201,152,58,0.4);
+  background: rgba(201,152,58,0.05);
+  border-top: 1px solid rgba(201,152,58,0.35);
   border-bottom: 1px solid var(--border);
   padding: 0 3rem;
   max-height: 0;
@@ -165,21 +405,27 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  gap: 0.8rem;
   position: relative;
 }
 #insight-bar.open {
   max-height: 90px;
-  padding-top: 0.7rem;
-  padding-bottom: 0.7rem;
+  padding-top: 0.65rem;
+  padding-bottom: 0.65rem;
+}
+.insight-glyph {
+  color: var(--gold);
+  opacity: 0.5;
+  font-size: 0.85rem;
+  flex-shrink: 0;
 }
 .insight-text {
   font-family: var(--font-body);
   font-style: italic;
-  font-size: 0.93rem;
+  font-size: 0.92rem;
   color: var(--parchment);
   text-align: center;
-  line-height: 1.5;
+  line-height: 1.55;
 }
 .insight-dismiss {
   position: absolute;
@@ -213,13 +459,13 @@
   font-family: var(--font-body);
   font-style: italic;
   font-size: 0.9rem;
-  padding: 0.8rem 2.5rem 0.8rem 1.2rem;
+  padding: 0.8rem 2.8rem 0.8rem 1.2rem;
   max-width: min(90vw, 600px);
   box-shadow: var(--shadow-deep);
   z-index: 3500;
   opacity: 0;
   transition: opacity 0.5s ease, transform 0.5s ease;
-  line-height: 1.55;
+  line-height: 1.6;
 }
 #concordance-insight-banner.visible {
   opacity: 1;
@@ -229,11 +475,11 @@
   color: var(--gold-light);
   font-style: normal;
   font-family: var(--font-heading);
-  font-size: 0.68rem;
-  letter-spacing: 0.1em;
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
-#concordance-insight-banner .cib-sigil { color: var(--gold); margin-right: 0.4rem; }
+#concordance-insight-banner .cib-sigil { color: var(--gold); margin-right: 0.45rem; }
 #concordance-insight-banner .cib-close {
   position: absolute;
   right: 0.5rem;
@@ -271,7 +517,7 @@
   cursor: pointer;
   border-radius: var(--radius);
   opacity: 0;
-  transition: opacity 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  transition: opacity 0.15s ease, color 0.15s ease;
   z-index: 5;
   padding: 0;
   line-height: 1;
@@ -309,386 +555,168 @@
   gap: 0.4rem;
 }
 .compare-remove {
-  background: transparent;
-  border: none;
-  color: var(--dim);
-  cursor: pointer;
-  font-size: 0.95rem;
-  padding: 0;
-  line-height: 1;
-  transition: color 0.15s;
-  min-width: 20px;
-  min-height: 20px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  background: transparent; border: none; color: var(--dim);
+  cursor: pointer; font-size: 0.95rem; padding: 0; line-height: 1;
+  transition: color 0.15s; min-width: 20px; min-height: 20px;
+  display: inline-flex; align-items: center; justify-content: center;
 }
 .compare-remove:hover { color: var(--gold); }
 .compare-open-btn {
-  font-family: var(--font-heading);
-  font-size: 0.63rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--gold-light);
-  background: transparent;
-  border: 1px solid var(--border-strong);
-  padding: 0.4rem 1rem;
-  cursor: pointer;
-  transition: background 0.2s ease;
-  min-height: 44px;
+  font-family: var(--font-heading); font-size: 0.63rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--gold-light); background: transparent;
+  border: 1px solid var(--border-strong); padding: 0.4rem 1rem; cursor: pointer;
+  transition: background 0.2s ease; min-height: 44px;
 }
 .compare-open-btn:hover { background: rgba(201,152,58,0.12); }
 .compare-clear-btn {
-  font-family: var(--font-heading);
-  font-size: 0.6rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--dim);
-  background: transparent;
-  border: 1px solid var(--border);
-  padding: 0.35rem 0.8rem;
-  cursor: pointer;
-  transition: color 0.2s ease;
-  min-height: 44px;
+  font-family: var(--font-heading); font-size: 0.6rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--dim); background: transparent;
+  border: 1px solid var(--border); padding: 0.35rem 0.8rem; cursor: pointer;
+  transition: color 0.2s ease; min-height: 44px;
 }
 .compare-clear-btn:hover { color: var(--vellum); }
 
 /* ── MODULE 7: COMPARE OVERLAY ───────────────────────────────*/
 #compare-overlay {
-  position: fixed;
-  inset: 0;
+  position: fixed; inset: 0;
   background: rgba(10,8,4,0.97);
   z-index: 4200;
-  display: flex;
-  flex-direction: column;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.35s ease;
-  overflow: hidden;
+  display: flex; flex-direction: column;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.35s ease; overflow: hidden;
 }
 #compare-overlay.open { opacity: 1; pointer-events: all; }
 .compare-overlay-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: flex; align-items: center; justify-content: space-between;
   padding: 1.1rem 1.5rem;
-  border-bottom: 1px solid var(--border-mid);
-  flex-shrink: 0;
+  border-bottom: 1px solid var(--border-mid); flex-shrink: 0;
 }
 .compare-overlay-title {
-  font-family: var(--font-heading);
-  font-size: 0.72rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--gold);
+  font-family: var(--font-heading); font-size: 0.72rem;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold);
 }
 .compare-overlay-close {
-  font-family: var(--font-heading);
-  font-size: 0.62rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--dim);
-  background: transparent;
-  border: 1px solid var(--border);
-  padding: 0.4rem 0.9rem;
-  cursor: pointer;
-  transition: color 0.2s ease;
-  min-height: 44px;
+  font-family: var(--font-heading); font-size: 0.62rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--dim); background: transparent;
+  border: 1px solid var(--border); padding: 0.4rem 0.9rem; cursor: pointer;
+  transition: color 0.2s ease; min-height: 44px;
 }
 .compare-overlay-close:hover { color: var(--vellum); }
 #compare-body { overflow-y: auto; flex: 1; padding: 1.5rem; }
 .compare-grid { display: grid; border: 1px solid var(--border); }
 .compare-col-header {
-  padding: 1rem 1.2rem;
-  border-right: 1px solid var(--border);
+  padding: 1rem 1.2rem; border-right: 1px solid var(--border);
   border-bottom: 2px solid var(--border-mid);
 }
 .compare-col-header:last-child { border-right: none; }
 .compare-col-level {
-  font-family: var(--font-heading);
-  font-size: 0.58rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--dim);
-  margin-bottom: 0.3rem;
+  font-family: var(--font-heading); font-size: 0.58rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--dim); margin-bottom: 0.3rem;
 }
 .compare-col-name {
-  font-family: var(--font-heading);
-  font-size: 1rem;
-  color: var(--gold-light);
-  letter-spacing: 0.04em;
-  margin-bottom: 0.5rem;
+  font-family: var(--font-heading); font-size: 1rem;
+  color: var(--gold-light); letter-spacing: 0.04em; margin-bottom: 0.5rem;
 }
 .compare-col-trads { display: flex; flex-wrap: wrap; gap: 0.25rem; }
 .compare-row-label {
   background: rgba(201,152,58,0.05);
-  border-bottom: 1px solid var(--border);
-  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border); border-top: 1px solid var(--border);
   padding: 0.45rem 1.2rem;
-  font-family: var(--font-heading);
-  font-size: 0.6rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--faint);
+  font-family: var(--font-heading); font-size: 0.6rem;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint);
 }
 .compare-cell {
-  padding: 0.75rem 1.2rem;
-  border-right: 1px solid var(--border);
+  padding: 0.75rem 1.2rem; border-right: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  gap: 0.28rem;
-  font-family: var(--font-body);
-  font-size: 0.9rem;
-  color: var(--vellum);
+  display: flex; flex-direction: column; gap: 0.28rem;
+  font-family: var(--font-body); font-size: 0.9rem; color: var(--vellum);
 }
 .compare-cell:last-child { border-right: none; }
 .compare-dim { color: var(--dim); font-style: italic; }
-.compare-shared {
-  background: rgba(201,152,58,0.16) !important;
-  border-color: var(--gold) !important;
-}
+.compare-shared { background: rgba(201,152,58,0.16) !important; border-color: var(--gold) !important; }
 .compare-trad-tag {
-  font-family: var(--font-heading);
-  font-size: 0.62rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--faint);
-  background: rgba(201,152,58,0.04);
-  border: 1px solid var(--border);
-  padding: 0.18rem 0.45rem;
-  display: inline-block;
-  margin: 2px;
+  font-family: var(--font-heading); font-size: 0.62rem; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--faint);
+  background: rgba(201,152,58,0.04); border: 1px solid var(--border);
+  padding: 0.18rem 0.45rem; display: inline-block; margin: 2px;
 }
 .compare-rel {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-size: 0.82rem;
-  color: var(--faint);
+  display: flex; align-items: center; gap: 0.35rem;
+  font-size: 0.82rem; color: var(--faint);
 }
 
 /* ── MODULE 2: CONSTELLATION OVERLAY ─────────────────────────*/
 #constellation-overlay {
-  position: fixed;
-  inset: 0;
+  position: fixed; inset: 0;
   background: var(--ink-deep);
   z-index: 4600;
-  display: flex;
-  flex-direction: column;
-  opacity: 0;
-  pointer-events: none;
+  display: flex; flex-direction: column;
+  opacity: 0; pointer-events: none;
   transition: opacity 0.35s ease;
 }
 #constellation-overlay.open { opacity: 1; pointer-events: all; }
 .constellation-header {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+  display: flex; align-items: center; gap: 1rem;
   padding: 1rem 1.5rem;
   border-bottom: 1px solid var(--border-mid);
-  flex-shrink: 0;
+  flex-shrink: 0; background: rgba(10,8,4,0.8);
+  backdrop-filter: blur(6px);
 }
 .constellation-title {
-  font-family: var(--font-heading);
-  font-size: 0.72rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--gold);
-  flex: 1;
+  font-family: var(--font-heading); font-size: 0.72rem;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); flex: 1;
 }
 .constellation-entity-label {
-  font-family: var(--font-body);
-  font-style: italic;
-  font-size: 0.85rem;
-  color: var(--faint);
+  font-family: var(--font-body); font-style: italic;
+  font-size: 0.88rem; color: var(--parchment);
 }
 .constellation-close {
-  font-family: var(--font-heading);
-  font-size: 0.62rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--dim);
-  background: transparent;
-  border: 1px solid var(--border);
-  padding: 0.4rem 0.9rem;
-  cursor: pointer;
-  transition: color 0.2s ease;
+  font-family: var(--font-heading); font-size: 0.62rem;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--dim); background: transparent; border: 1px solid var(--border);
+  padding: 0.4rem 0.9rem; cursor: pointer; transition: color 0.2s ease;
   min-height: 44px;
 }
 .constellation-close:hover { color: var(--vellum); }
 #constellation-svg-wrap {
-  flex: 1;
-  position: relative;
-  overflow: hidden;
-  background: radial-gradient(ellipse at center, rgba(26,20,16,0.9) 0%, var(--ink-deep) 100%);
+  flex: 1; position: relative; overflow: hidden;
 }
 #constellation-legend {
-  padding: 0.55rem 1.2rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.7rem;
-  border-top: 1px solid var(--border);
-  flex-shrink: 0;
+  padding: 0.55rem 1.2rem; display: flex; flex-wrap: wrap; gap: 0.7rem;
+  border-top: 1px solid var(--border); flex-shrink: 0;
   background: rgba(10,8,4,0.8);
-  font-family: var(--font-heading);
-  font-size: 0.6rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--dim);
+  font-family: var(--font-heading); font-size: 0.6rem;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--dim);
 }
 .constellation-empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  gap: 1.2rem;
-  color: var(--dim);
-  font-family: var(--font-body);
-  font-style: italic;
-  font-size: 1rem;
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; height: 100%; gap: 1.2rem;
+  color: var(--dim); font-family: var(--font-body); font-style: italic; font-size: 1rem;
 }
-.constellation-empty-glyph {
-  font-size: 3rem;
-  color: var(--sepia);
-  opacity: 0.45;
-}
+.constellation-empty-glyph { font-size: 3rem; color: var(--sepia); opacity: 0.45; }
 .m-edge-tooltip {
   position: absolute;
-  background: var(--ink);
-  border: 1px solid var(--border-mid);
-  color: var(--faint);
-  font-family: var(--font-heading);
-  font-size: 0.6rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 0.25rem 0.55rem;
-  pointer-events: none;
-  z-index: 20;
-  white-space: nowrap;
+  background: var(--ink); border: 1px solid var(--border-mid); color: var(--faint);
+  font-family: var(--font-heading); font-size: 0.6rem; letter-spacing: 0.1em;
+  text-transform: uppercase; padding: 0.25rem 0.55rem;
+  pointer-events: none; z-index: 20; white-space: nowrap;
 }
-
-/* ── MODULE 10: EXPORT MODAL ─────────────────────────────────*/
-#export-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 5500;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(10,8,4,0.86);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s ease;
-}
-#export-modal.open { opacity: 1; pointer-events: all; }
-.export-modal-panel {
-  background: var(--ink);
-  border: 1px solid var(--border-strong);
-  border-top: 2px solid var(--gold);
-  width: 360px;
-  max-width: 94vw;
-  padding: 1.8rem;
-  box-shadow: var(--shadow-deep);
-}
-.export-modal-label {
-  font-family: var(--font-heading);
-  font-size: 0.58rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--faint);
-  margin-bottom: 0.25rem;
-}
-#export-modal-name {
-  font-family: var(--font-display);
-  font-size: 1.15rem;
-  color: var(--gold-bright);
-  margin-bottom: 1.4rem;
-  letter-spacing: 0.04em;
-  display: block;
-}
-.export-options { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1rem; }
-.export-option-btn {
-  font-family: var(--font-heading);
-  font-size: 0.65rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--vellum);
-  background: transparent;
-  border: 1px solid var(--border-mid);
-  padding: 0.7rem 1.1rem;
-  cursor: pointer;
-  transition: background 0.18s ease, border-color 0.18s ease;
-  text-align: left;
-  min-height: 44px;
-}
-.export-option-btn:hover {
-  background: rgba(201,152,58,0.09);
-  border-color: var(--border-strong);
-}
-#export-feedback {
-  font-family: var(--font-body);
-  font-style: italic;
-  font-size: 0.84rem;
-  color: var(--gold-light);
-  text-align: center;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  min-height: 1.3rem;
-  margin-bottom: 0.4rem;
-}
-.export-close-row {
-  text-align: center;
-  margin-top: 0.2rem;
-}
-.export-close-btn {
-  font-family: var(--font-heading);
-  font-size: 0.6rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--dim);
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 0.3rem 0;
-  transition: color 0.2s ease;
-  min-height: 32px;
-}
-.export-close-btn:hover { color: var(--vellum); }
 
 /* ── MODULE 8: TIMELINE ENHANCEMENTS ─────────────────────────*/
 #tl-jump-strip {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-  padding-top: 0.85rem;
-  margin-top: 0.35rem;
+  display: flex; flex-wrap: wrap; gap: 0.45rem;
+  padding-top: 0.85rem; margin-top: 0.35rem;
 }
 .tl-jump-btn {
-  font-family: var(--font-heading);
-  font-size: 0.58rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--dim);
-  background: transparent;
-  border: 1px solid var(--border);
-  padding: 0.3rem 0.65rem;
-  cursor: pointer;
-  transition: color 0.2s ease, border-color 0.2s ease;
-  min-height: 32px;
+  font-family: var(--font-heading); font-size: 0.58rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--dim); background: transparent;
+  border: 1px solid var(--border); padding: 0.3rem 0.65rem; cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease; min-height: 32px;
 }
-.tl-jump-btn:hover {
-  color: var(--gold);
-  border-color: var(--border-mid);
-}
+.tl-jump-btn:hover { color: var(--gold); border-color: var(--border-mid); }
 .tl-era-count {
-  font-family: var(--font-heading);
-  font-size: 0.52rem;
-  color: var(--sepia);
-  display: block;
-  margin-top: 0.15rem;
-  letter-spacing: 0.06em;
+  font-family: var(--font-heading); font-size: 0.52rem; color: var(--sepia);
+  display: block; margin-top: 0.15rem; letter-spacing: 0.06em;
 }
 #tl-scroll-wrap { cursor: grab; user-select: none; }
 #tl-scroll-wrap.is-grabbing { cursor: grabbing; }
@@ -700,28 +728,27 @@
   background: rgba(201,152,58,0.16);
 }
 
+/* ── LEGEND ITEMS ─────────────────────────────────────────────*/
+.legend-item {
+  display: flex; align-items: center; gap: 0.4rem;
+  font-family: var(--font-heading); font-size: 0.6rem;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--dim);
+}
+.legend-dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+}
+
 /* ── PRINT STYLES ─────────────────────────────────────────────*/
 @media print {
   #nav, .detail-actions, #graph-overlay, #constellation-overlay,
-  #compare-overlay, #compare-bar, #export-modal, #insight-bar,
+  #compare-overlay, #compare-bar, #insight-bar,
   #concordance-insight-banner, #lore-tooltip, #search-suggestions,
   .sound-toggle-btn, #header-sigil-svg-wrap, #tl-jump-strip,
+  #m-invocation-overlay, #m-vignette, .m-marginalia-glyph,
   body::before { display: none !important; }
-  #detail-overlay {
-    position: static !important;
-    background: white !important;
-  }
-  #detail-panel {
-    border: none !important;
-    box-shadow: none !important;
-    max-width: 100% !important;
-  }
-  * {
-    color: #111 !important;
-    border-color: #aaa !important;
-    background: white !important;
-    text-shadow: none !important;
-  }
+  #detail-overlay { position: static !important; background: white !important; }
+  #detail-panel { border: none !important; box-shadow: none !important; max-width: 100% !important; }
+  * { color: #111 !important; border-color: #aaa !important; background: white !important; text-shadow: none !important; }
 }
 
 /* ── RESPONSIVE ───────────────────────────────────────────────*/
@@ -730,7 +757,10 @@
   #header-sigil-svg-wrap { width: 64px; height: 64px; }
   #compare-bar { gap: 0.4rem; padding: 0.5rem 0.8rem; }
   .compare-open-btn, .compare-clear-btn { font-size: 0.58rem; padding: 0.3rem 0.55rem; }
-  .export-modal-panel { padding: 1.3rem; }
   #insight-bar.open { padding-left: 1rem; padding-right: 2.5rem; }
   .constellation-title { font-size: 0.62rem; }
+  .m-marginalia-glyph { display: none; }
+  #m-invocation-inner { padding: 2rem 1.2rem; }
+  .m-invocation-title { font-size: 1.5rem; }
+  .m-seal-svg-wrap { width: 110px; height: 110px; }
 }
