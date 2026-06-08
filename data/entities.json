@@ -7451,6 +7451,905 @@
       ],
       "research_notes": "Walter Otto's Dionysus: Myth and Cult (1933) is the foundational modern scholarly treatment — he argues Dionysus represents the principle of life itself, 'the one who comes' from outside all normal categories. The Bacchae is considered by many scholars the greatest Greek tragedy precisely because it refuses to let the audience safely condemn either Dionysus or Pentheus — both are simultaneously right and catastrophically wrong.",
       "completeness_score": 90
+    },
+    {
+      "id": "yam-nahar",
+      "canonical_name": "Yam / Nahar",
+      "aliases": [
+        "Judge Nahar",
+        "Prince Yam",
+        "Lord of the Sea",
+        "Ruler of Rivers"
+      ],
+      "tradition_vectors": {
+        "canaanite": {
+          "name": "Yam / Nahar",
+          "class": "Sea God / Chaos / Primordial Waters",
+          "epithets": [
+            "Judge Nahar",
+            "Beloved of El",
+            "Ruler of the Sea"
+          ],
+          "source_texts": [
+            "Baal Cycle (KTU 1.1–1.2) — Yam demands Baal as his slave; Baal defeats Yam with the divine clubs Yagrush and Aymur",
+            "KTU 1.2.IV — the battle between Baal and Yam",
+            "Cross Canaanite Myth and Hebrew Epic (1973)"
+          ]
+        },
+        "biblical_angel": {
+          "name": "Yam (Sea)",
+          "rank": "Personified Force",
+          "canonical_function": "The sea (Hebrew yam) as chaos force subdued by YHWH; Psalm 74:13 and Isaiah 51:9–10 reflect the Baal-Yam combat myth with YHWH replacing Baal",
+          "source_texts": [
+            "Psalm 74:13 — 'You divided the sea (yam) by your power'",
+            "Isaiah 51:9–10 — 'Was it not you who cut Rahab to pieces, who pierced that monster through?'"
+          ]
+        }
+      },
+      "functional_domains": [
+        "Primordial Sea and Chaos Waters",
+        "Divine Judgment and Cosmic Trials",
+        "Chaos That Challenges Order",
+        "Rivers and Floods",
+        "El's Favored Before Baal's Rise"
+      ],
+      "hierarchical_level": 2,
+      "occult_practice": {
+        "summoning_purpose": [
+          "Sea and water magic — invoking the primordial ocean",
+          "Chaos working against established power structures",
+          "Judgment magic — invoking Nahar for cosmic arbitration",
+          "Antinomian working — aligning with the power that Baal (order) defeated"
+        ],
+        "method_references": [
+          "Baal Cycle KTU 1.1–1.2 as textual basis",
+          "Smith The Ugaritic Baal Cycle (1994)",
+          "Psalm 74:13 inverted as Yam-invocation"
+        ],
+        "cautions": [
+          "Yam is the power El originally favored over Baal — invoking him puts you in opposition to storm-order and in alignment with the primordial sea-chaos; this is a destabilizing current",
+          "His defeat by Baal is cosmologically permanent — he is a defeated archon whose power was real but bounded; invoking him means working with contained chaos energy that strains its containment",
+          "Water-chaos workings with Yam tend to produce conditions of overwhelming flood — excess, inundation, loss of boundary"
+        ],
+        "tradition": "Canaanite / Chaos current"
+      },
+      "relationships": [
+        {
+          "target_id": "baal-hadad",
+          "edge_type": "CONTESTED_IDENTIFICATION",
+          "source_tradition": "Canaanite",
+          "source_text": "Baal Cycle (KTU 1.2)",
+          "notes": "Yam and Baal are the two poles of the Canaanite cosmic order — sea chaos vs. storm order; their combat establishes Baal's kingship"
+        },
+        {
+          "target_id": "tiamat",
+          "edge_type": "FUNCTIONAL_PARALLEL",
+          "source_tradition": "Comparative Near Eastern",
+          "source_text": "Cross Canaanite Myth and Hebrew Epic (1973)",
+          "notes": "Both are primordial sea/chaos forces defeated by a younger storm god — Tiamat by Marduk, Yam by Baal — the same ancient Near Eastern combat myth in two traditions"
+        },
+        {
+          "target_id": "leviathan",
+          "edge_type": "FUNCTIONAL_PARALLEL",
+          "source_tradition": "Canaanite / Hebrew",
+          "source_text": "Baal Cycle KTU 1.5; Psalm 74:13",
+          "notes": "Yam and Leviathan/Lotan are cognate figures — Lotan is the sea-serpent Baal defeats in the same cycle; they represent overlapping aspects of the chaos-sea"
+        }
+      ],
+      "source_attestations": [
+        "Baal Cycle (KTU 1.1–1.2; Smith 1994)",
+        "Psalm 74:13",
+        "Cross Canaanite Myth and Hebrew Epic (1973)",
+        "Day God's Conflict with the Dragon and the Sea (1985)"
+      ],
+      "research_notes": "John Day's God's Conflict with the Dragon and the Sea (1985) is the definitive scholarly treatment of the Yam-Baal-Leviathan complex and its relationship to Hebrew Bible imagery. The Baal Cycle's combat myth directly influenced the language of the Psalms — the 'divine clubs Yagrush and Aymur' (Driver and Chase) are the weapons that subdue Yam, and their echoes appear in YHWH's 'arm' subduing the sea in Isaiah.",
+      "completeness_score": 82
+    },
+    {
+      "id": "hades",
+      "canonical_name": "Hades",
+      "aliases": [
+        "Pluto",
+        "The Unseen One",
+        "Dis",
+        "Clymenus",
+        "Rich One"
+      ],
+      "tradition_vectors": {
+        "greek": {
+          "name": "Hades",
+          "class": "Underworld King / Death",
+          "epithets": [
+            "The Wealthy",
+            "The Invisible",
+            "He Who Has Many Guests"
+          ],
+          "source_texts": [
+            "Homer Iliad — Hades as lord of the dead",
+            "Homeric Hymn to Demeter — abduction of Persephone; the myth of seasons",
+            "Plato Phaedo — Socrates discusses the underworld before death",
+            "Virgil Aeneid VI — Aeneas's descent; Pluto as Roman form"
+          ]
+        },
+        "roman": {
+          "name": "Pluto / Dis",
+          "interpretatio_type": "Direct",
+          "source_texts": [
+            "Virgil Aeneid VI",
+            "Ovid Metamorphoses V — Proserpina abduction"
+          ]
+        },
+        "kabbalistic": {
+          "sephira": "Binah / Qliphoth gateway",
+          "divine_name": "YHVH Elohim",
+          "source_texts": [
+            "Death-mother correspondence"
+          ]
+        },
+        "planetary": {
+          "planet": "Pluto / Saturn",
+          "metal": "Lead / Obsidian",
+          "color": "Black",
+          "day_of_week": "Saturday"
+        }
+      },
+      "functional_domains": [
+        "Kingdom of the Dead",
+        "Riches from Below (gems, metals from the earth)",
+        "Inevitability and Impartiality of Death",
+        "Hospitality of the Final Guest",
+        "The Underworld Geography (Styx, Elysium, Tartarus)"
+      ],
+      "hierarchical_level": 2,
+      "occult_practice": {
+        "summoning_purpose": [
+          "Necromancy and communication with the dead",
+          "Wealth-magic — accessing the riches of the deep earth",
+          "Death workings and underworld initiation",
+          "Impartiality and justice in extreme situations — Hades judges with absolute equality",
+          "Saturn-Pluto current in modern astrology-magic"
+        ],
+        "method_references": [
+          "Homeric Hymn to Demeter — the myth structure as ritual template",
+          "Plato Phaedo — philosophical preparation for death-encounter workings",
+          "Orphic gold tablets — the Eleusinian passwords for the underworld",
+          "Virgil Aeneid VI as nekuia (underworld descent) template"
+        ],
+        "cautions": [
+          "Hades does not release guests easily — his domain is permanent residence for the dead; opening his gateway requires careful protocols for closing it afterward",
+          "He abducted Persephone and kept her even after Zeus's intervention; he will retain anything brought into his realm without explicit release conditions established beforehand",
+          "Unlike many death deities, Hades is genuinely impartial — he cannot be bribed or charmed (only Orpheus's music and Psyche's beauty briefly moved him); emotional appeals do not work with him",
+          "The Orphic tradition requires a specific password at the White Cypress / Mnemosyne spring — entering the underworld current without proper orientation risks losing oneself in it"
+        ],
+        "tradition": "Greek / Orphic / Necromantic"
+      },
+      "relationships": [
+        {
+          "target_id": "persephone",
+          "edge_type": "FUNCTIONAL_PARALLEL",
+          "source_tradition": "Greek",
+          "source_text": "Homeric Hymn to Demeter",
+          "notes": "Hades and Persephone are the co-rulers of the underworld — she is the queen he abducted, who became his equal partner in governance of the dead"
+        },
+        {
+          "target_id": "osiris",
+          "edge_type": "FUNCTIONAL_PARALLEL",
+          "source_tradition": "Comparative",
+          "source_text": "Plutarch De Iside et Osiride",
+          "notes": "Plutarch identifies Hades/Pluto with Osiris as parallel lords of the dead and the underworld"
+        }
+      ],
+      "source_attestations": [
+        "Homeric Hymn to Demeter",
+        "Homer Iliad IX.158",
+        "Plato Phaedo",
+        "Virgil Aeneid VI"
+      ],
+      "research_notes": "Hades is unique among Greek gods in that he has almost no myth cycle of his own — he rules, he is impartial, he is invisible (his helmet of invisibility is his primary attribute). His Roman name Pluto ('the Wealthy') reflects the belief that all wealth comes from below the earth. The Eleusinian Mysteries, the most important religious institution of classical Greece, centered on the Hades-Persephone myth.",
+      "completeness_score": 82
+    },
+    {
+      "id": "persephone",
+      "canonical_name": "Persephone",
+      "aliases": [
+        "Kore",
+        "Proserpina",
+        "The Maiden",
+        "Queen of the Underworld",
+        "Dread Persephone"
+      ],
+      "tradition_vectors": {
+        "greek": {
+          "name": "Persephone / Kore",
+          "class": "Underworld Queen / Spring Goddess",
+          "epithets": [
+            "The Dread",
+            "The Maiden",
+            "Bringer of Fruit"
+          ],
+          "source_texts": [
+            "Homeric Hymn to Demeter — the complete myth of her abduction and return",
+            "Hesiod Theogony 913 — daughter of Zeus and Demeter",
+            "Orphic Hymn 29 (To Persephone)",
+            "Ovid Metamorphoses V.341–571 (as Proserpina)"
+          ]
+        },
+        "roman": {
+          "name": "Proserpina",
+          "interpretatio_type": "Direct",
+          "source_texts": [
+            "Ovid Metamorphoses V"
+          ]
+        },
+        "kabbalistic": {
+          "sephira": "Malkuth / Binah",
+          "divine_name": "Adonai ha-Aretz",
+          "source_texts": [
+            "Queen of the underworld / earth — Malkuth as both daughter and queen"
+          ]
+        },
+        "hermetic": {
+          "role": "Persephone as the soul (psyche) that descends into matter (underworld) and returns — the initiatory descent as spiritual model",
+          "corpus_hermeticum_ref": "The descent-and-return structure underlies all Hermetic initiation theory"
+        }
+      },
+      "functional_domains": [
+        "Seasonal Cycle — her return causes spring",
+        "Initiation Through Descent and Return",
+        "Queen of the Dead",
+        "The Bridge Between Living and Dead",
+        "Mystery Initiation — Eleusinian Mysteries"
+      ],
+      "hierarchical_level": 2,
+      "occult_practice": {
+        "summoning_purpose": [
+          "Eleusinian mystery rites — initiation through symbolic death and rebirth",
+          "Spring and seasonal magic",
+          "Communication with the dead — she is the most accessible of the underworld rulers",
+          "Feminine initiation magic — the maiden who becomes queen through ordeal",
+          "Shadow work — voluntary descent into the underworld of the psyche"
+        ],
+        "method_references": [
+          "Homeric Hymn to Demeter as primary ritual text",
+          "Orphic gold tablets — Persephone's name as underworld password",
+          "Eleusinian Mysteries (reconstructed from Mylonas Eleusis and the Eleusinian Mysteries, 1961)",
+          "Jung Psychology and Religion — the Kore myth as anima archetype"
+        ],
+        "cautions": [
+          "Her myth is one of abduction, trauma, and adaptation to sovereignty — working with her in descent rites means working with the archetype of the unwilling initiation; she will take you somewhere you did not plan to go",
+          "Eating in the underworld bound her to it permanently (pomegranate seeds); practitioners working with her should be careful about what 'nourishment' they accept during the working — any gift received in the underworld state creates a bond",
+          "She is simultaneously maiden and dread queen — her dual nature means she does not always respond as the gentle spring goddess; in winter (when she reigns below) she is at full underworld power"
+        ],
+        "tradition": "Greek / Eleusinian Mystery / Jungian"
+      },
+      "relationships": [
+        {
+          "target_id": "hades",
+          "edge_type": "FUNCTIONAL_PARALLEL",
+          "source_tradition": "Greek",
+          "source_text": "Homeric Hymn to Demeter",
+          "notes": "Wife of Hades — her union with him established her as co-ruler of the underworld; her seasonal return to the upper world is what creates the cycle of growth and death"
+        },
+        {
+          "target_id": "isis",
+          "edge_type": "SYNCRETIZED_WITH",
+          "source_tradition": "Hellenistic syncretism",
+          "source_text": "Plutarch De Iside et Osiride",
+          "notes": "Isis and Persephone are linked by Plutarch as parallel descent-and-return goddesses — both descend to recover what was lost to death"
+        }
+      ],
+      "source_attestations": [
+        "Homeric Hymn to Demeter (ca. 7th c. BCE)",
+        "Orphic Hymn 29",
+        "Mylonas Eleusis and the Eleusinian Mysteries (1961)",
+        "Jung Psychology and Religion (CW 11)"
+      ],
+      "research_notes": "The Homeric Hymn to Demeter is one of the most beautiful and theologically rich texts in Greek literature. The Eleusinian Mysteries, which dramatized Persephone's descent and return, were practiced continuously for nearly 2,000 years (ca. 1600 BCE – 392 CE). Initiates were sworn to secrecy; we know only that those who underwent initiation lost their fear of death.",
+      "completeness_score": 86
+    },
+    {
+      "id": "marbas",
+      "canonical_name": "Marbas",
+      "aliases": [
+        "Barbas",
+        "Great President of Hell",
+        "He Who Reveals Hidden Things"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Marbas",
+          "rank": "President",
+          "legions": 36,
+          "seal_reference": "Ars Goetia Seal #5",
+          "primary_functions": [
+            "Answering truly about hidden or secret things",
+            "Causing and curing diseases",
+            "Teaching mechanical arts",
+            "Transforming people into other shapes"
+          ],
+          "grimoire_source": "Ars Goetia (Lemegeton); Pseudomonarchia Daemonum (Weyer 1577)"
+        },
+        "planetary": {
+          "planet": "Sun",
+          "color": "Gold / Yellow",
+          "metal": "Gold"
+        }
+      },
+      "functional_domains": [
+        "Disease — both Causing and Healing",
+        "Revelation of Hidden Things",
+        "Mechanical Arts and Engineering",
+        "Transformation of Form",
+        "The Great Lion President"
+      ],
+      "hierarchical_level": 6,
+      "occult_practice": {
+        "summoning_purpose": [
+          "Healing workings — Marbas is one of the primary Goetic healing spirits",
+          "Diagnosing hidden illness — he reveals what is truly wrong",
+          "Engineering and mechanical problems — technical innovation",
+          "Revealing concealed information about health and body"
+        ],
+        "method_references": [
+          "Ars Goetia Seal #5 and full conjuration (Mathers/Crowley 1904)",
+          "Damon Brand Demons of Magick (2018) — accessible Goetic healing approach",
+          "Ford Luciferian Goetia (2004)"
+        ],
+        "cautions": [
+          "He causes as readily as he cures — invoking him for healing without precise intent may activate his disease-causing function instead",
+          "His transformation power (changing human shapes) is not metaphorical in the grimoire tradition; practitioners have reported unexpected physical changes during sustained work with him",
+          "As a President, he governs 36 legions — he requires formal presidential-level address and protocol"
+        ],
+        "tradition": "Goetic / Solomonic / Healing Magic"
+      },
+      "relationships": [
+        {
+          "target_id": "bael",
+          "edge_type": "FUNCTIONAL_PARALLEL",
+          "source_tradition": "Goetic hierarchy",
+          "source_text": "Ars Goetia",
+          "notes": "Both are among the earliest entries in the Goetia — Bael (#1 King) and Marbas (#5 President) represent different ranks in the infernal hierarchy"
+        }
+      ],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer 1577)",
+        "Mathers/Crowley The Goetia (1904)"
+      ],
+      "research_notes": "Marbas's dual function as both disease-causer and healer reflects the ancient understanding of divine disease — the same supernatural force that afflicts can also cure, depending on ritual context and intent. This pattern appears across cultures (Shamash, Sekhmet, Apollo). His great lion form (he appears as a great lion before taking human shape) connects him to solar symbolism.",
+      "completeness_score": 72
+    },
+    {
+      "id": "valefor",
+      "canonical_name": "Valefor",
+      "aliases": [
+        "Malaphar",
+        "Valefar",
+        "Duke of Thieves"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Valefor",
+          "rank": "Duke",
+          "legions": 10,
+          "seal_reference": "Ars Goetia Seal #6",
+          "primary_functions": [
+            "Tempting men to theft",
+            "Leading thieves to the gallows if permitted",
+            "Familiar spirit to thieves",
+            "Maintaining friendship while it lasts"
+          ],
+          "grimoire_source": "Ars Goetia (Lemegeton); Pseudomonarchia Daemonum (Weyer 1577)"
+        }
+      },
+      "functional_domains": [
+        "Theft and Larceny",
+        "Familiar Spirit of Thieves and Con Artists",
+        "Temptation to Take What is Not Yours",
+        "False Friendship",
+        "Leading Those on Crooked Paths to Ruin"
+      ],
+      "hierarchical_level": 6,
+      "occult_practice": {
+        "summoning_purpose": [
+          "Protection of thieves and those taking what is hidden",
+          "Invoking the archetype of the trickster-thief",
+          "Retrieving what was taken from you",
+          "Breaking locks — literal and metaphorical barriers"
+        ],
+        "method_references": [
+          "Ars Goetia Seal #6",
+          "Mathers/Crowley The Goetia (1904)"
+        ],
+        "cautions": [
+          "The Goetia states Valefor 'maintains friendship with men a good while, but at last leads them to the gallows' — he is specifically a spirit of short-term benefit for long-term destruction",
+          "His domain is theft — any working with him tends to activate the law of reciprocal theft; what you take with his help will be taken from you in turn",
+          "Do not form a long-term working relationship with Valefor; the grimoire is explicit that he only 'maintains friendship while it lasts' — and it does not last"
+        ],
+        "tradition": "Goetic / Trickster current"
+      },
+      "relationships": [
+        {
+          "target_id": "bael",
+          "edge_type": "FUNCTIONAL_PARALLEL",
+          "source_tradition": "Goetic hierarchy",
+          "source_text": "Ars Goetia",
+          "notes": "Sixth in the Goetic sequence; like Bael he is one of the foundational Goetic dukes"
+        }
+      ],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer 1577)"
+      ],
+      "research_notes": "Valefor appears as a lion with an ass's head, roaring. His clear moral coding — he leads thieves to the gallows — is among the most didactically moralizing of all Goetic descriptions, suggesting his entry may have been influenced by clerical scribes who wanted to warn against his use.",
+      "completeness_score": 65
+    },
+    {
+      "id": "adamas-gnostic",
+      "canonical_name": "Adamas (Gnostic Heavenly Adam)",
+      "aliases": [
+        "Heavenly Adam",
+        "Perfect Man",
+        "The Immovable Race",
+        "Pigeradamas"
+      ],
+      "tradition_vectors": {
+        "gnostic": {
+          "name": "Adamas / Pigeradamas",
+          "system": "Sethian",
+          "classification": "Aeon",
+          "source_texts": [
+            "Apocryphon of John (NHC II.1) — Adamas as the perfect image of the Invisible Spirit",
+            "Gospel of the Egyptians (NHC III.2) — 'Great invisible Spirit... Adamas of light'",
+            "Trimorphic Protennoia (NHC XIII.1)",
+            "Allogenes (NHC XI.3)"
+          ]
+        },
+        "kabbalistic": {
+          "sephira": "Kether / Adam Kadmon",
+          "divine_name": "Ehyeh",
+          "source_texts": [
+            "Lurianic Kabbalah — Adam Kadmon as cosmic template; Adamas as Gnostic parallel"
+          ]
+        }
+      },
+      "functional_domains": [
+        "The Perfect Heavenly Archetype of Humanity",
+        "The Immovable Race — the Seed of Seth",
+        "Light Above the Demiurge",
+        "The Image of the Invisible Spirit",
+        "Template for the Perfect Gnostic (Pneumatic)"
+      ],
+      "hierarchical_level": 2,
+      "occult_practice": {
+        "summoning_purpose": [
+          "Invoking the perfect divine image within the self — the Higher Self working",
+          "Sethian gnosis — identifying with the perfect human archetype above the Demiurge's creation",
+          "Accessing the Immovable Race — the lineage of pneumatic beings",
+          "Contemplative Gnostic practice aimed at realizing the divine template"
+        ],
+        "method_references": [
+          "Apocryphon of John (NHC II.1) — Adamas's hymn of praise",
+          "Gospel of the Egyptians invocations",
+          "Turner Sethian Gnosticism and the Platonic Tradition (2001)"
+        ],
+        "cautions": [
+          "Working with Adamas involves invoking the perfect divine image — this sets up an enormous contrast with the practitioner's actual state; the gap between the archetype and the self can produce severe spiritual depression (kenosis without pleroma)",
+          "Adamas as the template for the 'Immovable Race' is an elitist Gnostic concept — it identifies some humans as pneumatic (spirit-bearing) and others as not; this theological assumption can produce dangerous spiritual arrogance"
+        ],
+        "tradition": "Sethian Gnosticism / Contemplative"
+      },
+      "relationships": [
+        {
+          "target_id": "adam",
+          "edge_type": "FUNCTIONAL_PARALLEL",
+          "source_tradition": "Gnostic / Biblical",
+          "source_text": "Apocryphon of John (NHC II.1)",
+          "notes": "Adamas is the heavenly archetype of which the biblical Adam is the earthly (and fallen) copy — the Gnostic distinction between the perfect heavenly human and the Demiurge's material imitation"
+        },
+        {
+          "target_id": "barbelo",
+          "edge_type": "DESCENDED_FROM",
+          "source_tradition": "Sethian Gnostic",
+          "source_text": "Apocryphon of John",
+          "notes": "Adamas is placed in the first aeon by the Invisible Spirit with Barbelo — he is the perfect human within the Pleroma, before any fall or corruption"
+        }
+      ],
+      "source_attestations": [
+        "Apocryphon of John (NHC II.1)",
+        "Gospel of the Egyptians (NHC III.2)",
+        "Turner Sethian Gnosticism and the Platonic Tradition (2001)"
+      ],
+      "research_notes": "Pigeradamas ('Adam of Light' in Coptic — pige = light, adamas = Adam) is the perfect heavenly human of Sethian cosmology, placed in the first aeon (Harmozel) before the fall. He is the ancestor of Seth and through Seth of the entire 'immovable race' — the Sethian community's self-identification as pneumatic beings above the Demiurge's control.",
+      "completeness_score": 74
+    },
+    {
+      "id": "nuit-thelema",
+      "canonical_name": "Nuit",
+      "aliases": [
+        "Nu",
+        "Night",
+        "Infinite Space",
+        "Lady of the Starry Heaven",
+        "The Goddess"
+      ],
+      "tradition_vectors": {
+        "hermetic": {
+          "role": "Nuit as the infinite space and infinite stars — the totality of all possibility; the first speaker in Liber AL vel Legis; she is the circle, Hadit is the point within",
+          "corpus_hermeticum_ref": "Liber AL vel Legis I:1–66 — the direct speech of Nuit"
+        },
+        "egyptian": {
+          "name": "Nut",
+          "theology": "Heliopolitan",
+          "ennead_position": "Daughter of Shu and Tefnut; wife of Geb; mother of Osiris, Isis, Set, Nephthys",
+          "class": "Sky Goddess",
+          "source_texts": [
+            "Pyramid Texts — Nut as the night sky who swallows and rebirths the sun",
+            "Book of the Dead vignettes — Nut arching over the earth as the sky",
+            "Coffin Texts — Nut as the mother who receives the dead"
+          ]
+        },
+        "kabbalistic": {
+          "sephira": "Kether / Ain Soph",
+          "divine_name": "Ehyeh",
+          "source_texts": [
+            "Crowley's Thelemic Kabbalah — Nuit as Ain Soph (Infinite)",
+            "Crowley 777 and Other Qabalistic Writings"
+          ]
+        }
+      },
+      "functional_domains": [
+        "Infinite Space and All Stars",
+        "Night Sky and Cosmic Totality",
+        "Unlimited Love — 'Love is the law, love under will'",
+        "The Goddess of Thelemic Religion",
+        "Every Point of Light is a Star (individual sovereignty)"
+      ],
+      "hierarchical_level": 1,
+      "occult_practice": {
+        "summoning_purpose": [
+          "Thelemic ritual — Star Ruby, Star Sapphire, and Liber Resh",
+          "Invocation of the infinite — dissolving individual identity into cosmic space",
+          "Night sky workings and stellar magic",
+          "Nuit as the supreme Goddess for all Thelemic ceremonial work",
+          "Egyptian Nut as sky and rebirth goddess in Kemetic practice"
+        ],
+        "method_references": [
+          "Liber AL vel Legis Chapter I (Crowley 1909) — Nuit's direct speech",
+          "Liber Resh — four daily adorations of the sun as approach to Nuit",
+          "Star Ruby (Liber XXV) — Thelemic banishing/invoking ritual",
+          "Crowley Magick in Theory and Practice (1930)"
+        ],
+        "cautions": [
+          "Nuit is infinite space — invocations aimed at full dissolution into her produce genuine ego-death; practitioners should have a clear anchor (Hadit, the individual point) before invoking the infinite",
+          "Crowley's Thelemic system requires the complementary Hadit to balance Nuit — invoking Nuit alone without Hadit can produce formlessness without the activating principle",
+          "The injunction 'Every man and every woman is a star' creates individualist theology; practitioners who use Nuit to justify all actions as 'True Will' without genuine self-examination risk spiritual narcissism"
+        ],
+        "tradition": "Thelema / A∴A∴ / OTO / Kemetic"
+      },
+      "relationships": [
+        {
+          "target_id": "osiris",
+          "edge_type": "DESCENDED_FROM",
+          "source_tradition": "Egyptian",
+          "source_text": "Heliopolitan theology",
+          "notes": "As Egyptian Nut, she is mother of Osiris, Isis, Set, and Nephthys — the sky-mother who births and receives the dead"
+        },
+        {
+          "target_id": "hadit",
+          "edge_type": "FUNCTIONAL_PARALLEL",
+          "source_tradition": "Thelema",
+          "source_text": "Liber AL vel Legis I–II",
+          "notes": "Nuit and Hadit are the supreme Thelemic polarity — infinite space (Nuit) and the infinite point of pure experience (Hadit); their union produces Ra-Hoor-Khuit"
+        }
+      ],
+      "source_attestations": [
+        "Liber AL vel Legis (The Book of the Law), Chapter I (Crowley 1909)",
+        "Pyramid Texts (as Egyptian Nut)",
+        "Crowley Magick in Theory and Practice (1930)",
+        "DuQuette The Magick of Aleister Crowley (2003)"
+      ],
+      "research_notes": "Nuit was received by Crowley through Aiwass in Cairo on April 8–10, 1904 — the dictation of Liber AL vel Legis that became the central text of Thelema. Her identity is simultaneously a development of Egyptian Nut (the sky goddess) and an entirely new theological concept (infinite space as divine feminine). Lon Milo DuQuette's work provides the most accessible scholarly treatment of her Thelemic theology.",
+      "completeness_score": 85
+    },
+    {
+      "id": "hadit",
+      "canonical_name": "Hadit",
+      "aliases": [
+        "Had",
+        "The Point",
+        "The Winged Globe",
+        "The Snake That Gives Knowledge"
+      ],
+      "tradition_vectors": {
+        "hermetic": {
+          "role": "Hadit as the infinite point — the flame that burns in every heart; the complement to Nuit (space); in Liber AL II he speaks as the innermost self, the pure will, the burning point of consciousness",
+          "corpus_hermeticum_ref": "Liber AL vel Legis II:1–80 — the direct speech of Hadit"
+        },
+        "egyptian": {
+          "name": "Hadit (Behdety)",
+          "theology": "Edfu",
+          "class": "Winged Solar Disk",
+          "source_texts": [
+            "Edfu temple inscriptions — Behdety the winged solar disk",
+            "Crowley identified the Stele of Revealing's figure Hadit with the winged solar globe"
+          ]
+        },
+        "kabbalistic": {
+          "sephira": "Chokmah / Kether point",
+          "divine_name": "Yah",
+          "source_texts": [
+            "Crowley's Thelemic Kabbalah — Hadit as the primordial point of will"
+          ]
+        }
+      },
+      "functional_domains": [
+        "The Individual Point of Pure Will",
+        "The Snake of Knowledge / Consciousness",
+        "Hidden Self — 'I am the secret Serpent coiled about to spring'",
+        "Pure Experience Without Object",
+        "Complement to Nuit — Without Him She is Barren"
+      ],
+      "hierarchical_level": 1,
+      "occult_practice": {
+        "summoning_purpose": [
+          "True Will working — invoking Hadit to clarify and activate one's True Will",
+          "Pure consciousness practices — the point of awareness before thought",
+          "Kundalini-analog workings — the serpent coiled at the base",
+          "Thelemic initiation — discovering the inner Hadit"
+        ],
+        "method_references": [
+          "Liber AL vel Legis Chapter II — Hadit's direct speech",
+          "Star Ruby and Star Sapphire (Crowley) — Thelemic ritual",
+          "Crowley Magick in Theory and Practice (1930)"
+        ],
+        "cautions": [
+          "Hadit is the innermost self as infinite point — contact with him collapses all distance between self and absolute; this is permanently transformative and cannot be reversed",
+          "His statement 'I am the Snake that giveth Knowledge and Delight and bright glory' echoes the Eden serpent; working with him is working with the serpentine self-knowledge that traditional religion forbids",
+          "Without Nuit to contextualize him, Hadit as pure will can produce ruthless self-assertion without cosmic context — the Thelemic balance requires both"
+        ],
+        "tradition": "Thelema / A∴A∴"
+      },
+      "relationships": [
+        {
+          "target_id": "nuit-thelema",
+          "edge_type": "FUNCTIONAL_PARALLEL",
+          "source_tradition": "Thelema",
+          "source_text": "Liber AL vel Legis I–II",
+          "notes": "Nuit and Hadit are the supreme Thelemic polarity — their union produces Ra-Hoor-Khuit, the lord of the aeon; they cannot be properly understood separately"
+        },
+        {
+          "target_id": "lucifer",
+          "edge_type": "FUNCTIONAL_PARALLEL",
+          "source_tradition": "Luciferian / Thelemic comparative",
+          "source_text": "Ford Adversarial Light (2009)",
+          "notes": "Hadit as serpent of knowledge occupies a similar position to Lucifer as light-bringer — both are the inner principle of self-knowledge and illumination through transgression"
+        }
+      ],
+      "source_attestations": [
+        "Liber AL vel Legis Chapter II (Crowley 1909)",
+        "Crowley Magick in Theory and Practice (1930)",
+        "DuQuette The Magick of Aleister Crowley (2003)"
+      ],
+      "research_notes": "Hadit's identification in the Stele of Revealing (Egyptian New Kingdom stele, now in Cairo Museum) involves Crowley's idiosyncratic reading of 'Hadit' from the Egyptian 'Behdety' (the winged solar disk of Edfu). The theological polarity of Nuit/Hadit is one of the most sophisticated constructions in modern Western esotericism — space and point, infinite and singular, goddess and god of the interior.",
+      "completeness_score": 80
+    },
+    {
+      "id": "tamiel",
+      "canonical_name": "Tamiel",
+      "aliases": [
+        "Tumiel",
+        "Perfection of God",
+        "Watcher of the Deep Waters"
+      ],
+      "tradition_vectors": {
+        "enochian": {
+          "name": "Tamiel",
+          "classification": "Fallen Watcher",
+          "enoch_book": "1 Enoch",
+          "sin_or_role": "Taught the sons of men the spirits of the deep and the signs of the earth (geomancy / hydrological divination); one of the 20 chiefs of the 200 Watchers; sometimes associated with the depths of the sea",
+          "chapter_reference": "1 Enoch 6:7; 8:3"
+        }
+      },
+      "functional_domains": [
+        "Deep Waters and the Abyss",
+        "Geomancy and Earth Signs",
+        "Forbidden Knowledge of Subterranean Forces",
+        "Water Divination",
+        "The Perfection Trapped in Matter"
+      ],
+      "hierarchical_level": 4,
+      "occult_practice": {
+        "summoning_purpose": [
+          "Water divination and hydrological magic",
+          "Deep earth and geomantic workings",
+          "Accessing the Watcher current through its water/depth aspect",
+          "Deep-sea and abyssal magic"
+        ],
+        "method_references": [
+          "1 Enoch 6:7 as textual basis",
+          "Geomancy manuals — connection to his earth-signs teaching"
+        ],
+        "cautions": [
+          "His domain (deep waters, subterranean forces) connects to the unconscious depths — working with him surfaces material from the deepest layers of the psyche without preparation or warning",
+          "As a Watcher he is bound; invoking him partially releases his binding and may draw the attention of the forces that imprisoned him"
+        ],
+        "tradition": "Enochian / Watcher Current / Water Magic"
+      },
+      "relationships": [
+        {
+          "target_id": "semjaza",
+          "edge_type": "COMMANDS",
+          "source_tradition": "Enochian",
+          "source_text": "1 Enoch 6:7",
+          "notes": "Listed among the 20 Watcher chiefs who took the oath at Mount Hermon"
+        }
+      ],
+      "source_attestations": [
+        "1 Enoch 6:7",
+        "VanderKam 1 Enoch: A Commentary (2001)"
+      ],
+      "research_notes": "Tamiel's name means 'Perfection of God' (tam = perfect/complete + El = God) — an ironic name for a fallen angel who taught forbidden knowledge. His connection to deep waters and earth signs makes him one of the most earth-and-water oriented of the Watcher chiefs, contrasting with the more celestial or metallurgical specializations of Azazel and Kokabiel.",
+      "completeness_score": 58
+    },
+    {
+      "id": "varuna",
+      "canonical_name": "Varuna",
+      "aliases": [
+        "Lord of the Cosmic Waters",
+        "Guardian of Rita",
+        "All-Seeing God",
+        "The Binder"
+      ],
+      "tradition_vectors": {
+        "hindu": {
+          "name": "Varuna",
+          "class": "Vedic Sovereign / Cosmic Order / Ocean",
+          "tradition": "Vedic",
+          "epithets": [
+            "The All-Seeing",
+            "Guardian of Rita (Cosmic Order)",
+            "The One with a Thousand Eyes"
+          ],
+          "source_texts": [
+            "Rigveda — numerous hymns to Varuna alongside Mitra",
+            "Rigveda VII.86 — Vasishtha's great prayer of release from Varuna's bonds",
+            "Atharva Veda — Varuna's binding and releasing of sinners",
+            "Dumézil Mitra-Varuna (1948) — definitive comparative study"
+          ]
+        },
+        "kabbalistic": {
+          "sephira": "Binah / Da'ath",
+          "source_texts": [
+            "Cosmic law / justice correspondence"
+          ]
+        }
+      },
+      "functional_domains": [
+        "Cosmic Order (Rita) and Moral Law",
+        "The Heavenly Ocean and Night Sky",
+        "Binding of Sinners with His Noose",
+        "Release of Those Who Confess and Repent",
+        "The Thousand Eyes of the All-Seeing"
+      ],
+      "hierarchical_level": 1,
+      "occult_practice": {
+        "summoning_purpose": [
+          "Cosmic justice and moral law invocation",
+          "Release from guilt, sin, and spiritual binding",
+          "Water and ocean magic",
+          "Binding enemies with Varuna's noose (pasha)",
+          "Truth-speaking and oath-enforcement"
+        ],
+        "method_references": [
+          "Rigveda VII.86 (Vasishtha's prayer) — primary supplication text",
+          "Atharva Veda binding spells — Varuna's noose as ritual tool",
+          "Dumézil Mitra-Varuna — comparative framework for his power"
+        ],
+        "cautions": [
+          "Varuna is the all-seeing — he perceives every transgression; approaching him while carrying unconfessed moral debt is extremely unwise; he binds the guilty with his noose regardless of whether the ritual is performed correctly",
+          "His noose (pasha) is invisible and tightens over time; practitioners who invoke him against enemies may find the noose eventually turns to their own hidden transgressions",
+          "He is a god of release as well as binding — the Rigveda hymns show that sincere confession and repentance move him; he is not implacable like some death gods, but he is thorough"
+        ],
+        "tradition": "Vedic / Reconstructionist"
+      },
+      "relationships": [
+        {
+          "target_id": "indra",
+          "edge_type": "FUNCTIONAL_PARALLEL",
+          "source_tradition": "Vedic",
+          "source_text": "Rigveda; Dumézil Mitra-Varuna (1948)",
+          "notes": "Varuna and Indra represent the two poles of Vedic sovereignty — Varuna as the sovereign of cosmic order and night (Dumézil's 'magical sovereignty'), Indra as the warrior-king of battle and day; Dumézil's comparative framework makes them the Vedic instance of the universal Indo-European dual sovereignty"
+        }
+      ],
+      "source_attestations": [
+        "Rigveda VII.86",
+        "Atharva Veda",
+        "Dumézil Mitra-Varuna (1948)",
+        "Oldenberg Religion of the Veda (1894)"
+      ],
+      "research_notes": "Georges Dumézil's comparative study (1948) established Varuna and Mitra as the Vedic representatives of his universal Indo-European 'dual sovereignty' — magical/nocturnal/binding sovereignty (Varuna) vs. legal/diurnal/contractual sovereignty (Mitra). Varuna's decline in the Puranic period (replaced by Shiva as cosmic sovereign) is one of the most dramatic shifts in Hindu religious history. In the Puranas he becomes merely the god of the sea.",
+      "completeness_score": 80
+    },
+    {
+      "id": "ningishzida",
+      "canonical_name": "Ningishzida",
+      "aliases": [
+        "Lord of the Good Tree",
+        "Lord of the Underworld",
+        "God of the Serpent",
+        "Gishzida"
+      ],
+      "tradition_vectors": {
+        "mesopotamian": {
+          "name": "Ningishzida",
+          "class": "Underworld / Vegetation / Serpent God",
+          "epithets": [
+            "Lord of the Underworld Throne",
+            "The Faithful Underworld God",
+            "He Whose Tree is Good"
+          ],
+          "source_texts": [
+            "Adapa and the South Wind — Ningishzida and Tammuz guard the gate of Anu",
+            "Gudea cylinders (ca. 2100 BCE) — Ningishzida as personal deity of the ruler Gudea of Lagash",
+            "Descent of Inanna — the gatekeeper of the underworld"
+          ]
+        },
+        "hermetic": {
+          "role": "Ningishzida's serpent-and-staff iconography (two intertwined serpents on a staff — the earliest known caduceus image, ca. 2100 BCE) is the direct ancestor of the Hermetic caduceus",
+          "corpus_hermeticum_ref": "Caduceus of Hermes — the two-serpent staff that is Hermes' attribute derives from Ningishzida's iconography"
+        }
+      },
+      "functional_domains": [
+        "The Serpent and Healing (Caduceus origin)",
+        "Vegetation and Growth from Below",
+        "Underworld Gate Guardianship",
+        "Personal Divine Patron of Kings",
+        "Two Serpents Rising — Kundalini-analog"
+      ],
+      "hierarchical_level": 4,
+      "occult_practice": {
+        "summoning_purpose": [
+          "Caduceus / serpent-healing magic — the most ancient healing-serpent current",
+          "Gate-guardian workings — opening and closing spiritual gates",
+          "Underworld passage — Ningishzida as the gatekeeper of deeper realms",
+          "Kundalini and serpent-power work",
+          "Personal patron deity invocation"
+        ],
+        "method_references": [
+          "Gudea Cylinders (ca. 2100 BCE) — the dream-vision texts in which Ningishzida instructs the king",
+          "Adapa and the South Wind (ANET 101–103) — Ningishzida as heavenly gatekeeper",
+          "Serpent-staff iconography as ritual object"
+        ],
+        "cautions": [
+          "As underworld gatekeeper he can open passages that are difficult to close; gate-working with him requires explicit opening and closing protocols",
+          "His two-serpent staff is a power of both healing and venom — the serpent that heals and the serpent that kills are the same serpent in different aspects"
+        ],
+        "tradition": "Sumerian / Healing / Serpent Current"
+      },
+      "relationships": [
+        {
+          "target_id": "dumuzi",
+          "edge_type": "FUNCTIONAL_PARALLEL",
+          "source_tradition": "Sumerian",
+          "source_text": "Adapa and the South Wind",
+          "notes": "Ningishzida and Dumuzi/Tammuz both guard the gate of Anu in the Adapa myth — two dying-and-rising underworld gods serving as cosmic gatekeepers"
+        },
+        {
+          "target_id": "hermes-trismegistus",
+          "edge_type": "FUNCTIONAL_PARALLEL",
+          "source_tradition": "Comparative / Hermetic",
+          "source_text": "Iconographic parallel",
+          "notes": "Ningishzida's caduceus (two intertwined serpents on a staff, from the Gudea cup, ca. 2100 BCE) is the earliest known image of what became the Hermetic caduceus — making him the iconographic ancestor of Hermes Trismegistus's primary attribute"
+        }
+      ],
+      "source_attestations": [
+        "Gudea Cylinders (ca. 2100 BCE; ETCSL 2.1.7)",
+        "Adapa and the South Wind (ANET 101–103)",
+        "Black & Green Gods, Demons and Symbols of Ancient Mesopotamia (1992)"
+      ],
+      "research_notes": "The libation cup of Gudea (ca. 2100 BCE, now in the Louvre) depicts two intertwined serpents on a staff flanked by dragons — the earliest known representation of the caduceus motif. This makes Ningishzida's iconographic tradition the oldest known ancestor of one of Western civilization's most enduring medical and magical symbols. His personal role as Gudea of Lagash's protective deity (and the detailed dream-vision texts recording their relationship) make this one of the most intimate god-king relationships documented in Mesopotamian literature.",
+      "completeness_score": 76
     }
   ]
 }
