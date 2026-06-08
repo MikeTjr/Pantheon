@@ -5,14 +5,69 @@
 
 'use strict';
 
+// ─── SAFE GLOBALS — app.js uses const/let (not var), so they're
+//     in the shared script scope but NOT on window.
+//     These helpers safely reference them by name.
+function M_DB()            { return (typeof DB !== 'undefined') ? DB : null; }
+function M_EDGE_COLORS()   { return (typeof EDGE_COLORS !== 'undefined') ? EDGE_COLORS : {}; }
+function M_NODE_COLORS()   { return (typeof NODE_COLORS !== 'undefined') ? NODE_COLORS : {}; }
+function M_TRAD_LABELS()   { return (typeof TRADITION_LABELS !== 'undefined') ? TRADITION_LABELS : {}; }
+function M_LEVEL_LABELS()  { return (typeof LEVEL_LABELS !== 'undefined') ? LEVEL_LABELS : {}; }
+function M_FUSE()          { return (typeof fuse !== 'undefined') ? fuse : null; }
+
 // ─── READY GUARD ──────────────────────────────────────────────
 function M_whenReady(fn, retries) {
   retries = retries || 0;
-  if (window.DB && window.DB.entities && window.DB.entities.length > 0) {
+  var db = M_DB();
+  if (db && db.entities && db.entities.length > 0) {
     fn();
   } else if (retries < 120) {
     setTimeout(function() { M_whenReady(fn, retries + 1); }, 100);
   }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  MODULE A — OPENING INVOCATION SEAL
+// ══════════════════════════════════════════════════════════════
+function M_initInvocation() {
+  var overlay = document.getElementById('m-invocation-overlay');
+  if (!overlay) return;
+
+  try {
+    if (localStorage.getItem('pantheon_invocation_seen') === '1') {
+      overlay.remove();
+      return;
+    }
+  } catch(e) {}
+
+  document.body.style.overflow = 'hidden';
+
+  // Animate seal rings
+  var rings = overlay.querySelectorAll('.m-seal-ring');
+  rings.forEach(function(r, i) {
+    r.style.animationDelay = (i * 0.18) + 's';
+  });
+
+  // Reveal text staggered
+  var lines = overlay.querySelectorAll('.m-invocation-line');
+  lines.forEach(function(l, i) {
+    l.style.animationDelay = (1.2 + i * 0.55) + 's';
+    l.style.opacity = '0';
+    l.style.animation = 'none';
+    setTimeout(function() {
+      l.style.animation = '';
+      l.style.animationDelay = '';
+    }, 50);
+  });
+}
+
+function M_dismissInvocation() {
+  var overlay = document.getElementById('m-invocation-overlay');
+  if (!overlay) return;
+  overlay.classList.add('m-invocation-dismissed');
+  document.body.style.overflow = '';
+  try { localStorage.setItem('pantheon_invocation_seen', '1'); } catch(e) {}
+  setTimeout(function() { overlay.remove(); }, 900);
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -25,7 +80,7 @@ var M_droneOsc = null;
 var M_droneLfo = null;
 var M_noiseSource = null;
 var M_chimeIndex = 0;
-var M_CHIME_FREQS = [261.63, 329.63, 392, 493.88, 587.33]; // C4 E4 G4 B4 D5
+var M_CHIME_FREQS = [261.63, 329.63, 392, 493.88, 587.33];
 
 function M_initSound() {
   var header = document.getElementById('header');
@@ -68,10 +123,8 @@ function M_toggleSound() {
 
 function M_startDrone() {
   if (M_droneOsc) return;
-
   var reverb = M_createReverb();
   reverb.connect(M_masterGain);
-
   var osc = M_audioCtx.createOscillator();
   var droneGain = M_audioCtx.createGain();
   osc.type = 'sine';
@@ -81,7 +134,6 @@ function M_startDrone() {
   droneGain.connect(reverb);
   osc.start();
   M_droneOsc = osc;
-
   var lfo = M_audioCtx.createOscillator();
   var lfoGain = M_audioCtx.createGain();
   lfo.type = 'sine';
@@ -100,19 +152,15 @@ function M_startNoise() {
   var buf = M_audioCtx.createBuffer(1, len, rate);
   var data = buf.getChannelData(0);
   for (var i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1);
-
   var src = M_audioCtx.createBufferSource();
   src.buffer = buf;
   src.loop = true;
-
   var lpf = M_audioCtx.createBiquadFilter();
   lpf.type = 'lowpass';
   lpf.frequency.value = 280;
   lpf.Q.value = 0.5;
-
   var ng = M_audioCtx.createGain();
   ng.gain.value = 0.035;
-
   src.connect(lpf);
   lpf.connect(ng);
   ng.connect(M_masterGain);
@@ -178,17 +226,17 @@ function M_playBell() {
 var M_SIGILS = {
   biblical_angel: '<polygon points="50,14 58,36 82,36 63,50 70,74 50,60 30,74 37,50 18,36 42,36" stroke="var(--gold)" stroke-width="1.2" fill="none" opacity="0.7"/><polygon points="50,86 42,64 18,64 37,50 30,26 50,40 70,26 63,50 82,64 58,64" stroke="var(--gold)" stroke-width="0.8" fill="none" opacity="0.4"/>',
   enochian: '<rect x="22" y="44" width="56" height="12" stroke="var(--gold)" stroke-width="1.2" fill="none" opacity="0.65"/><rect x="44" y="22" width="12" height="56" stroke="var(--gold)" stroke-width="1.2" fill="none" opacity="0.65"/><rect x="12" y="44" width="12" height="12" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.5"/><rect x="76" y="44" width="12" height="12" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.5"/><rect x="44" y="12" width="12" height="12" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.5"/><rect x="44" y="76" width="12" height="12" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.5"/>',
-  kabbalistic: '<circle cx="50" cy="10" r="4" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.65"/><circle cx="76" cy="26" r="3.5" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.6"/><circle cx="24" cy="26" r="3.5" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.6"/><circle cx="76" cy="46" r="3.5" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.6"/><circle cx="24" cy="46" r="3.5" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.6"/><circle cx="50" cy="56" r="4" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.65"/><circle cx="76" cy="68" r="3.5" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.6"/><circle cx="24" cy="68" r="3.5" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.6"/><circle cx="50" cy="78" r="3.5" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.6"/><circle cx="50" cy="92" r="4" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.65"/><line x1="50" y1="10" x2="76" y2="26" stroke="var(--gold)" stroke-width="0.7" opacity="0.38"/><line x1="50" y1="10" x2="24" y2="26" stroke="var(--gold)" stroke-width="0.7" opacity="0.38"/><line x1="76" y1="26" x2="24" y2="26" stroke="var(--gold)" stroke-width="0.7" opacity="0.38"/><line x1="76" y1="26" x2="76" y2="46" stroke="var(--gold)" stroke-width="0.7" opacity="0.38"/><line x1="24" y1="26" x2="24" y2="46" stroke="var(--gold)" stroke-width="0.7" opacity="0.38"/><line x1="76" y1="26" x2="50" y2="56" stroke="var(--gold)" stroke-width="0.7" opacity="0.38"/><line x1="24" y1="26" x2="50" y2="56" stroke="var(--gold)" stroke-width="0.7" opacity="0.38"/><line x1="76" y1="46" x2="24" y2="46" stroke="var(--gold)" stroke-width="0.7" opacity="0.38"/><line x1="76" y1="46" x2="50" y2="56" stroke="var(--gold)" stroke-width="0.7" opacity="0.38"/><line x1="24" y1="46" x2="50" y2="56" stroke="var(--gold)" stroke-width="0.7" opacity="0.38"/><line x1="50" y1="56" x2="76" y2="68" stroke="var(--gold)" stroke-width="0.7" opacity="0.38"/><line x1="50" y1="56" x2="24" y2="68" stroke="var(--gold)" stroke-width="0.7" opacity="0.38"/><line x1="50" y1="56" x2="50" y2="78" stroke="var(--gold)" stroke-width="0.7" opacity="0.38"/><line x1="76" y1="68" x2="24" y2="68" stroke="var(--gold)" stroke-width="0.7" opacity="0.38"/><line x1="76" y1="68" x2="50" y2="78" stroke="var(--gold)" stroke-width="0.7" opacity="0.38"/><line x1="24" y1="68" x2="50" y2="78" stroke="var(--gold)" stroke-width="0.7" opacity="0.38"/><line x1="50" y1="78" x2="50" y2="92" stroke="var(--gold)" stroke-width="0.7" opacity="0.38"/>',
-  hermetic: '<line x1="50" y1="14" x2="50" y2="88" stroke="var(--gold)" stroke-width="1.5" opacity="0.65"/><path d="M50,30 Q36,38 50,48 Q64,58 50,68 Q36,78 50,86" stroke="var(--gold)" stroke-width="1.3" fill="none" opacity="0.6"/><path d="M50,30 Q64,38 50,48 Q36,58 50,68 Q64,78 50,86" stroke="var(--gold)" stroke-width="1.3" fill="none" opacity="0.6"/><path d="M38,22 Q28,16 24,24 Q28,32 38,28" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.55"/><path d="M62,22 Q72,16 76,24 Q72,32 62,28" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.55"/><circle cx="50" cy="21" r="5.5" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.55"/>',
+  kabbalistic: '<circle cx="50" cy="10" r="4" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.65"/><circle cx="76" cy="26" r="3.5" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.6"/><circle cx="24" cy="26" r="3.5" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.6"/><circle cx="76" cy="46" r="3.5" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.6"/><circle cx="24" cy="46" r="3.5" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.6"/><circle cx="50" cy="56" r="4" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.65"/><circle cx="76" cy="68" r="3.5" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.6"/><circle cx="24" cy="68" r="3.5" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.6"/><circle cx="50" cy="78" r="3.5" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.6"/><circle cx="50" cy="92" r="4" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.65"/><line x1="50" y1="10" x2="76" y2="26" stroke="var(--gold)" stroke-width="0.7" opacity="0.38"/><line x1="50" y1="10" x2="24" y2="26" stroke="var(--gold)" stroke-width="0.7" opacity="0.38"/><line x1="76" y1="26" x2="24" y2="26" stroke="var(--gold)" stroke-width="0.7" opacity="0.38"/><line x1="76" y1="26" x2="50" y2="56" stroke="var(--gold)" stroke-width="0.7" opacity="0.38"/><line x1="24" y1="26" x2="50" y2="56" stroke="var(--gold)" stroke-width="0.7" opacity="0.38"/><line x1="50" y1="56" x2="76" y2="68" stroke="var(--gold)" stroke-width="0.7" opacity="0.38"/><line x1="50" y1="56" x2="24" y2="68" stroke="var(--gold)" stroke-width="0.7" opacity="0.38"/><line x1="76" y1="68" x2="50" y2="78" stroke="var(--gold)" stroke-width="0.7" opacity="0.38"/><line x1="24" y1="68" x2="50" y2="78" stroke="var(--gold)" stroke-width="0.7" opacity="0.38"/><line x1="50" y1="78" x2="50" y2="92" stroke="var(--gold)" stroke-width="0.7" opacity="0.38"/>',
+  hermetic: '<line x1="50" y1="14" x2="50" y2="88" stroke="var(--gold)" stroke-width="1.5" opacity="0.65"/><path d="M50,30 Q36,38 50,48 Q64,58 50,68 Q36,78 50,86" stroke="var(--gold)" stroke-width="1.3" fill="none" opacity="0.6"/><path d="M50,30 Q64,38 50,48 Q36,58 50,68 Q64,78 50,86" stroke="var(--gold)" stroke-width="1.3" fill="none" opacity="0.6"/><circle cx="50" cy="21" r="5.5" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.55"/>',
   gnostic: '<circle cx="50" cy="50" r="33" stroke="var(--gold)" stroke-width="1.5" fill="none" opacity="0.65"/><path d="M50,17 Q18,28 17,50 Q18,72 50,83 Q54,80 56,77 Q34,68 33,50 Q34,32 56,25 Z" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.4"/><circle cx="56" cy="19" r="3.5" fill="var(--gold)" fill-opacity="0.35" stroke="var(--gold)" stroke-width="0.8" opacity="0.7"/>',
   greek: '<polygon points="50,14 55,38 80,21 62,43 88,50 62,57 80,79 55,62 50,86 45,62 20,79 38,57 12,50 38,43 20,21 45,38" stroke="var(--gold)" stroke-width="1.3" fill="none" opacity="0.65"/>',
-  roman: '<ellipse cx="50" cy="50" rx="30" ry="38" stroke="var(--gold)" stroke-width="1.3" fill="none" opacity="0.55"/><path d="M30,30 Q21,27 19,34 Q23,39 31,37" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.55"/><path d="M70,30 Q79,27 81,34 Q77,39 69,37" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.55"/><path d="M30,42 Q21,39 19,46 Q23,51 31,49" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.48"/><path d="M70,42 Q79,39 81,46 Q77,51 69,49" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.48"/><path d="M30,55 Q21,52 19,59 Q23,64 31,62" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.42"/><path d="M70,55 Q79,52 81,59 Q77,64 69,62" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.42"/><path d="M36,66 Q28,63 27,70 Q31,75 38,73" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.38"/><path d="M64,66 Q72,63 73,70 Q69,75 62,73" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.38"/>',
+  roman: '<ellipse cx="50" cy="50" rx="30" ry="38" stroke="var(--gold)" stroke-width="1.3" fill="none" opacity="0.55"/>',
   egyptian: '<circle cx="50" cy="30" r="15" stroke="var(--gold)" stroke-width="1.5" fill="none" opacity="0.65"/><line x1="50" y1="45" x2="50" y2="88" stroke="var(--gold)" stroke-width="1.5" opacity="0.65"/><line x1="32" y1="62" x2="68" y2="62" stroke="var(--gold)" stroke-width="1.5" opacity="0.65"/>',
   mesopotamian: '<polygon points="50,12 57,36 80,21 65,43 90,50 65,57 80,79 57,64 50,88 43,64 20,79 35,57 10,50 35,43 20,21 43,36" stroke="var(--gold)" stroke-width="1.3" fill="none" opacity="0.65"/><circle cx="50" cy="50" r="9" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.4"/>',
-  canaanite: '<path d="M24,50 A26,26 0 1,1 50,24 A26,26 0 0,0 24,50" stroke="var(--gold)" stroke-width="1.5" fill="none" opacity="0.65"/><polygon points="74,22 77,32 70,27 80,27 73,32" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.6"/>',
+  canaanite: '<path d="M24,50 A26,26 0 1,1 50,24 A26,26 0 0,0 24,50" stroke="var(--gold)" stroke-width="1.5" fill="none" opacity="0.65"/>',
   hindu: '<text x="50" y="68" text-anchor="middle" font-size="54" font-family="serif" fill="none" stroke="var(--gold)" stroke-width="0.9" opacity="0.6">ॐ</text>',
-  goetic: '<circle cx="50" cy="50" r="37" stroke="var(--gold)" stroke-width="1.3" fill="none" opacity="0.65"/><polygon points="50,13 83.5,58.5 16.5,58.5" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.55"/><polygon points="50,87 83.5,41.5 16.5,41.5" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.4"/>',
-  islamic: '<polygon points="50,14 61,36 86,35 68,54 76,78 50,65 24,78 32,54 14,35 39,36" stroke="var(--gold)" stroke-width="1.3" fill="none" opacity="0.65"/><polygon points="50,26 59,42 78,42 64,53 70,70 50,60 30,70 36,53 22,42 41,42" stroke="var(--gold)" stroke-width="0.8" fill="none" opacity="0.38"/>',
+  goetic: '<circle cx="50" cy="50" r="37" stroke="var(--crimson)" stroke-width="1.3" fill="none" opacity="0.75"/><polygon points="50,13 83.5,58.5 16.5,58.5" stroke="var(--crimson)" stroke-width="1" fill="none" opacity="0.6"/><polygon points="50,87 83.5,41.5 16.5,41.5" stroke="var(--crimson)" stroke-width="1" fill="none" opacity="0.45"/>',
+  islamic: '<polygon points="50,14 61,36 86,35 68,54 76,78 50,65 24,78 32,54 14,35 39,36" stroke="var(--gold)" stroke-width="1.3" fill="none" opacity="0.65"/>',
   planetary: '<polygon points="50,12 79.7,26.3 87,58.5 66.5,84.2 33.5,84.2 13,58.5 20.3,26.3" stroke="var(--gold)" stroke-width="1" fill="none" opacity="0.38"/><polygon points="50,12 66.5,84.2 13,58.5 87,58.5 20.3,26.3 79.7,26.3 33.5,84.2" stroke="var(--gold)" stroke-width="1.3" fill="none" opacity="0.65"/>'
 };
 
@@ -197,12 +245,10 @@ var M_currentSigilTrad = 'all';
 function M_initSigils() {
   var header = document.getElementById('header');
   if (!header) return;
-
   var wrap = document.createElement('div');
   wrap.id = 'header-sigil-svg-wrap';
   wrap.innerHTML = '<svg id="header-sigil-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>';
   header.appendChild(wrap);
-
   document.querySelectorAll('.filter-btn').forEach(function(btn) {
     btn.addEventListener('click', function() {
       M_showSigil(btn.dataset.filter || 'all');
@@ -222,6 +268,40 @@ function M_showSigil(tradition) {
 }
 
 // ══════════════════════════════════════════════════════════════
+//  MODULE B — DANGER MARKS (fallen/goetic visual treatment)
+// ══════════════════════════════════════════════════════════════
+var M_FALLEN_TRADITIONS = ['goetic'];
+var M_FALLEN_EDGE_TYPES  = ['FALLEN_FORM_OF', 'POLEMIC_EQUIVALENT'];
+
+function M_isDangerous(entity) {
+  if (!entity) return false;
+  var tv = entity.tradition_vectors || {};
+  for (var i = 0; i < M_FALLEN_TRADITIONS.length; i++) {
+    if (tv[M_FALLEN_TRADITIONS[i]]) return true;
+  }
+  var rels = entity.relationships || [];
+  for (var j = 0; j < rels.length; j++) {
+    if (M_FALLEN_EDGE_TYPES.indexOf(rels[j].edge_type) >= 0) return true;
+  }
+  return false;
+}
+
+function M_applyDangerMarks() {
+  var db = M_DB();
+  if (!db) return;
+  document.querySelectorAll('.entity-card:not([data-danger-ok])').forEach(function(card) {
+    card.setAttribute('data-danger-ok', '1');
+    var nameEl = card.querySelector('.card-name');
+    if (!nameEl) return;
+    var name = nameEl.textContent.trim();
+    var entity = db.entities.find(function(e) { return e.canonical_name === name; });
+    if (entity && M_isDangerous(entity)) {
+      card.classList.add('m-danger-card');
+    }
+  });
+}
+
+// ══════════════════════════════════════════════════════════════
 //  MODULE 2 — CONSTELLATION RELATIONSHIP MAP
 // ══════════════════════════════════════════════════════════════
 function M_initConstellation() {
@@ -231,19 +311,41 @@ function M_initConstellation() {
     M_injectDetailExtras(id);
     M_playBell();
     M_showEntityInsightForId(id);
+    M_triggerTypewriter(id);
+    M_applyDangerMarks();
   };
+
   var _origClose = window.closeDetail;
   window.closeDetail = function() {
     _origClose();
     M_hideInsightBar();
   };
+
+  // Add Connections button to nav
+  M_addConstellationNavBtn();
+}
+
+function M_addConstellationNavBtn() {
+  var nav = document.getElementById('nav');
+  if (!nav || document.getElementById('m-nav-connections')) return;
+  var btn = document.createElement('button');
+  btn.className = 'nav-btn';
+  btn.id = 'm-nav-connections';
+  btn.textContent = '✦ Connections';
+  btn.addEventListener('click', function() {
+    var db = M_DB();
+    if (!db) return;
+    var pool = db.entities.filter(function(e) { return (e.relationships || []).length > 0; });
+    if (!pool.length) return;
+    var pick = pool[Math.floor(Math.random() * Math.min(10, pool.length))];
+    M_openConstellation(pick.id);
+  });
+  nav.appendChild(btn);
 }
 
 function M_injectDetailExtras(entityId) {
-  var oldC = document.getElementById('m-constellation-btn');
-  var oldE = document.getElementById('m-export-btn');
-  if (oldC) oldC.remove();
-  if (oldE) oldE.remove();
+  var old = document.getElementById('m-constellation-btn');
+  if (old) old.remove();
 
   var actions = document.querySelector('.detail-actions');
   if (!actions) return;
@@ -252,40 +354,34 @@ function M_injectDetailExtras(entityId) {
   cBtn.id = 'm-constellation-btn';
   cBtn.className = 'detail-graph-btn';
   cBtn.setAttribute('aria-label', 'Open Constellation Map');
-  cBtn.textContent = '⊕ Constellation Map';
+  cBtn.textContent = '✦ Connections';
   cBtn.addEventListener('click', function() { M_openConstellation(entityId); });
-
-  var eBtn = document.createElement('button');
-  eBtn.id = 'm-export-btn';
-  eBtn.className = 'detail-graph-btn';
-  eBtn.setAttribute('aria-label', 'Export entity data');
-  eBtn.textContent = '⊡ Export';
-  eBtn.addEventListener('click', function() { M_openExportModal(entityId); });
 
   var closeBtn = actions.querySelector('.detail-close');
   if (closeBtn) {
     actions.insertBefore(cBtn, closeBtn);
-    actions.insertBefore(eBtn, closeBtn);
   } else {
     actions.appendChild(cBtn);
-    actions.appendChild(eBtn);
   }
 }
 
 function M_openConstellation(entityId) {
-  if (!window.DB || !window.DB.entities) return;
+  var db = M_DB();
+  if (!db) return;
   var overlay = document.getElementById('constellation-overlay');
   if (!overlay) return;
 
   var lbl = overlay.querySelector('.constellation-entity-label');
   if (lbl) {
-    var ent = window.DB.entities.find(function(e) { return e.id === entityId; });
+    var ent = db.entities.find(function(e) { return e.id === entityId; });
     if (ent) lbl.textContent = ent.canonical_name;
   }
 
   overlay.classList.add('open');
   document.body.style.overflow = 'hidden';
-  M_buildConstellationGraph(entityId);
+
+  // Small delay so the overlay has rendered dimensions
+  setTimeout(function() { M_buildConstellationGraph(entityId); }, 60);
 }
 
 function M_closeConstellation() {
@@ -299,7 +395,9 @@ function M_closeConstellation() {
 }
 
 function M_buildConstellationGraph(entityId) {
-  var entity = window.DB.entities.find(function(e) { return e.id === entityId; });
+  var db = M_DB();
+  if (!db) return;
+  var entity = db.entities.find(function(e) { return e.id === entityId; });
   if (!entity) return;
 
   var wrap = document.getElementById('constellation-svg-wrap');
@@ -314,9 +412,12 @@ function M_buildConstellationGraph(entityId) {
   }
 
   if (typeof d3 === 'undefined') {
-    wrap.innerHTML = '<div class="constellation-empty"><span class="constellation-empty-glyph">◉</span><p>Graph library not yet loaded. Please try again.</p></div>';
+    wrap.innerHTML = '<div class="constellation-empty"><span class="constellation-empty-glyph">◉</span><p>Graph library loading — please try again in a moment.</p></div>';
     return;
   }
+
+  var edgeColors = M_EDGE_COLORS();
+  var nodeColors = M_NODE_COLORS();
 
   var nodes = [{ id: entity.id, name: entity.canonical_name, level: entity.hierarchical_level || 5, focal: true, entity: entity }];
   var links = [];
@@ -324,29 +425,44 @@ function M_buildConstellationGraph(entityId) {
   seen[entity.id] = true;
 
   rels.forEach(function(rel) {
-    var target = window.DB.entities.find(function(e) { return e.id === rel.target_id; });
+    var target = db.entities.find(function(e) { return e.id === rel.target_id; });
     if (!seen[rel.target_id]) {
       seen[rel.target_id] = true;
-      var lvl = target ? (target.hierarchical_level || 5) : 5;
-      nodes.push({ id: rel.target_id, name: target ? target.canonical_name : rel.target_id.replace(/-/g, ' '), level: lvl, focal: false, entity: target });
+      nodes.push({
+        id: rel.target_id,
+        name: target ? target.canonical_name : rel.target_id.replace(/-/g, ' '),
+        level: target ? (target.hierarchical_level || 5) : 5,
+        focal: false,
+        entity: target || null
+      });
     }
     links.push({ source: entity.id, target: rel.target_id, type: rel.edge_type });
   });
 
-  var W = wrap.clientWidth || 800;
-  var H = wrap.clientHeight || 500;
+  var W = Math.max(400, wrap.clientWidth || wrap.offsetWidth || 800);
+  var H = Math.max(300, wrap.clientHeight || wrap.offsetHeight || 500);
 
   var svg = d3.select(wrap).append('svg')
     .attr('width', W).attr('height', H)
-    .attr('aria-label', 'Constellation map for ' + entity.canonical_name);
+    .style('background', 'radial-gradient(ellipse at center, rgba(26,10,10,0.6) 0%, rgba(8,6,4,0.95) 100%)');
+
+  // Starfield
+  var starG = svg.append('g');
+  for (var s = 0; s < 60; s++) {
+    starG.append('circle')
+      .attr('cx', Math.random() * W)
+      .attr('cy', Math.random() * H)
+      .attr('r', Math.random() * 0.8 + 0.2)
+      .attr('fill', '#c9983a')
+      .attr('opacity', Math.random() * 0.25 + 0.05);
+  }
 
   var defs = svg.append('defs');
-  var edgeColors = window.EDGE_COLORS || {};
   Object.keys(edgeColors).forEach(function(type) {
     defs.append('marker')
       .attr('id', 'cst-arrow-' + type)
       .attr('viewBox', '0 -5 10 10')
-      .attr('refX', 22).attr('refY', 0)
+      .attr('refX', 24).attr('refY', 0)
       .attr('markerWidth', 5).attr('markerHeight', 5)
       .attr('orient', 'auto')
       .append('path')
@@ -355,27 +471,29 @@ function M_buildConstellationGraph(entityId) {
   });
 
   var sim = d3.forceSimulation(nodes)
-    .force('link', d3.forceLink(links).id(function(d) { return d.id; }).distance(130).strength(0.5))
-    .force('charge', d3.forceManyBody().strength(-320))
+    .force('link', d3.forceLink(links).id(function(d) { return d.id; }).distance(150).strength(0.5))
+    .force('charge', d3.forceManyBody().strength(-380))
     .force('center', d3.forceCenter(W / 2, H / 2))
-    .force('collision', d3.forceCollide(44));
+    .force('collision', d3.forceCollide(48));
 
   var linkSel = svg.append('g').selectAll('line')
     .data(links).join('line')
     .attr('stroke', function(d) { return edgeColors[d.type] || '#c9983a'; })
-    .attr('stroke-width', 1.5)
-    .attr('stroke-opacity', 0.65)
+    .attr('stroke-width', 1.2)
+    .attr('stroke-opacity', 0.5)
+    .attr('stroke-dasharray', '4 2')
     .attr('marker-end', function(d) { return edgeColors[d.type] ? 'url(#cst-arrow-' + d.type + ')' : null; });
 
-  var edgeTip = d3.select(wrap).append('div').attr('class', 'm-edge-tooltip').style('display', 'none');
-  linkSel
-    .on('mouseenter', function(event, d) {
-      edgeTip.style('display', 'block')
-        .style('left', (event.offsetX + 14) + 'px')
-        .style('top', (event.offsetY - 10) + 'px')
-        .text(d.type.replace(/_/g, ' '));
-    })
-    .on('mouseleave', function() { edgeTip.style('display', 'none'); });
+  // Edge labels
+  var edgeLabelG = svg.append('g').attr('class', 'edge-labels');
+  var edgeLabels = edgeLabelG.selectAll('text')
+    .data(links).join('text')
+    .attr('fill', function(d) { return edgeColors[d.type] || '#c9983a'; })
+    .attr('font-family', 'Cinzel, serif')
+    .attr('font-size', '7px')
+    .attr('text-anchor', 'middle')
+    .attr('opacity', 0.65)
+    .text(function(d) { return d.type.replace(/_/g, ' '); });
 
   var nodeGrp = svg.append('g').selectAll('g')
     .data(nodes).join('g')
@@ -389,56 +507,106 @@ function M_buildConstellationGraph(entityId) {
 
   nodeGrp.each(function(d) {
     var g = d3.select(this);
-    var nodeColors = window.NODE_COLORS || {};
+    var dangerous = d.entity && M_isDangerous(d.entity);
     var trad = 'default';
-    if (!d.focal && d.entity) {
+    if (d.entity) {
       var keys = Object.keys(d.entity.tradition_vectors || {});
       if (keys.length) trad = keys[0];
     }
-    var color = d.focal ? '#f0cc70' : (nodeColors[trad] || '#c9983a');
-    var r = d.focal ? 22 : Math.max(10, 22 - d.level * 1.8);
+    var color = d.focal ? '#f0cc70' : (dangerous ? '#c05050' : (nodeColors[trad] || '#c9983a'));
+    var r = d.focal ? 22 : Math.max(10, 22 - d.level * 1.5);
 
+    // Outer ring
     if (d.focal) {
-      g.append('circle').attr('r', r + 6).attr('fill', 'none')
-        .attr('stroke', '#f0cc70').attr('stroke-width', 1.2)
-        .attr('stroke-dasharray', '4 3').attr('opacity', 0.65);
+      g.append('circle').attr('r', r + 8).attr('fill', 'none')
+        .attr('stroke', '#f0cc70').attr('stroke-width', 0.8)
+        .attr('stroke-dasharray', '3 4').attr('opacity', 0.5);
+      g.append('circle').attr('r', r + 4).attr('fill', 'none')
+        .attr('stroke', '#f0cc70').attr('stroke-width', 0.5).attr('opacity', 0.3);
     }
-    g.append('circle').attr('r', r)
-      .attr('fill', color).attr('fill-opacity', d.focal ? 0.22 : 0.16)
-      .attr('stroke', color).attr('stroke-width', d.focal ? 2 : 1);
+    if (dangerous) {
+      g.append('circle').attr('r', r + 5).attr('fill', 'none')
+        .attr('stroke', '#c05050').attr('stroke-width', 0.8)
+        .attr('stroke-dasharray', '2 3').attr('opacity', 0.45);
+    }
 
+    g.append('circle').attr('r', r)
+      .attr('fill', color).attr('fill-opacity', d.focal ? 0.18 : 0.12)
+      .attr('stroke', color).attr('stroke-width', d.focal ? 1.8 : 1);
+
+    // Name label
     var shortName = d.name.split(' / ')[0].split(' (')[0];
-    if (shortName.length > 16) shortName = shortName.substring(0, 15) + '…';
+    if (shortName.length > 18) shortName = shortName.substring(0, 16) + '…';
     g.append('text')
-      .attr('text-anchor', 'middle').attr('dy', r + 14)
-      .attr('font-family', 'Cinzel, serif').attr('font-size', d.focal ? '10.5px' : '9px')
-      .attr('fill', color).attr('fill-opacity', 0.9)
+      .attr('text-anchor', 'middle').attr('dy', r + 15)
+      .attr('font-family', 'Cinzel, serif')
+      .attr('font-size', d.focal ? '10px' : '8.5px')
+      .attr('fill', color).attr('fill-opacity', 0.88)
       .text(shortName);
 
-    g.on('click', function() { M_closeConstellation(); window.openDetail(d.id); })
-     .on('mouseenter', function() { g.select('circle').attr('fill-opacity', 0.4); })
-     .on('mouseleave', function() { g.select('circle').attr('fill-opacity', d.focal ? 0.22 : 0.16); });
+    g.on('click', function() {
+      M_closeConstellation();
+      setTimeout(function() { window.openDetail(d.id); }, 200);
+    })
+    .on('mouseenter', function() { g.select('circle').attr('fill-opacity', 0.35); })
+    .on('mouseleave', function() { g.select('circle').attr('fill-opacity', d.focal ? 0.18 : 0.12); });
   });
 
   sim.on('tick', function() {
     linkSel
-      .attr('x1', function(d) { return Math.max(20, Math.min(W - 20, d.source.x)); })
-      .attr('y1', function(d) { return Math.max(20, Math.min(H - 20, d.source.y)); })
-      .attr('x2', function(d) { return Math.max(20, Math.min(W - 20, d.target.x)); })
-      .attr('y2', function(d) { return Math.max(20, Math.min(H - 20, d.target.y)); });
+      .attr('x1', function(d) { return clamp(d.source.x, 20, W - 20); })
+      .attr('y1', function(d) { return clamp(d.source.y, 20, H - 20); })
+      .attr('x2', function(d) { return clamp(d.target.x, 20, W - 20); })
+      .attr('y2', function(d) { return clamp(d.target.y, 20, H - 20); });
+
+    edgeLabels
+      .attr('x', function(d) { return (clamp(d.source.x, 20, W - 20) + clamp(d.target.x, 20, W - 20)) / 2; })
+      .attr('y', function(d) { return (clamp(d.source.y, 20, H - 20) + clamp(d.target.y, 20, H - 20)) / 2 - 5; });
+
     nodeGrp.attr('transform', function(d) {
-      return 'translate(' + Math.max(30, Math.min(W - 30, d.x)) + ',' + Math.max(30, Math.min(H - 30, d.y)) + ')';
+      return 'translate(' + clamp(d.x, 30, W - 30) + ',' + clamp(d.y, 30, H - 30) + ')';
     });
   });
 
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+  // Legend
   var legendEl = document.getElementById('constellation-legend');
   if (legendEl) {
-    var usedTypes = links.map(function(l) { return l.type; }).filter(function(t, i, a) { return a.indexOf(t) === i; });
+    var usedTypes = links.map(function(l) { return l.type; })
+      .filter(function(t, i, a) { return a.indexOf(t) === i; });
     legendEl.innerHTML = usedTypes.map(function(t) {
       var c = edgeColors[t] || '#c9983a';
       return '<div class="legend-item"><div class="legend-dot" style="background:' + c + '"></div>' + t.replace(/_/g, ' ') + '</div>';
     }).join('');
   }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  MODULE C — NAME TYPEWRITER REVEAL
+// ══════════════════════════════════════════════════════════════
+function M_triggerTypewriter(entityId) {
+  var db = M_DB();
+  if (!db) return;
+  var nameEl = document.getElementById('d-name');
+  if (!nameEl) return;
+  var entity = db.entities.find(function(e) { return e.id === entityId; });
+  if (!entity) return;
+
+  var full = entity.canonical_name;
+  nameEl.textContent = '';
+  nameEl.classList.add('m-typewriter');
+  var i = 0;
+  var speed = Math.max(28, Math.min(60, 1200 / full.length));
+  var interval = setInterval(function() {
+    if (i >= full.length) {
+      clearInterval(interval);
+      nameEl.classList.remove('m-typewriter');
+      return;
+    }
+    nameEl.textContent = full.slice(0, i + 1);
+    i++;
+  }, speed);
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -449,7 +617,10 @@ var M_loreTimer = null;
 function M_initLoreTooltips() {
   var grid = document.getElementById('results-grid');
   if (!grid) return;
-  var obs = new MutationObserver(function() { M_attachLoreListeners(); });
+  var obs = new MutationObserver(function() {
+    M_attachLoreListeners();
+    M_applyDangerMarks();
+  });
   obs.observe(grid, { childList: true });
   M_attachLoreListeners();
 }
@@ -460,14 +631,16 @@ function M_attachLoreListeners() {
     card.addEventListener('mouseenter', function() {
       clearTimeout(M_loreTimer);
       M_loreTimer = setTimeout(function() {
-        if (document.getElementById('detail-overlay').classList.contains('open')) return;
-        if (!window.DB) return;
+        var detail = document.getElementById('detail-overlay');
+        if (detail && detail.classList.contains('open')) return;
+        var db = M_DB();
+        if (!db) return;
         var nameEl = card.querySelector('.card-name');
         if (!nameEl) return;
         var name = nameEl.textContent.trim();
-        var entity = window.DB.entities.find(function(e) { return e.canonical_name === name; });
+        var entity = db.entities.find(function(e) { return e.canonical_name === name; });
         if (entity) M_showLoreTooltip(entity, card);
-      }, 1200);
+      }, 1100);
     });
     card.addEventListener('mouseleave', function() {
       clearTimeout(M_loreTimer);
@@ -486,7 +659,7 @@ function M_getLoreText(entity) {
     var s = notes.split(/[.!?]/)[0];
     if (s && s.trim().length > 15) return s.trim() + '.';
   }
-  var doms = (entity.functional_domains || []).slice(0, 2);
+  var doms = (entity.functional_domains || []).slice(0, 3);
   if (doms.length) return doms.join(' · ');
   return null;
 }
@@ -496,23 +669,39 @@ function M_showLoreTooltip(entity, cardEl) {
   if (!text) return;
   var tooltip = document.getElementById('lore-tooltip');
   if (!tooltip) return;
-  tooltip.innerHTML = text;
-  tooltip.classList.add('visible');
+  var dangerous = M_isDangerous(entity);
+  tooltip.innerHTML = (dangerous ? '<span class="m-tooltip-danger-glyph">⚠</span> ' : '') + text;
+  tooltip.className = dangerous ? 'visible m-tooltip-danger' : 'visible';
   var rect = cardEl.getBoundingClientRect();
-  var left = Math.min(rect.left, window.innerWidth - 300);
-  tooltip.style.left = Math.max(8, left) + 'px';
+  tooltip.style.left = Math.max(8, Math.min(rect.left, window.innerWidth - 300)) + 'px';
   tooltip.style.top = (rect.bottom + 8) + 'px';
 }
 
 function M_hideLoreTooltip() {
   var tooltip = document.getElementById('lore-tooltip');
-  if (tooltip) tooltip.classList.remove('visible');
+  if (tooltip) { tooltip.className = ''; }
 }
 
 // ══════════════════════════════════════════════════════════════
-//  MODULE 5 — SMART SEARCH SUGGESTIONS
+//  MODULE 5 — SMART SEARCH SUGGESTIONS + PLACEHOLDER ROTATION
 // ══════════════════════════════════════════════════════════════
 var M_suggActive = -1;
+
+var M_SEARCH_PROMPTS = [
+  'e.g. Azazel — the scapegoat who taught forbidden arts…',
+  'e.g. Thoth · Hermes · Mercury — one figure, three traditions…',
+  'e.g. Lucifer — the morning star before the fall…',
+  'e.g. Asmodeus — King of Demons, 72nd of the Goetia…',
+  'e.g. Enoch — patriarch, scribe, and angel…',
+  'e.g. Baal — storm lord or demon king?…',
+  'e.g. Sophia — Gnostic wisdom and the Demiurge…',
+  'e.g. Michael — commander of the heavenly host…',
+  'e.g. Metatron — the angel who was once a man…',
+  'e.g. Osiris · Christ — resurrection across traditions…'
+];
+
+var M_promptIndex = 0;
+var M_promptTimer = null;
 
 function M_initSearchSuggestions() {
   var input = document.getElementById('search-input');
@@ -526,10 +715,19 @@ function M_initSearchSuggestions() {
   sugg.setAttribute('aria-label', 'Search suggestions');
   wrap.appendChild(sugg);
 
+  // Rotate placeholders
+  M_startPlaceholderRotation(input);
+
   input.addEventListener('input', function() {
     var q = input.value.trim();
-    if (q.length < 2 || !window.fuse) { M_hideSuggestions(); return; }
+    M_stopPlaceholderRotation();
+    if (q.length < 2 || !M_FUSE()) { M_hideSuggestions(); return; }
     M_renderSuggestions(q);
+  });
+
+  input.addEventListener('focus', function() { M_stopPlaceholderRotation(); });
+  input.addEventListener('blur', function() {
+    if (!input.value.trim()) M_startPlaceholderRotation(input);
   });
 
   input.addEventListener('keydown', function(e) {
@@ -557,16 +755,38 @@ function M_initSearchSuggestions() {
   });
 }
 
+function M_startPlaceholderRotation(input) {
+  M_stopPlaceholderRotation();
+  input.placeholder = M_SEARCH_PROMPTS[M_promptIndex];
+  M_promptTimer = setInterval(function() {
+    if (document.activeElement === input) return;
+    M_promptIndex = (M_promptIndex + 1) % M_SEARCH_PROMPTS.length;
+    input.style.transition = 'opacity 0.3s ease';
+    input.style.opacity = '0.4';
+    setTimeout(function() {
+      input.placeholder = M_SEARCH_PROMPTS[M_promptIndex];
+      input.style.opacity = '';
+    }, 300);
+  }, 4500);
+}
+
+function M_stopPlaceholderRotation() {
+  clearInterval(M_promptTimer);
+  M_promptTimer = null;
+}
+
 function M_renderSuggestions(query) {
-  if (!window.fuse || !window.DB) return;
-  var results = window.fuse.search(query).slice(0, 6);
+  var fuseInst = M_FUSE();
+  var db = M_DB();
+  if (!fuseInst || !db) return;
+  var results = fuseInst.search(query).slice(0, 7);
   M_suggActive = -1;
   var sugg = document.getElementById('search-suggestions');
   if (!sugg) return;
   if (!results.length) { M_hideSuggestions(); return; }
 
-  var nodeColors = window.NODE_COLORS || {};
-  var tradLabels = window.TRADITION_LABELS || {};
+  var nodeColors = M_NODE_COLORS();
+  var tradLabels = M_TRAD_LABELS();
   var levelRoman = ['I','II','III','IV','V','VI','VII'];
 
   sugg.innerHTML = results.map(function(r) {
@@ -575,7 +795,9 @@ function M_renderSuggestions(query) {
     var color = nodeColors[trad] || '#c9983a';
     var domain = (e.functional_domains || [])[0] || '';
     var lvl = e.hierarchical_level || 7;
-    return '<div class="suggestion-item" role="option" data-entity-id="' + e.id + '">' +
+    var dangerous = M_isDangerous(e);
+    return '<div class="suggestion-item' + (dangerous ? ' suggestion-danger' : '') + '" role="option" data-entity-id="' + e.id + '">' +
+      (dangerous ? '<span class="m-danger-pip">⚠</span>' : '') +
       '<span class="suggestion-name">' + e.canonical_name + '</span>' +
       '<span class="suggestion-level">' + (levelRoman[lvl - 1] || lvl) + '</span>' +
       '<span class="suggestion-pip" style="background:' + color + '" title="' + (tradLabels[trad] || trad) + '"></span>' +
@@ -609,7 +831,7 @@ function M_highlightSugg(items) {
 }
 
 // ══════════════════════════════════════════════════════════════
-//  MODULE 6 — EDUCATIONAL "DID YOU KNOW" SYSTEM
+//  MODULE 6 — INSIGHT BAR
 // ══════════════════════════════════════════════════════════════
 function M_initInsightBar() {
   var nav = document.getElementById('nav');
@@ -618,32 +840,34 @@ function M_initInsightBar() {
   bar.id = 'insight-bar';
   bar.setAttribute('role', 'status');
   bar.setAttribute('aria-live', 'polite');
-  bar.innerHTML = '<span class="insight-text" id="insight-text"></span>' +
+  bar.innerHTML = '<span class="insight-glyph">✦</span>' +
+    '<span class="insight-text" id="insight-text"></span>' +
     '<button class="insight-dismiss" onclick="M_hideInsightBar()" aria-label="Dismiss">×</button>';
   nav.parentNode.insertBefore(bar, nav.nextSibling);
 }
 
 function M_showEntityInsightForId(entityId) {
-  if (!window.DB) return;
-  var entity = window.DB.entities.find(function(e) { return e.id === entityId; });
+  var db = M_DB();
+  if (!db) return;
+  var entity = db.entities.find(function(e) { return e.id === entityId; });
   if (!entity) return;
 
   var text = null;
   var rels = entity.relationships || [];
   if (rels.length) {
     var rel = rels[Math.floor(Math.random() * rels.length)];
-    var target = window.DB.entities.find(function(e) { return e.id === rel.target_id; });
+    var target = db.entities.find(function(e) { return e.id === rel.target_id; });
     var tName = target ? target.canonical_name : rel.target_id.replace(/-/g, ' ');
     if (rel.notes && rel.notes.length > 20) {
       text = rel.notes;
     } else {
-      text = entity.canonical_name + ' shares a ' + rel.edge_type.replace(/_/g, ' ').toLowerCase() + ' connection with ' + tName + '.';
+      text = entity.canonical_name + ' ' + rel.edge_type.replace(/_/g, ' ').toLowerCase() + ' ' + tName + ' — a connection that crossed at least two traditions.';
     }
   } else if (entity.research_notes && entity.research_notes.length > 20) {
     text = entity.research_notes.split(/[.!?]/)[0].trim() + '.';
   }
 
-  if (text) M_showInsightBar('Did you know? ' + text);
+  if (text) M_showInsightBar(text);
 }
 
 function M_showInsightBar(text) {
@@ -660,26 +884,32 @@ function M_hideInsightBar() {
 }
 
 function M_showPageLoadInsight() {
-  if (!window.DB || !window.DB.entities.length) return;
-  var pool = window.DB.entities.filter(function(e) { return (e.relationships || []).length > 0; });
+  var db = M_DB();
+  if (!db) return;
+  var pool = db.entities.filter(function(e) { return (e.relationships || []).length > 0; });
   if (!pool.length) return;
   var entity = pool[Math.floor(Math.random() * pool.length)];
   var rels = entity.relationships || [];
   var rel = rels[Math.floor(Math.random() * rels.length)];
-  var target = window.DB.entities.find(function(e) { return e.id === rel.target_id; });
+  var target = db.entities.find(function(e) { return e.id === rel.target_id; });
   var tName = target ? target.canonical_name : rel.target_id.replace(/-/g, ' ');
+
   var text;
   if (rel.notes && rel.notes.length > 20) {
     text = rel.notes;
   } else {
-    text = entity.canonical_name + ' and ' + tName + ' share a ' + rel.edge_type.replace(/_/g, ' ').toLowerCase() + ' connection across traditions.';
+    text = entity.canonical_name + ' and ' + tName + ' share a ' + rel.edge_type.replace(/_/g, ' ').toLowerCase() + ' connection that survives in at least two independent traditions.';
   }
 
   var banner = document.createElement('div');
   banner.id = 'concordance-insight-banner';
   banner.setAttribute('role', 'status');
-  banner.innerHTML = '<span class="cib-sigil">✦</span> <em>Concordance Insight:</em> ' + text +
-    ' <button class="cib-close" onclick="this.parentElement.classList.remove(\'visible\');setTimeout(function(){this.parentElement.remove()}.bind(this),600)" aria-label="Dismiss">×</button>';
+  banner.innerHTML = '<span class="cib-sigil">✦</span> <em>Concordance:</em> ' + text +
+    ' <button class="cib-close" aria-label="Dismiss">×</button>';
+  banner.querySelector('.cib-close').addEventListener('click', function() {
+    banner.classList.remove('visible');
+    setTimeout(function() { if (banner.parentNode) banner.remove(); }, 600);
+  });
   document.body.appendChild(banner);
 
   setTimeout(function() {
@@ -689,8 +919,8 @@ function M_showPageLoadInsight() {
         banner.classList.remove('visible');
         setTimeout(function() { if (banner.parentNode) banner.remove(); }, 600);
       }
-    }, 8000);
-  }, 3000);
+    }, 9000);
+  }, 4000);
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -706,12 +936,14 @@ function M_initCompare() {
 }
 
 function M_injectCompareButtons() {
+  var db = M_DB();
+  if (!db) return;
   document.querySelectorAll('.entity-card:not([data-cmp-ok])').forEach(function(card) {
     card.setAttribute('data-cmp-ok', '1');
     var nameEl = card.querySelector('.card-name');
-    if (!nameEl || !window.DB) return;
+    if (!nameEl) return;
     var name = nameEl.textContent.trim();
-    var entity = window.DB.entities.find(function(e) { return e.canonical_name === name; });
+    var entity = db.entities.find(function(e) { return e.canonical_name === name; });
     if (!entity) return;
     var entityId = entity.id;
 
@@ -726,7 +958,6 @@ function M_injectCompareButtons() {
 }
 
 function M_addToCompare(entityId) {
-  if (!window.DB) return;
   if (M_compareSet.indexOf(entityId) >= 0) return;
   if (M_compareSet.length >= 3) M_compareSet.shift();
   M_compareSet.push(entityId);
@@ -747,16 +978,20 @@ function M_clearCompare() {
 
 function M_renderCompareBar() {
   var bar = document.getElementById('compare-bar');
-  if (!bar || !window.DB) return;
+  var db = M_DB();
+  if (!bar || !db) return;
   if (!M_compareSet.length) { bar.classList.remove('visible'); return; }
 
-  var entities = M_compareSet.map(function(id) { return window.DB.entities.find(function(e) { return e.id === id; }); }).filter(Boolean);
+  var entities = M_compareSet.map(function(id) {
+    return db.entities.find(function(e) { return e.id === id; });
+  }).filter(Boolean);
+
   bar.innerHTML = entities.map(function(e) {
     return '<span class="compare-bar-item">' + e.canonical_name +
-      ' <button class="compare-remove" onclick="M_removeFromCompare(\'' + e.id + '\')" aria-label="Remove ' + e.canonical_name + '">×</button></span>';
+      ' <button class="compare-remove" onclick="M_removeFromCompare(\'' + e.id + '\')" aria-label="Remove">×</button></span>';
   }).join('') +
     '<button class="compare-open-btn" onclick="M_openCompareOverlay()">⊞ Open Comparison</button>' +
-    '<button class="compare-clear-btn" onclick="M_clearCompare()">Clear All</button>';
+    '<button class="compare-clear-btn" onclick="M_clearCompare()">Clear</button>';
   bar.classList.add('visible');
 }
 
@@ -772,20 +1007,22 @@ function M_openCompareOverlay() {
 function M_closeCompareOverlay() {
   var overlay = document.getElementById('compare-overlay');
   if (overlay) overlay.classList.remove('open');
-  if (!document.getElementById('detail-overlay').classList.contains('open')) {
-    document.body.style.overflow = '';
-  }
+  var detail = document.getElementById('detail-overlay');
+  if (!detail || !detail.classList.contains('open')) document.body.style.overflow = '';
 }
 
 function M_buildCompareContent() {
   var body = document.getElementById('compare-body');
-  if (!body || !window.DB) return;
-  var entities = M_compareSet.map(function(id) { return window.DB.entities.find(function(e) { return e.id === id; }); }).filter(Boolean);
+  var db = M_DB();
+  if (!body || !db) return;
+  var entities = M_compareSet.map(function(id) {
+    return db.entities.find(function(e) { return e.id === id; });
+  }).filter(Boolean);
   if (!entities.length) return;
 
-  var nodeColors = window.NODE_COLORS || {};
-  var tradLabels = window.TRADITION_LABELS || {};
-  var levelLabels = window.LEVEL_LABELS || {};
+  var nodeColors = M_NODE_COLORS();
+  var tradLabels = M_TRAD_LABELS();
+  var levelLabels = M_LEVEL_LABELS();
 
   var allTrads = [];
   entities.forEach(function(e) { Object.keys(e.tradition_vectors || {}).forEach(function(t) { if (allTrads.indexOf(t) < 0) allTrads.push(t); }); });
@@ -796,10 +1033,8 @@ function M_buildCompareContent() {
   var sharedDoms = allDoms.filter(function(d) { return entities.filter(function(e) { return (e.functional_domains || []).indexOf(d) >= 0; }).length > 1; });
 
   var cols = entities.length;
-
   var html = '<div class="compare-grid" style="grid-template-columns:repeat(' + cols + ',1fr)">';
 
-  // Headers
   entities.forEach(function(e) {
     var trad = Object.keys(e.tradition_vectors || {})[0] || 'default';
     var color = nodeColors[trad] || '#c9983a';
@@ -813,7 +1048,6 @@ function M_buildCompareContent() {
       '</div>';
   });
 
-  // Domains
   html += '<div class="compare-row-label" style="grid-column:1/-1">Functional Domains</div>';
   entities.forEach(function(e) {
     html += '<div class="compare-cell">' + (e.functional_domains || []).map(function(d) {
@@ -821,7 +1055,6 @@ function M_buildCompareContent() {
     }).join('') + '</div>';
   });
 
-  // Traditions
   html += '<div class="compare-row-label" style="grid-column:1/-1">Tradition Vectors</div>';
   entities.forEach(function(e) {
     html += '<div class="compare-cell">' + Object.keys(e.tradition_vectors || {}).map(function(t) {
@@ -829,19 +1062,17 @@ function M_buildCompareContent() {
     }).join('') + '</div>';
   });
 
-  // Relationships
   html += '<div class="compare-row-label" style="grid-column:1/-1">Relationships</div>';
   entities.forEach(function(e) {
     var rels = e.relationships || [];
     if (!rels.length) { html += '<div class="compare-cell compare-dim">—</div>'; return; }
     html += '<div class="compare-cell">' + rels.slice(0, 4).map(function(r) {
-      var tgt = window.DB.entities.find(function(x) { return x.id === r.target_id; });
+      var tgt = db.entities.find(function(x) { return x.id === r.target_id; });
       var tName = tgt ? tgt.canonical_name : r.target_id.replace(/-/g, ' ');
-      return '<div class="compare-rel"><span class="edge-type edge-' + r.edge_type + '" style="font-size:0.62rem">' + r.edge_type.replace(/_/g, ' ') + '</span> ' + tName + '</div>';
+      return '<div class="compare-rel"><span class="edge-type edge-' + r.edge_type + '" style="font-size:0.6rem">' + r.edge_type.replace(/_/g, ' ') + '</span> ' + tName + '</div>';
     }).join('') + (rels.length > 4 ? '<div class="compare-dim">+' + (rels.length - 4) + ' more</div>' : '') + '</div>';
   });
 
-  // Depth
   html += '<div class="compare-row-label" style="grid-column:1/-1">Research Depth</div>';
   entities.forEach(function(e) {
     var sc = e.completeness_score || 0;
@@ -872,25 +1103,19 @@ function M_enhanceTimeline() {
     M_addTimelineJumpButtons();
     M_addTimelineScrollMomentum();
     M_addTimelineBadgeTooltips();
-    M_addEraFigureCounts();
   }, 80);
 }
 
 function M_addTimelineJumpButtons() {
   var tlHeader = document.querySelector('.tl-header');
   if (!tlHeader || document.getElementById('tl-jump-strip')) return;
-
   var ERAS = [
-    { label: 'Sumerian', start: -3500 },
-    { label: 'Bronze Age', start: -2000 },
-    { label: 'Classical', start: -800 },
-    { label: '2nd Temple', start: -167 },
-    { label: 'Late Antique', start: 200 },
-    { label: 'Medieval', start: 700 },
+    { label: 'Sumerian', start: -3500 }, { label: 'Bronze Age', start: -2000 },
+    { label: 'Classical', start: -800 }, { label: '2nd Temple', start: -167 },
+    { label: 'Late Antique', start: 200 }, { label: 'Medieval', start: 700 },
     { label: 'Early Modern', start: 1400 }
   ];
   var PX_PER_DECADE = 17, TL_PAD_LEFT = 60, TL_START = -3500;
-
   var strip = document.createElement('div');
   strip.id = 'tl-jump-strip';
   ERAS.forEach(function(era) {
@@ -912,39 +1137,21 @@ function M_addTimelineScrollMomentum() {
   var wrap = document.getElementById('tl-scroll-wrap');
   if (!wrap || wrap.dataset.momentumOk) return;
   wrap.dataset.momentumOk = '1';
-
   var isDown = false, startX = 0, scrollLeft = 0, lastX = 0, velocity = 0, rafId = null;
-
   wrap.addEventListener('pointerdown', function(e) {
-    isDown = true;
-    startX = e.pageX - wrap.offsetLeft;
-    scrollLeft = wrap.scrollLeft;
-    lastX = e.pageX;
-    velocity = 0;
-    cancelAnimationFrame(rafId);
-    wrap.classList.add('is-grabbing');
+    isDown = true; startX = e.pageX - wrap.offsetLeft; scrollLeft = wrap.scrollLeft; lastX = e.pageX; velocity = 0;
+    cancelAnimationFrame(rafId); wrap.classList.add('is-grabbing');
     try { wrap.setPointerCapture(e.pointerId); } catch(err) {}
   });
-
   wrap.addEventListener('pointermove', function(e) {
     if (!isDown) return;
-    velocity = e.pageX - lastX;
-    lastX = e.pageX;
-    var x = e.pageX - wrap.offsetLeft;
-    wrap.scrollLeft = scrollLeft - (x - startX);
+    velocity = e.pageX - lastX; lastX = e.pageX;
+    wrap.scrollLeft = scrollLeft - (e.pageX - wrap.offsetLeft - startX);
   });
-
   var endDrag = function() {
-    if (!isDown) return;
-    isDown = false;
-    wrap.classList.remove('is-grabbing');
+    if (!isDown) return; isDown = false; wrap.classList.remove('is-grabbing');
     var v = velocity;
-    var coast = function() {
-      v *= 0.91;
-      if (Math.abs(v) < 0.5) return;
-      wrap.scrollLeft -= v;
-      rafId = requestAnimationFrame(coast);
-    };
+    var coast = function() { v *= 0.91; if (Math.abs(v) < 0.5) return; wrap.scrollLeft -= v; rafId = requestAnimationFrame(coast); };
     rafId = requestAnimationFrame(coast);
   };
   wrap.addEventListener('pointerup', endDrag);
@@ -953,60 +1160,26 @@ function M_addTimelineScrollMomentum() {
 
 function M_addTimelineBadgeTooltips() {
   var canvas = document.getElementById('tl-canvas');
-  if (!canvas || !window.DB) return;
+  var db = M_DB();
+  if (!canvas || !db) return;
   canvas.querySelectorAll('.tl-badge:not([data-tl-tip])').forEach(function(badge) {
     badge.setAttribute('data-tl-tip', '1');
     badge.addEventListener('mouseenter', function() {
       var entityId = badge.dataset.entityId;
       if (!entityId) return;
-      var entity = window.DB.entities.find(function(e) { return e.id === entityId; });
+      var entity = db.entities.find(function(e) { return e.id === entityId; });
       if (!entity) return;
       var domain = (entity.functional_domains || [])[0] || '';
-      var dateStr = badge.title || '';
       var tooltip = document.getElementById('lore-tooltip');
       if (!tooltip) return;
-      tooltip.innerHTML = '<strong style="font-family:var(--font-heading);color:var(--gold-light);font-size:0.78rem">' +
-        entity.canonical_name + '</strong><br>' +
-        '<span style="color:var(--dim);font-size:0.75rem">' + dateStr + '</span>' +
+      tooltip.innerHTML = '<strong style="font-family:var(--font-heading);color:var(--gold-light);font-size:0.78rem">' + entity.canonical_name + '</strong>' +
         (domain ? '<br><em style="color:var(--faint);font-size:0.78rem">' + domain + '</em>' : '');
-      tooltip.classList.add('visible');
+      tooltip.className = 'visible';
       var rect = badge.getBoundingClientRect();
       tooltip.style.left = Math.min(rect.left, window.innerWidth - 300) + 'px';
       tooltip.style.top = (rect.bottom + 8) + 'px';
     });
     badge.addEventListener('mouseleave', function() { M_hideLoreTooltip(); });
-  });
-}
-
-function M_addEraFigureCounts() {
-  var canvas = document.getElementById('tl-canvas');
-  if (!canvas) return;
-  var badges = canvas.querySelectorAll('.tl-badge');
-  var TL_ERAS = [
-    { start: -3500, end: -2000 }, { start: -2000, end: -800 },
-    { start: -800,  end: -167  }, { start: -167,  end:  200 },
-    { start:  200,  end:  700  }, { start:  700,  end: 1400 },
-    { start: 1400,  end: 1950  }
-  ];
-  var PX_PER_DECADE = 17, TL_PAD_LEFT = 60, TL_START = -3500;
-
-  var eraLabels = canvas.querySelectorAll('.tl-era-label');
-  eraLabels.forEach(function(lbl, i) {
-    var era = TL_ERAS[i];
-    if (!era) return;
-    var xStart = TL_PAD_LEFT + ((era.start - TL_START) / 10) * PX_PER_DECADE;
-    var xEnd   = TL_PAD_LEFT + ((era.end   - TL_START) / 10) * PX_PER_DECADE;
-    var count = 0;
-    badges.forEach(function(b) {
-      var left = parseFloat(b.style.left) || 0;
-      if (left >= xStart && left < xEnd) count++;
-    });
-    if (count > 0) {
-      var span = document.createElement('span');
-      span.className = 'tl-era-count';
-      span.textContent = count + ' ' + (count === 1 ? 'figure' : 'figures');
-      lbl.appendChild(span);
-    }
   });
 }
 
@@ -1019,7 +1192,6 @@ var M_fuseScripture = null;
 function M_initScriptureSearch() {
   var filterBar = document.getElementById('filter-bar');
   if (!filterBar) return;
-
   var btn = document.createElement('button');
   btn.className = 'filter-btn';
   btn.dataset.filter = 'scripture';
@@ -1027,7 +1199,6 @@ function M_initScriptureSearch() {
   btn.setAttribute('aria-label', 'Search by scripture reference');
   btn.textContent = '⊟ Scripture';
   filterBar.appendChild(btn);
-
   btn.addEventListener('click', function() {
     var wasActive = btn.classList.contains('active');
     document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
@@ -1045,14 +1216,16 @@ function M_initScriptureSearch() {
 }
 
 function M_buildScriptureIndex() {
-  if (M_fuseScripture || !window.DB) return;
+  var db = M_DB();
+  if (M_fuseScripture || !db) return;
   var docs = [];
-  window.DB.entities.forEach(function(entity) {
+  db.entities.forEach(function(entity) {
     (entity.source_attestations || []).forEach(function(src) {
       docs.push({ entityId: entity.id, name: entity.canonical_name, source: src });
     });
     Object.values(entity.tradition_vectors || {}).forEach(function(tv) {
-      (tv.source_texts || []).forEach(function(src) {
+      if (!tv || !tv.source_texts) return;
+      tv.source_texts.forEach(function(src) {
         docs.push({ entityId: entity.id, name: entity.canonical_name, source: src });
       });
     });
@@ -1064,46 +1237,41 @@ function M_buildScriptureIndex() {
 }
 
 function M_applyScriptureSearch() {
+  var db = M_DB();
+  if (!M_fuseScripture || !db) return;
   var input = document.getElementById('search-input');
-  if (!input) return;
-  var q = input.value.trim();
-  if (q.length < 2 || !M_fuseScripture) return;
+  var q = input ? input.value.trim() : '';
+  if (q.length < 2) return;
 
   var results = M_fuseScripture.search(q);
   var entityIds = [];
-  results.forEach(function(r) {
-    if (entityIds.indexOf(r.item.entityId) < 0) entityIds.push(r.item.entityId);
-  });
-
-  var grid = document.getElementById('results-grid');
-  if (!grid || !window.DB) return;
-  var entities = entityIds.map(function(id) { return window.DB.entities.find(function(e) { return e.id === id; }); }).filter(Boolean);
+  results.forEach(function(r) { if (entityIds.indexOf(r.item.entityId) < 0) entityIds.push(r.item.entityId); });
+  var entities = entityIds.map(function(id) { return db.entities.find(function(e) { return e.id === id; }); }).filter(Boolean);
 
   var countEl = document.getElementById('results-count');
-  if (countEl) countEl.textContent = entities.length + ' ' + (entities.length === 1 ? 'entry' : 'entries') + ' matching scripture "' + q + '"';
+  if (countEl) countEl.textContent = entities.length + ' entries matching scripture "' + q + '"';
 
+  var grid = document.getElementById('results-grid');
+  if (!grid) return;
   grid.innerHTML = '';
   if (!entities.length) {
-    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="empty-glyph">◉</div><p>No scripture references match. Try a book name (e.g. "Enoch", "Daniel") or citation format.</p></div>';
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="empty-glyph">◉</div><p>No scripture references match. Try a book name (e.g. "Enoch", "Daniel") or citation.</p></div>';
     return;
   }
   entities.forEach(function(entity, i) {
     var card = document.createElement('div');
     var isJesus = entity.id === 'jesus-christ';
-    card.className = 'entity-card' + (isJesus ? ' card-jesus' : '');
+    card.className = 'entity-card' + (isJesus ? ' card-jesus' : '') + (M_isDangerous(entity) ? ' m-danger-card' : '');
     card.style.animationDelay = Math.min(i * 0.04, 0.4) + 's';
     card.addEventListener('click', function() { window.openDetail(entity.id); });
-
     var tradKeys = Object.keys(entity.tradition_vectors || {});
-    var nodeColors = window.NODE_COLORS || {};
-    var tradLabels = window.TRADITION_LABELS || {};
-    var levelLabels = window.LEVEL_LABELS || {};
+    var tradLabels = M_TRAD_LABELS();
     var tradPips = tradKeys.map(function(k) { return '<span class="trad-pip trad-' + k + '">' + (tradLabels[k] || k) + '</span>'; }).join('');
     var domains = (entity.functional_domains || []).slice(0, 3).map(function(d) { return '<span class="domain-tag">' + d + '</span>'; }).join('');
+    var levelLabels = M_LEVEL_LABELS();
     var sc = entity.completeness_score || 0;
     var dl = sc >= 80 ? 'primary' : sc >= 60 ? 'secondary' : 'partial';
     var dt = sc >= 80 ? 'Primary Source' : sc >= 60 ? 'Secondary Source' : 'Partial';
-
     card.innerHTML = '<p class="card-level">' + (levelLabels[entity.hierarchical_level] || 'Level ' + entity.hierarchical_level) + '</p>' +
       '<h3 class="card-name">' + entity.canonical_name + '</h3>' +
       '<div class="card-domains">' + domains + '</div>' +
@@ -1114,128 +1282,37 @@ function M_applyScriptureSearch() {
 }
 
 // ══════════════════════════════════════════════════════════════
-//  MODULE 10 — PRINT / EXPORT MODE
+//  MODULE D — MANUSCRIPT ATMOSPHERE
 // ══════════════════════════════════════════════════════════════
-function M_openExportModal(entityId) {
-  if (!window.DB) return;
-  var entity = window.DB.entities.find(function(e) { return e.id === entityId; });
-  if (!entity) return;
-  var modal = document.getElementById('export-modal');
-  if (!modal) return;
-  modal.dataset.entityId = entityId;
-  var nameEl = document.getElementById('export-modal-name');
-  if (nameEl) nameEl.textContent = entity.canonical_name;
-  modal.classList.add('open');
-}
+function M_initAtmosphere() {
+  // Vignette overlay
+  var vignette = document.createElement('div');
+  vignette.id = 'm-vignette';
+  document.body.appendChild(vignette);
 
-function M_closeExportModal() {
-  var modal = document.getElementById('export-modal');
-  if (modal) modal.classList.remove('open');
-}
-
-function M_exportJSON() {
-  var modal = document.getElementById('export-modal');
-  if (!modal || !window.DB) return;
-  var entity = window.DB.entities.find(function(e) { return e.id === modal.dataset.entityId; });
-  if (!entity) return;
-  var text = JSON.stringify(entity, null, 2);
-  M_copyToClipboard(text, 'JSON copied to clipboard ✦');
-}
-
-function M_entityToMarkdown(entity) {
-  var levelLabels = window.LEVEL_LABELS || {};
-  var tradLabels = window.TRADITION_LABELS || {};
-  var aliases = (entity.aliases || []).join(', ');
-  var domains = (entity.functional_domains || []).map(function(d) { return '- ' + d; }).join('\n');
-
-  var tradSection = '';
-  Object.entries(entity.tradition_vectors || {}).forEach(function(entry) {
-    var trad = entry[0], tv = entry[1];
-    var tradName = tradLabels[trad] || trad;
-    var fields = Object.entries(tv)
-      .filter(function(e) { return e[1] && e[0] !== 'source_texts'; })
-      .map(function(e) { return e[0].replace(/_/g, ' ') + ': ' + (Array.isArray(e[1]) ? e[1].join(', ') : e[1]); })
-      .join('\n');
-    var srcs = (tv.source_texts || []).map(function(s) { return 'source: ' + s; }).join('\n');
-    tradSection += '\n### ' + tradName + '\n' + fields + (srcs ? '\n' + srcs : '') + '\n';
+  // Marginalia glyphs (fixed, decorative)
+  var GLYPHS = ['✦', '✧', '⊛', '◈', '⊜', '⊕', '✶', '⊗', '◉', '✷'];
+  var positions = [
+    { top: '12%', left: '1.5%' }, { top: '38%', left: '0.8%' },
+    { top: '65%', left: '1.8%' }, { top: '82%', left: '1.1%' },
+    { top: '18%', right: '1.2%' }, { top: '44%', right: '0.7%' },
+    { top: '70%', right: '1.5%' }, { top: '90%', right: '1.0%' }
+  ];
+  positions.forEach(function(pos, i) {
+    var el = document.createElement('div');
+    el.className = 'm-marginalia-glyph';
+    el.textContent = GLYPHS[i % GLYPHS.length];
+    Object.assign(el.style, pos);
+    el.style.animationDelay = (i * 0.7) + 's';
+    document.body.appendChild(el);
   });
-
-  var rels = (entity.relationships || []).map(function(r) {
-    var tgt = window.DB.entities.find(function(e) { return e.id === r.target_id; });
-    var tName = tgt ? tgt.canonical_name : r.target_id;
-    return '- ' + r.edge_type + ' → ' + tName + ' (' + r.source_text + ')';
-  }).join('\n');
-
-  var sources = (entity.source_attestations || []).map(function(s, i) { return (i + 1) + '. ' + s; }).join('\n');
-
-  return '# ' + entity.canonical_name + '\n' +
-    '*' + (aliases || 'No aliases recorded') + '*\n' +
-    (levelLabels[entity.hierarchical_level] || 'Level ' + entity.hierarchical_level) + '\n\n' +
-    '## Functional Domains\n' + (domains || '—') + '\n\n' +
-    '## Tradition Vectors\n' + tradSection + '\n' +
-    '## Relationships\n' + (rels || '—') + '\n\n' +
-    '## Source Attestations\n' + (sources || '—') + '\n\n' +
-    '## Research Notes\n' + (entity.research_notes || '—') + '\n';
-}
-
-function M_exportMarkdown() {
-  var modal = document.getElementById('export-modal');
-  if (!modal || !window.DB) return;
-  var entity = window.DB.entities.find(function(e) { return e.id === modal.dataset.entityId; });
-  if (!entity) return;
-  M_copyToClipboard(M_entityToMarkdown(entity), 'Markdown copied to clipboard ✦');
-}
-
-function M_printCard() {
-  var modal = document.getElementById('export-modal');
-  if (!modal || !window.DB) return;
-  var entityId = modal.dataset.entityId;
-  M_closeExportModal();
-  var detailOpen = document.getElementById('detail-overlay').classList.contains('open');
-  if (!detailOpen) window.openDetail(entityId);
-  setTimeout(function() { window.print(); }, 400);
-}
-
-function M_copyToClipboard(text, successMsg) {
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(text).then(function() {
-      M_showExportFeedback(successMsg);
-    }).catch(function() {
-      M_fallbackCopy(text, successMsg);
-    });
-  } else {
-    M_fallbackCopy(text, successMsg);
-  }
-}
-
-function M_fallbackCopy(text, successMsg) {
-  var ta = document.createElement('textarea');
-  ta.value = text;
-  ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0';
-  document.body.appendChild(ta);
-  ta.focus();
-  ta.select();
-  try {
-    document.execCommand('copy');
-    M_showExportFeedback(successMsg);
-  } catch(e) {
-    M_showExportFeedback('Copy failed — please select and copy manually');
-  }
-  document.body.removeChild(ta);
-}
-
-function M_showExportFeedback(msg) {
-  var fb = document.getElementById('export-feedback');
-  if (!fb) return;
-  fb.textContent = msg;
-  fb.style.opacity = '1';
-  setTimeout(function() { fb.style.opacity = '0'; }, 2800);
 }
 
 // ══════════════════════════════════════════════════════════════
 //  BOOT
 // ══════════════════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', function() {
+  M_initInvocation();
   M_initSound();
   M_initSigils();
   M_initLoreTooltips();
@@ -1245,16 +1322,18 @@ document.addEventListener('DOMContentLoaded', function() {
   M_initTimeline();
   M_initConstellation();
   M_initScriptureSearch();
+  M_initAtmosphere();
 
   var idleFn = function() {
     M_whenReady(function() {
       M_injectCompareButtons();
+      M_applyDangerMarks();
       M_showPageLoadInsight();
     });
   };
   if (typeof requestIdleCallback !== 'undefined') {
     requestIdleCallback(idleFn, { timeout: 4000 });
   } else {
-    setTimeout(idleFn, 500);
+    setTimeout(idleFn, 600);
   }
 });
