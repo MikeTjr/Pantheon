@@ -231,20 +231,78 @@
   <div id="compare-body"></div>
 </div>
 
-<!-- ══ EXPORT MODAL ══ -->
-<div id="export-modal" role="dialog" aria-modal="true" aria-label="Export Entity Data">
-  <div class="export-modal-panel">
-    <p class="export-modal-label">Export · Research Data</p>
-    <span id="export-modal-name"></span>
-    <div class="export-options">
-      <button class="export-option-btn" onclick="M_exportJSON()" aria-label="Copy entity data as JSON">⊞ Copy JSON</button>
-      <button class="export-option-btn" onclick="M_exportMarkdown()" aria-label="Copy entity data as Markdown">◈ Copy Markdown</button>
-      <button class="export-option-btn" onclick="M_printCard()" aria-label="Print entity as card">⊡ Print Card</button>
+<!-- ══ OPENING INVOCATION SEAL ══ -->
+<div id="m-invocation-overlay" role="dialog" aria-modal="true" aria-label="Pantheon Concordance — Enter">
+  <div id="m-invocation-inner">
+
+    <div class="m-seal-svg-wrap">
+      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- Outer ring with markers -->
+        <g class="m-seal-ring">
+          <circle cx="100" cy="100" r="90" fill="none" stroke="#c9983a" stroke-width="0.8" opacity="0.4"/>
+          <circle cx="100" cy="100" r="86" fill="none" stroke="#c9983a" stroke-width="0.3" opacity="0.25"/>
+          <g fill="#c9983a" opacity="0.55">
+            <rect x="99" y="9" width="2" height="7" rx="1"/>
+            <rect x="99" y="184" width="2" height="7" rx="1"/>
+            <rect x="9" y="99" width="7" height="2" rx="1"/>
+            <rect x="184" y="99" width="7" height="2" rx="1"/>
+          </g>
+          <g fill="#c9983a" opacity="0.35">
+            <rect x="99" y="9" width="2" height="4" rx="1" transform="rotate(22.5 100 100)"/>
+            <rect x="99" y="9" width="2" height="4" rx="1" transform="rotate(45 100 100)"/>
+            <rect x="99" y="9" width="2" height="4" rx="1" transform="rotate(67.5 100 100)"/>
+            <rect x="99" y="9" width="2" height="4" rx="1" transform="rotate(112.5 100 100)"/>
+            <rect x="99" y="9" width="2" height="4" rx="1" transform="rotate(135 100 100)"/>
+            <rect x="99" y="9" width="2" height="4" rx="1" transform="rotate(157.5 100 100)"/>
+            <rect x="99" y="9" width="2" height="4" rx="1" transform="rotate(202.5 100 100)"/>
+            <rect x="99" y="9" width="2" height="4" rx="1" transform="rotate(225 100 100)"/>
+            <rect x="99" y="9" width="2" height="4" rx="1" transform="rotate(247.5 100 100)"/>
+            <rect x="99" y="9" width="2" height="4" rx="1" transform="rotate(292.5 100 100)"/>
+            <rect x="99" y="9" width="2" height="4" rx="1" transform="rotate(315 100 100)"/>
+            <rect x="99" y="9" width="2" height="4" rx="1" transform="rotate(337.5 100 100)"/>
+          </g>
+        </g>
+        <!-- Middle ring — star polygon -->
+        <g class="m-seal-ring">
+          <polygon points="100,22 110,55 144,55 118,75 128,108 100,88 72,108 82,75 56,55 90,55"
+            fill="none" stroke="#c9983a" stroke-width="0.9" opacity="0.45"/>
+          <circle cx="100" cy="100" r="54" fill="none" stroke="#c9983a" stroke-width="0.5" opacity="0.3"/>
+        </g>
+        <!-- Inner ring with cross and circle -->
+        <g class="m-seal-ring">
+          <circle cx="100" cy="100" r="32" fill="none" stroke="#c9983a" stroke-width="0.8" opacity="0.5"/>
+          <line x1="100" y1="68" x2="100" y2="132" stroke="#c9983a" stroke-width="0.7" opacity="0.4"/>
+          <line x1="68" y1="100" x2="132" y2="100" stroke="#c9983a" stroke-width="0.7" opacity="0.4"/>
+        </g>
+        <!-- Center pulse -->
+        <g class="m-seal-pulse">
+          <circle cx="100" cy="100" r="8" fill="none" stroke="#f0cc70" stroke-width="1.2" opacity="0.65"/>
+          <circle cx="100" cy="100" r="3" fill="#f0cc70" opacity="0.5"/>
+        </g>
+      </svg>
     </div>
-    <div id="export-feedback" aria-live="polite"></div>
-    <div class="export-close-row">
-      <button class="export-close-btn" onclick="M_closeExportModal()" aria-label="Close export modal">✕ Cancel</button>
-    </div>
+
+    <p class="m-invocation-line m-invocation-label">Concordance · Schema v0.5</p>
+    <h2 class="m-invocation-line m-invocation-title">Pantheon Concordance</h2>
+    <p class="m-invocation-line m-invocation-divider">✦ ✧ ✦</p>
+    <p class="m-invocation-line m-invocation-body">
+      This database maps the <strong>divine hierarchies, fallen orders, angelic ranks,</strong> and
+      esoteric correspondences recorded across <strong>14 traditions</strong> — from Sumerian cuneiform
+      to medieval grimoires. Figures are cross-referenced where two or more independent traditions
+      describe the same entity under different names.
+    </p>
+    <p class="m-invocation-line m-invocation-body" style="animation-delay:1.8s">
+      You will find archangels catalogued alongside the <strong>72 spirits of the Goetia.</strong>
+      Patriarchs mapped to Enochian watchers. Greek Titans set against Kabbalistic emanations.
+      The correspondences are documented — not endorsed.
+    </p>
+    <p class="m-invocation-line m-invocation-warning">Handle this knowledge with scholarly discernment.</p>
+    <button class="m-invocation-enter m-invocation-line" onclick="M_dismissInvocation()" aria-label="Enter the Concordance">
+      ✦ &nbsp;Enter the Concordance
+    </button>
+    <p class="m-invocation-line m-invocation-subtext">
+      "For by him all things were created — visible and invisible, whether thrones or powers or rulers or authorities." — Colossians 1:16
+    </p>
   </div>
 </div>
 
