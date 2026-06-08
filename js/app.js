@@ -281,26 +281,55 @@ function openDetail(id) {
     tradEl.appendChild(block);
   });
 
-  // Relations
-  const relEl = document.getElementById('d-relations');
-  relEl.innerHTML = '';
-  if (!(entity.relationships||[]).length) {
-    relEl.innerHTML = '<p style="color:var(--dim);font-style:italic;font-size:0.96rem">No cross-traditional relationships recorded yet.</p>';
-  } else {
-    (entity.relationships||[]).forEach(rel => {
-      const targetEntity = DB.entities.find(e => e.id === rel.target_id);
-      const targetName = targetEntity ? targetEntity.canonical_name : rel.target_id.replace(/-/g,' ');
-      const item = document.createElement('div');
-      item.className = 'edge-item';
-      item.innerHTML = `
-        <span class="edge-type edge-${rel.edge_type}">${rel.edge_type.replace(/_/g,' ')}</span>
-        <p class="edge-target">→ <a onclick="openDetail('${rel.target_id}')">${targetName}</a></p>
-        <p class="edge-meta"><strong style="color:var(--faint);font-family:var(--font-heading);font-size:0.66rem;letter-spacing:0.1em;text-transform:uppercase">Source: </strong>${rel.source_text}</p>
-        ${rel.notes?`<p class="edge-notes">${rel.notes}</p>`:''}
-      `;
-      relEl.appendChild(item);
-    });
-  }
+    // Relations — Marginalia Discovery Treatment
+    const relEl = document.getElementById('d-relations');
+    relEl.innerHTML = '';
+    const rels = entity.relationships || [];
+    if (!rels.length) {
+      relEl.innerHTML = '<p class="marginalia-empty">No cross-traditional relationships recorded in this manuscript.</p>';
+    } else {
+      const wrap = document.createElement('div');
+      wrap.className = 'marginalia-section-wrap';
+
+      const EDGE_GLYPHS = {
+        SYNCRETIZED_WITH:'⊕', FUNCTIONAL_PARALLEL:'⊗', DESCENDED_FROM:'↓',
+        EMANATED_FROM:'◎', POLEMIC_EQUIVALENT:'⊘', MANIFESTED_AS:'◈',
+        FALLEN_FORM_OF:'↯', TAUGHT_BY:'⊛', COMMANDS:'⊞',
+        CORRESPONDS_TO:'⋈', CONTESTED_IDENTIFICATION:'⊜'
+      };
+
+      rels.forEach(rel => {
+        const targetEntity = DB.entities.find(e => e.id === rel.target_id);
+        const targetName = targetEntity ? targetEntity.canonical_name : rel.target_id.replace(/-/g,' ');
+        const edgeColor = EDGE_COLORS[rel.edge_type] || 'var(--faint)';
+        const glyph = EDGE_GLYPHS[rel.edge_type] || '◆';
+
+        const entry = document.createElement('div');
+        entry.className = 'marginalia-entry';
+        entry.innerHTML = `
+          <div class="marginalia-glyph">${glyph}</div>
+          <div class="marginalia-rubric">
+            <span class="marginalia-rubric-badge edge-${rel.edge_type}"
+              style="background:${edgeColor}1a;color:${edgeColor};border:1px solid ${edgeColor}55">
+              ${rel.edge_type.replace(/_/g,' ')}
+            </span>
+          </div>
+          <a class="marginalia-target-name" onclick="openDetail('${rel.target_id}')">${targetName}</a>
+          <div class="marginalia-source-cite">
+            <span class="marginalia-source-label">Attestation</span>
+            <span class="marginalia-source-text">${rel.source_text}</span>
+          </div>
+          ${rel.notes ? `<p class="marginalia-notes">${rel.notes}</p>` : ''}
+          <div class="marginalia-tradition">
+            <div class="marginalia-trad-dot"></div>
+            ${rel.source_tradition || ''}
+          </div>
+        `;
+        wrap.appendChild(entry);
+      });
+
+      relEl.appendChild(wrap);
+    }
 
   // Sources
   document.getElementById('d-sources').innerHTML =
