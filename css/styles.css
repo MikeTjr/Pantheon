@@ -1117,3 +1117,137 @@ h1 {
   :root { --base: 17px; }
   .nav-btn { padding:0.75rem 0.85rem; font-size:0.65rem; letter-spacing:0.12em; }
 }
+
+
+  /* ══════════════════════════════════════════
+     MARGINALIA RELATIONSHIP ENTRIES
+     Full-width manuscript-gloss treatment for cross-traditional connections
+  ══════════════════════════════════════════ */
+  .marginalia-empty {
+    color:var(--dim); font-style:italic; font-size:0.96rem; padding:0.6rem 0;
+  }
+
+  .marginalia-section-wrap {
+    border:1px solid var(--border-mid);
+    border-left:3px solid var(--sepia);
+    border-radius:var(--radius);
+    overflow:hidden;
+    background:rgba(0,0,0,0.18);
+  }
+
+  .marginalia-entry {
+    position:relative;
+    padding:1.6rem 1.6rem 1.4rem 4.2rem;
+    border-bottom:1px solid rgba(196,169,110,0.08);
+    transition:background 0.2s;
+  }
+  .marginalia-entry:last-child { border-bottom:none; }
+  .marginalia-entry:hover {
+    background:linear-gradient(105deg,rgba(201,152,58,0.045) 0%,transparent 65%);
+  }
+
+  .marginalia-glyph {
+    position:absolute;
+    left:0.95rem; top:1.65rem;
+    width:2rem; height:2rem;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.1rem;
+    color:var(--gold);
+    opacity:0.42;
+    user-select:none;
+    font-family:var(--font-heading);
+  }
+
+  .marginalia-rubric {
+    display:flex; align-items:center; gap:0.55rem;
+    margin-bottom:0.5rem;
+  }
+  .marginalia-rubric-badge {
+    font-family:var(--font-heading);
+    font-size:0.58rem;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    padding:0.13rem 0.5rem;
+    border-radius:1px;
+    display:inline-block;
+  }
+
+  .marginalia-target-name {
+    font-family:var(--font-display);
+    font-size:1.18rem;
+    font-weight:600;
+    color:var(--gold-light);
+    cursor:pointer;
+    line-height:1.2;
+    margin-bottom:0.85rem;
+    display:block;
+    text-decoration:none;
+    transition:color 0.15s, text-shadow 0.15s;
+  }
+  .marginalia-target-name:hover {
+    color:var(--gold-bright);
+    text-shadow:0 0 18px rgba(240,204,112,0.25);
+  }
+  .marginalia-target-name::before {
+    content:'⟶ ';
+    font-size:0.82em;
+    opacity:0.38;
+    font-family:var(--font-heading);
+  }
+
+  .marginalia-source-cite {
+    padding:0.5rem 0.85rem;
+    margin-bottom:0.75rem;
+    background:rgba(0,0,0,0.28);
+    border-left:2px solid rgba(201,152,58,0.3);
+    border-radius:0 2px 2px 0;
+  }
+  .marginalia-source-label {
+    font-family:var(--font-heading);
+    font-size:0.56rem;
+    letter-spacing:0.25em;
+    text-transform:uppercase;
+    color:var(--gold);
+    opacity:0.65;
+    display:block;
+    margin-bottom:0.18rem;
+  }
+  .marginalia-source-text {
+    font-family:var(--font-body);
+    font-size:0.88rem;
+    color:var(--faint);
+    font-style:italic;
+    line-height:1.6;
+  }
+
+  .marginalia-notes {
+    font-family:var(--font-body);
+    font-size:0.97rem;
+    color:var(--vellum);
+    line-height:1.85;
+    padding-left:0.8rem;
+    border-left:1px solid rgba(201,152,58,0.12);
+    margin-bottom:0.8rem;
+  }
+
+  .marginalia-tradition {
+    display:flex; align-items:center; gap:0.4rem;
+    font-family:var(--font-heading);
+    font-size:0.58rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--dim);
+    margin-top:0.5rem;
+  }
+  .marginalia-trad-dot {
+    width:5px; height:5px; border-radius:50%;
+    background:var(--sepia); flex-shrink:0; opacity:0.6;
+  }
+
+  @media (max-width:640px) {
+    .marginalia-entry { padding:1.3rem 1.1rem 1.2rem 3.5rem; }
+    .marginalia-glyph { left:0.7rem; top:1.35rem; font-size:0.95rem; }
+    .marginalia-target-name { font-size:1.05rem; }
+    .marginalia-notes { font-size:0.93rem; }
+  }
+  
