@@ -3,7 +3,7 @@
 // ══════════════════════════════════════════════════════════════
 let DB = { entities: [] };
 let fuse = null;
-let cy = null;
+let graphBuilt = false;
 let currentFilter = 'all';
 let currentDetailId = null;
 
@@ -30,6 +30,18 @@ const LEVEL_LABELS = {
   7:'Level VII — Regional, Chthonic & Folkloric'
 };
 
+const LEVEL_SHORT_LABELS = {
+  1:'Primordial Source & Supreme Principle',
+  2:'First Emanations · Highest Orders',
+  3:'Sovereign Rulers · Cosmic Archons',
+  4:'Mediators · Patriarchs · Liminal Figures',
+  5:'Powers of Nature · Domain Deities',
+  6:'Grimoiric Hierarchy · Named Spirits',
+  7:'Regional · Chthonic · Folkloric'
+};
+
+const LEVEL_ROMAN = ['I','II','III','IV','V','VI','VII'];
+
 const NODE_COLORS = {
   greek:'#d4a832', roman:'#c4703a', egyptian:'#3ab8b8', mesopotamian:'#d9a07a',
   biblical_angel:'#a088d8', enochian:'#c06060', kabbalistic:'#50b870',
@@ -45,24 +57,6 @@ const EDGE_COLORS = {
   FALLEN_FORM_OF:'#c05050', TAUGHT_BY:'#50b0b0',
   COMMANDS:'#b06040', CORRESPONDS_TO:'#7090d0',
   CONTESTED_IDENTIFICATION:'#c09040'
-};
-
-// Level group color palette — divine to chthonic
-const LEVEL_BG = {
-  1: 'rgba(180,140,255,0.13)',
-  2: 'rgba(100,150,255,0.11)',
-  3: 'rgba(60,200,130,0.10)',
-  4: 'rgba(220,180,60,0.09)',
-  5: 'rgba(220,120,50,0.09)',
-  6: 'rgba(200,50,50,0.11)',
-  7: 'rgba(100,80,60,0.10)'
-};
-const LEVEL_BORDER = {
-  1:'#a070e0', 2:'#5080c0', 3:'#40a870',
-  4:'#c09040', 5:'#c07840', 6:'#b04040', 7:'#706050'
-};
-const LEVEL_SHORT = {
-  1:'I', 2:'II', 3:'III', 4:'IV', 5:'V', 6:'VI', 7:'VII'
 };
 
 // ══════════════════════════════════════════════════════════════
@@ -120,7 +114,6 @@ function init(data) {
     if (e.target === document.getElementById('detail-overlay')) closeDetail();
   });
 
-  document.getElementById('graph-edge-select').addEventListener('change', () => updateGraphEdgeVisibility());
   document.getElementById('graph-trad-select').addEventListener('change', () => updateGraphTradVisibility());
 }
 
@@ -280,7 +273,7 @@ function openDetail(id) {
     block.innerHTML = `
       <div class="trad-block-header">
         <p class="trad-block-name" style="color:${NODE_COLORS[tradKey]||'#c9983a'}">${TRADITION_LABELS[tradKey]||tradKey}</p>
-        <button class="focus-graph-btn" onclick="openGraphFocused('${entity.id}','${tradKey}')">⊛ Focus in Graph</button>
+        <button class="focus-graph-btn" onclick="openGraphFocused('${entity.id}','${tradKey}')">⊛ Show in Cascade</button>
       </div>
       <div class="trad-block-fields">${fields}${srcs}</div>
     `;
@@ -326,7 +319,6 @@ function openDetail(id) {
     pip.className = 'depth-pip' + (i < filled ? ' filled' : '');
     pips.appendChild(pip);
   }
-
   document.getElementById('d-depth-label').textContent = depthText(score) + ` (${score}% documented)`;
   document.getElementById('d-depth-desc').textContent =
     score>=80 ? 'This entry has extensive primary source documentation across multiple tradition tracks. Relationships are well-sourced and research notes provide scholarly context.' :
@@ -343,7 +335,7 @@ function closeDetail() {
 }
 
 // ══════════════════════════════════════════════════════════════
-//  GRAPH — HIERARCHY TREE (top-down, color-blocked by level)
+//  DIVINE HIERARCHY CASCADE — pure HTML, no graph library
 // ══════════════════════════════════════════════════════════════
 function getPrimaryTradition(entity) {
   const tv = entity.tradition_vectors||{};
@@ -353,245 +345,124 @@ function getPrimaryTradition(entity) {
 }
 
 function buildGraph() {
-  if (cy) return;
+  if (graphBuilt) return;
+  graphBuilt = true;
 
-  // Register dagre layout if available
-  if (typeof cytoscapeDagre !== 'undefined') {
-    cytoscape.use(cytoscapeDagre);
-  }
+  const container = document.getElementById('cy-fullscreen');
+  container.innerHTML = '';
+  container.className = 'cascade-scroll';
 
-  const elements = [];
+  const inner = document.createElement('div');
+  inner.className = 'cascade-container';
+  container.appendChild(inner);
 
-  // ── Level group compound nodes (one per level, top to bottom) ──
+  // ── Banner ──────────────────────────────────────────────────
+  const banner = document.createElement('div');
+  banner.className = 'cascade-banner';
+  banner.innerHTML = `
+    <div class="cascade-banner-sigil">✦ ✧ ✦</div>
+    <div class="cascade-banner-title">Divine Hierarchy Cascade</div>
+    <div class="cascade-banner-sub">Ontological Descent from Supreme Principle through Successive Ranks of Being</div>
+    <div class="cascade-banner-verse">"For by him all things were created — visible and invisible, whether thrones or powers or rulers or authorities."<span class="cascade-banner-cite">— Colossians 1:16</span></div>
+  `;
+  inner.appendChild(banner);
+
+  // ── Group entities by level, sorted within each level ──────
+  const byLevel = {};
+  for (let lvl = 1; lvl <= 7; lvl++) byLevel[lvl] = [];
+  DB.entities.forEach(e => byLevel[e.hierarchical_level || 5].push(e));
+
   for (let lvl = 1; lvl <= 7; lvl++) {
-    elements.push({
-      data: {
-        id: `__level_${lvl}`,
-        label: `${LEVEL_SHORT[lvl]} · ${LEVEL_LABELS[lvl].split('—')[1].trim()}`,
-        isGroup: true,
-        groupLevel: lvl
-      },
-      classes: `level-group lv${lvl}`
+    byLevel[lvl].sort((a, b) => {
+      if (a.id === 'jesus-christ') return -1;
+      if (b.id === 'jesus-christ') return 1;
+      const ta = TRADITION_ORDER.indexOf(getPrimaryTradition(a));
+      const tb = TRADITION_ORDER.indexOf(getPrimaryTradition(b));
+      if (ta !== tb) return ta - tb;
+      return a.canonical_name.localeCompare(b.canonical_name);
     });
   }
 
-  // Hidden ordering edges: force dagre to rank groups top-down by level
-  for (let lvl = 1; lvl <= 6; lvl++) {
-    elements.push({
-      data: { id: `__ord_${lvl}`, source: `__level_${lvl}`, target: `__level_${lvl+1}` },
-      classes: 'order-edge'
+  // ── Render tiers ────────────────────────────────────────────
+  for (let lvl = 1; lvl <= 7; lvl++) {
+    const entities = byLevel[lvl];
+    if (!entities.length) continue;
+
+    const tier = document.createElement('div');
+    tier.className = `cascade-tier cascade-tier-lv${lvl}`;
+    tier.dataset.level = lvl;
+
+    // — Tier header
+    const header = document.createElement('div');
+    header.className = 'cascade-tier-header';
+    header.innerHTML = `
+      <div class="cascade-rule"></div>
+      <div class="cascade-tier-label">
+        <span class="cascade-roman">${LEVEL_ROMAN[lvl - 1]}</span>
+        <span class="cascade-tier-name">${LEVEL_SHORT_LABELS[lvl]}</span>
+      </div>
+      <div class="cascade-rule"></div>
+    `;
+    tier.appendChild(header);
+
+    // — Entity count sub-label
+    const countLabel = document.createElement('div');
+    countLabel.className = 'cascade-tier-count';
+    countLabel.textContent = `${entities.length} ${entities.length === 1 ? 'figure' : 'figures'}`;
+    tier.appendChild(countLabel);
+
+    // — Entity cards
+    const cardsWrap = document.createElement('div');
+    cardsWrap.className = 'cascade-entities';
+
+    entities.forEach(entity => {
+      const trad = getPrimaryTradition(entity);
+      const color = entity.id === 'jesus-christ' ? '#f0cc70' : (NODE_COLORS[trad] || '#c9983a');
+      const isJesus = entity.id === 'jesus-christ';
+
+      const card = document.createElement('div');
+      card.className = 'cascade-entity' + (isJesus ? ' cascade-entity-jesus' : '');
+      card.dataset.entityId = entity.id;
+      card.dataset.tradition = trad;
+      card.style.setProperty('--trad-color', color);
+
+      const tradDots = Object.keys(entity.tradition_vectors || {})
+        .slice(0, 6)
+        .map(k => `<span class="cascade-trad-dot" style="background:${NODE_COLORS[k] || '#888'}" title="${TRADITION_LABELS[k] || k}"></span>`)
+        .join('');
+
+      const shortName = entity.canonical_name
+        .split(' / ')[0].split(' (')[0].split(',')[0];
+
+      card.innerHTML = `
+        <div class="cascade-entity-inner">
+          ${isJesus ? '<span class="cascade-jesus-star">✦ ✧ ✦</span>' : ''}
+          <span class="cascade-entity-name">${shortName}</span>
+          <div class="cascade-trad-pips">${tradDots}</div>
+        </div>
+      `;
+      card.onclick = () => openDetail(entity.id);
+      cardsWrap.appendChild(card);
     });
+
+    tier.appendChild(cardsWrap);
+
+    // — Descent connector between tiers (not after last)
+    if (lvl < 7) {
+      const descent = document.createElement('div');
+      descent.className = 'cascade-descent';
+      descent.innerHTML = `
+        <span class="cascade-descent-line"></span>
+        <span class="cascade-descent-glyph">⬡</span>
+        <span class="cascade-descent-line"></span>
+      `;
+      tier.appendChild(descent);
+    }
+
+    inner.appendChild(tier);
   }
 
-  // ── Entity nodes — children of their level group ──
-  DB.entities.forEach(entity => {
-    const trad = getPrimaryTradition(entity);
-    const isJesus = entity.id === 'jesus-christ';
-    const lvl = entity.hierarchical_level || 5;
-    const shortLabel = entity.canonical_name
-      .split(' / ')[0].split(' (')[0].split(',')[0];
-
-    elements.push({
-      data: {
-        id: entity.id,
-        parent: `__level_${lvl}`,
-        label: shortLabel,
-        color: isJesus ? '#f0cc70' : (NODE_COLORS[trad] || NODE_COLORS.default),
-        tradition: trad,
-        level: lvl,
-        isJesus: isJesus ? 1 : 0
-      }
-    });
-  });
-
-  // ── Edges — all relationships stored; hierarchical ones visible by default ──
-  const HIER_TYPES = new Set(['COMMANDS','EMANATED_FROM','DESCENDED_FROM','FALLEN_FORM_OF','MANIFESTED_AS','TAUGHT_BY']);
-  const addedEdges = new Set();
-
-  DB.entities.forEach(entity => {
-    (entity.relationships||[]).forEach(rel => {
-      const eid = [entity.id, rel.target_id, rel.edge_type].join('|');
-      const rev = [rel.target_id, entity.id, rel.edge_type].join('|');
-      if (addedEdges.has(rev)) return;
-      if (!DB.entities.find(e => e.id === rel.target_id)) return;
-      addedEdges.add(eid);
-      const isHier = HIER_TYPES.has(rel.edge_type);
-      elements.push({
-        data: {
-          id: eid,
-          source: entity.id,
-          target: rel.target_id,
-          edgeType: rel.edge_type,
-          color: EDGE_COLORS[rel.edge_type] || '#888',
-          isHierarchical: isHier ? 1 : 0
-        },
-        classes: isHier ? 'hier-edge' : 'cross-edge'
-      });
-    });
-  });
-
-  const hasDAGRE = typeof cytoscapeDagre !== 'undefined';
-
-  cy = cytoscape({
-    container: document.getElementById('cy-fullscreen'),
-    elements,
-    style: [
-      // ── Level group bands ──
-      {
-        selector: '.level-group',
-        style: {
-          'background-color': (el) => LEVEL_BG[el.data('groupLevel')] || 'rgba(100,80,60,0.1)',
-          'background-opacity': 1,
-          'border-color': (el) => LEVEL_BORDER[el.data('groupLevel')] || '#706050',
-          'border-opacity': 0.55,
-          'border-width': 1.5,
-          'label': 'data(label)',
-          'text-valign': 'top',
-          'text-halign': 'center',
-          'color': (el) => LEVEL_BORDER[el.data('groupLevel')] || '#a89870',
-          'font-family': 'Cinzel, serif',
-          'font-size': '10px',
-          'font-weight': '500',
-          'letter-spacing': '1px',
-          'text-background-color': '#0c0a07',
-          'text-background-opacity': 0.88,
-          'text-background-padding': '5px',
-          'padding': '22px',
-          'shape': 'roundrectangle',
-          'compound-sizing-wrt-labels': 'include',
-          'min-width': 240
-        }
-      },
-      // ── Entity nodes ──
-      {
-        selector: 'node:not(.level-group)',
-        style: {
-          'background-color': 'data(color)',
-          'label': 'data(label)',
-          'color': '#f0e6cc',
-          'font-family': 'Cinzel, serif',
-          'font-size': '9px',
-          'font-weight': '600',
-          'text-background-color': '#0f0d0a',
-          'text-background-opacity': 0.88,
-          'text-background-padding': '2px',
-          'text-valign': 'center',
-          'text-halign': 'center',
-          'text-outline-color': '#0a0806',
-          'text-outline-width': '1px',
-          'text-wrap': 'wrap',
-          'text-max-width': '78px',
-          'width': (el) => el.data('isJesus') ? 54 : Math.max(28, 50 - (el.data('level')||5) * 2),
-          'height': (el) => el.data('isJesus') ? 54 : Math.max(28, 50 - (el.data('level')||5) * 2),
-          'border-width': (el) => el.data('isJesus') ? 3 : 1.5,
-          'border-color': 'data(color)',
-          'border-opacity': 0.85,
-          'shape': (el) => el.data('isJesus') ? 'star' : 'ellipse',
-          'z-index': (el) => el.data('isJesus') ? 999 : 1
-        }
-      },
-      {
-        selector: 'node:selected:not(.level-group)',
-        style: { 'border-width': 4, 'border-opacity': 1 }
-      },
-      // ── Hierarchical edges (default visible) ──
-      {
-        selector: '.hier-edge',
-        style: {
-          'line-color': 'data(color)',
-          'target-arrow-color': 'data(color)',
-          'target-arrow-shape': 'triangle',
-          'arrow-scale': 0.75,
-          'width': 1.5,
-          'opacity': 0.72,
-          'curve-style': 'taxi',
-          'taxi-direction': 'downward'
-        }
-      },
-      // ── Cross-link edges (hidden by default, toggled by filter) ──
-      {
-        selector: '.cross-edge',
-        style: {
-          'line-color': 'data(color)',
-          'target-arrow-color': 'data(color)',
-          'target-arrow-shape': 'triangle',
-          'arrow-scale': 0.75,
-          'width': 1.2,
-          'opacity': 0,
-          'curve-style': 'bezier',
-          'line-style': 'dashed',
-          'line-dash-pattern': [6, 4],
-          'events': 'no'
-        }
-      },
-      // ── Ordering edges (invisible skeleton) ──
-      { selector: '.order-edge', style: { 'opacity': 0, 'events': 'no', 'width': 0 } },
-      // ── Dimming ──
-      { selector: 'edge.hidden', style: { 'opacity': 0, 'events': 'no' } },
-      { selector: 'node.dimmed:not(.level-group)', style: { 'opacity': 0.08, 'text-opacity': 0 } },
-      { selector: '.level-group.dimmed', style: { 'background-opacity': 0.4, 'border-opacity': 0.2 } },
-      { selector: 'edge.dimmed:not(.order-edge)', style: { 'opacity': 0.03 } }
-    ],
-    layout: hasDAGRE ? {
-      name: 'dagre',
-      rankDir: 'TB',
-      align: 'UL',
-      nodeSep: 28,
-      rankSep: 55,
-      edgeSep: 10,
-      ranker: 'tight-tree',
-      animate: true,
-      animationDuration: 800,
-      padding: 40,
-      fit: true
-    } : {
-      name: 'breadthfirst',
-      directed: true,
-      roots: ['jesus-christ'],
-      spacingFactor: 1.6,
-      padding: 60,
-      animate: true,
-      animationDuration: 700
-    },
-    userZoomingEnabled: true,
-    userPanningEnabled: true,
-    minZoom: 0.04,
-    maxZoom: 6,
-    wheelSensitivity: 0.07,
-    boxSelectionEnabled: false,
-    touchTapThreshold: 8,
-    desktopTapThreshold: 4,
-    autolock: false,
-    autoungrabify: false,
-    autounselectify: false
-  });
-
-  cy.on('tap', 'node:not(.level-group)', evt => {
-    const id = evt.target.id();
-    cy.nodes(':not(.level-group)').addClass('dimmed');
-    cy.nodes('.level-group').addClass('dimmed');
-    cy.edges(':not(.order-edge)').addClass('dimmed');
-    evt.target.removeClass('dimmed');
-    evt.target.connectedEdges(':not(.order-edge)').removeClass('dimmed').connectedNodes(':not(.level-group)').removeClass('dimmed');
-    openDetail(id);
-  });
-
-  cy.on('tap', '.level-group', evt => {
-    cy.elements().removeClass('dimmed');
-    const lvl = evt.target.data('groupLevel');
-    const children = cy.nodes(`[level = ${lvl}]:not(.level-group)`);
-    cy.nodes(':not(.level-group)').addClass('dimmed');
-    cy.edges(':not(.order-edge)').addClass('dimmed');
-    cy.nodes('.level-group').addClass('dimmed');
-    children.removeClass('dimmed');
-    evt.target.removeClass('dimmed');
-  });
-
-  cy.on('tap', evt => {
-    if (evt.target === cy) cy.elements().removeClass('dimmed');
-  });
-
-  // Build legend
+  // ── Build legend ─────────────────────────────────────────────
   const legendEl = document.getElementById('graph-legend');
   legendEl.innerHTML = Object.entries(NODE_COLORS)
     .filter(([k]) => k !== 'default')
@@ -601,136 +472,82 @@ function buildGraph() {
 
 function openGraphFocused(entityId, tradKey) {
   closeDetail();
-  openGraphOverlay(entityId);
+  openGraphOverlay();
+
   if (tradKey) {
     const sel = document.getElementById('graph-trad-select');
     if (sel) { sel.value = tradKey; updateGraphTradVisibility(); }
   }
-  if (cy) {
-    cy.ready(() => {
-      const node = cy.getElementById(entityId);
-      if (node && node.length) {
-        cy.$(':selected').unselect();
-        node.select();
-        const neighbors = node.connectedEdges(':not(.order-edge)').connectedNodes().union(node);
-        cy.nodes(':not(.level-group)').addClass('dimmed');
-        cy.nodes('.level-group').addClass('dimmed');
-        cy.edges(':not(.order-edge)').addClass('dimmed');
-        node.removeClass('dimmed');
-        node.connectedEdges(':not(.order-edge)').removeClass('dimmed').connectedNodes(':not(.level-group)').removeClass('dimmed');
-        cy.fit(neighbors.union(node.parent()), 80);
-      }
+
+  // Scroll to + flash the entity card
+  const doFocus = () => {
+    const card = document.querySelector(`#cy-fullscreen .cascade-entity[data-entity-id="${entityId}"]`);
+    if (card) {
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      card.classList.add('cascade-entity-focused');
+      setTimeout(() => card.classList.remove('cascade-entity-focused'), 2400);
+    }
+  };
+
+  if (graphBuilt) {
+    requestAnimationFrame(doFocus);
+  } else {
+    // Build first, then focus
+    requestAnimationFrame(() => {
+      buildGraph();
+      requestAnimationFrame(doFocus);
     });
   }
+
   const entity = DB.entities.find(e => e.id === entityId);
-  if (entity) document.getElementById('graph-focus-label').textContent =
-    `Focused: ${entity.canonical_name}${tradKey ? ' · ' + (TRADITION_LABELS[tradKey]||tradKey) : ''}`;
+  if (entity) {
+    document.getElementById('graph-focus-label').textContent =
+      `Focused: ${entity.canonical_name}${tradKey ? ' · ' + (TRADITION_LABELS[tradKey]||tradKey) : ''}`;
+  }
 }
 
 function openGraphForCurrent() {
   if (currentDetailId) openGraphFocused(currentDetailId, null);
-  else openGraphOverlay(null);
+  else openGraphOverlay();
 }
 
-function openGraphOverlay(focusId) {
+function openGraphOverlay() {
   const overlay = document.getElementById('graph-overlay');
   overlay.classList.add('open');
   document.body.style.overflow = 'hidden';
-
-  if (!cy) {
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        buildGraph();
-        if (cy) {
-          cy.resize();
-          if (focusId) {
-            const node = cy.getElementById(focusId);
-            if (node && node.length) cy.fit(node.union(node.connectedEdges(':not(.order-edge)').connectedNodes()), 80);
-            else cy.fit(undefined, 40);
-          } else {
-            cy.fit(undefined, 40);
-          }
-        }
-      });
-    });
-  } else {
-    cy.resize();
-    if (focusId) {
-      const node = cy.getElementById(focusId);
-      if (node && node.length) cy.fit(node.union(node.connectedEdges(':not(.order-edge)').connectedNodes()), 80);
-    } else {
-      cy.fit(undefined, 40);
-    }
-  }
+  if (!graphBuilt) buildGraph();
 }
 
 function closeGraph() {
   document.getElementById('graph-overlay').classList.remove('open');
   document.body.style.overflow = '';
   document.getElementById('graph-focus-label').textContent = '';
-  document.getElementById('graph-edge-select').value = 'hier';
   document.getElementById('graph-trad-select').value = 'all';
-  if (cy) {
-    cy.elements().removeClass('dimmed hidden');
-    updateGraphEdgeVisibility();
-  }
+  // Remove any tradition filtering
+  document.querySelectorAll('.cascade-entity').forEach(c => c.classList.remove('cascade-dimmed'));
 }
 
 function resetGraph() {
-  if (!cy) return;
-  cy.elements().removeClass('dimmed hidden');
   document.getElementById('graph-focus-label').textContent = '';
-  document.getElementById('graph-edge-select').value = 'hier';
   document.getElementById('graph-trad-select').value = 'all';
-  updateGraphEdgeVisibility();
-  updateGraphTradVisibility();
-  cy.fit(undefined, 40);
-}
-
-function updateGraphEdgeVisibility() {
-  if (!cy) return;
-  const val = document.getElementById('graph-edge-select').value;
-
-  // Always hide ordering skeleton edges
-  cy.edges('.order-edge').style({ opacity: 0, events: 'no' });
-
-  if (val === 'hier') {
-    // Default: hierarchical edges only
-    cy.edges('.hier-edge').style({ opacity: 0.72, events: 'yes' });
-    cy.edges('.cross-edge').style({ opacity: 0, events: 'no' });
-  } else if (val === 'all') {
-    cy.edges('.hier-edge').style({ opacity: 0.72, events: 'yes' });
-    cy.edges('.cross-edge').style({ opacity: 0.55, events: 'yes' });
-  } else if (val === 'cross') {
-    cy.edges('.hier-edge').style({ opacity: 0.15 });
-    cy.edges('.cross-edge').style({ opacity: 0.65, events: 'yes' });
-  } else {
-    // Specific edge type
-    cy.edges(':not(.order-edge)').forEach(e => {
-      if (e.data('edgeType') === val) {
-        e.style({ opacity: 0.75, events: 'yes' });
-      } else {
-        e.style({ opacity: 0, events: 'no' });
-      }
-    });
-  }
+  document.querySelectorAll('.cascade-entity').forEach(c => c.classList.remove('cascade-dimmed'));
+  const container = document.getElementById('cy-fullscreen');
+  container.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function updateGraphTradVisibility() {
-  if (!cy) return;
   const val = document.getElementById('graph-trad-select').value;
-  cy.elements().removeClass('dimmed');
+  document.querySelectorAll('.cascade-entity').forEach(card => {
+    if (val === 'all' || card.dataset.tradition === val) {
+      card.classList.remove('cascade-dimmed');
+    } else {
+      card.classList.add('cascade-dimmed');
+    }
+  });
+  // Scroll to the first visible card if filtering
   if (val !== 'all') {
-    cy.nodes(':not(.level-group)').forEach(n => {
-      if (n.data('tradition') !== val) n.addClass('dimmed');
-    });
-    cy.edges(':not(.order-edge)').forEach(e => {
-      const src = cy.getElementById(e.data('source'));
-      const tgt = cy.getElementById(e.data('target'));
-      if (src.hasClass('dimmed') || tgt.hasClass('dimmed')) e.addClass('dimmed');
-    });
-    const visible = cy.nodes(':not(.level-group)').filter(n => n.data('tradition') === val);
-    if (visible.length) cy.fit(visible, 80);
+    const first = document.querySelector(`.cascade-entity[data-tradition="${val}"]`);
+    if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 }
 
@@ -814,5 +631,5 @@ function buildHierarchy() {
 }
 
 // ══════════════════════════════════════════════════════════════
-//  BOOT — init() is called by js/data.js after fetching data/entities.json
+//  BOOT
 // ══════════════════════════════════════════════════════════════

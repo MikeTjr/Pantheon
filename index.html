@@ -8,12 +8,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/7.0.0/fuse.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/cytoscape-dagre@2.5.0/cytoscape-dagre.min.js"></script>
 </head>
 <body>
-
 
 <!-- HEADER -->
 <header id="header">
@@ -48,18 +45,18 @@
     <div class="filter-bar" id="filter-bar">
       <button class="filter-btn active" data-filter="all">All</button>
       <button class="filter-btn" data-filter="biblical_angel">Biblical</button>
-      <button class="filter-btn" data-filter="greek">Greek</button>
-      <button class="filter-btn" data-filter="roman">Roman</button>
-      <button class="filter-btn" data-filter="egyptian">Egyptian</button>
       <button class="filter-btn" data-filter="enochian">Enochian</button>
       <button class="filter-btn" data-filter="kabbalistic">Kabbalah</button>
       <button class="filter-btn" data-filter="hermetic">Hermetic</button>
       <button class="filter-btn" data-filter="gnostic">Gnostic</button>
-      <button class="filter-btn" data-filter="goetic">Goetic</button>
-      <button class="filter-btn" data-filter="islamic">Islamic</button>
+      <button class="filter-btn" data-filter="greek">Greek</button>
+      <button class="filter-btn" data-filter="roman">Roman</button>
+      <button class="filter-btn" data-filter="egyptian">Egyptian</button>
       <button class="filter-btn" data-filter="mesopotamian">Mesopotamian</button>
       <button class="filter-btn" data-filter="canaanite">Canaanite</button>
       <button class="filter-btn" data-filter="hindu">Hindu</button>
+      <button class="filter-btn" data-filter="goetic">Goetic</button>
+      <button class="filter-btn" data-filter="islamic">Islamic</button>
       <button class="filter-btn" data-filter="planetary">Planetary</button>
     </div>
     <p class="results-count" id="results-count"></p>
@@ -88,16 +85,16 @@
       <p>Each patriarch is cross-referenced with their appearances in other tradition tracks — Enoch in Enochian and Islamic literature, Abraham in Kabbalistic and Islamic correspondence, Noah across Enochian and Islamic prophecy. This genealogical thread is the red line running through the entire concordance.</p>
 
       <h2>Research Depth Rating</h2>
-      <p>The <strong>Research Depth</strong> meter on each entry replaces a simple percentage. It communicates how thoroughly an entry has been documented across its tradition tracks:</p>
+      <p>The <strong>Research Depth</strong> meter on each entry communicates how thoroughly an entry has been documented across its tradition tracks:</p>
       <p><strong style="color:var(--gold-light)">Primary Source</strong> — Extensively attested in multiple primary texts with full tradition-vector coverage and cross-referenced relationships.<br>
       <strong style="color:var(--sepia)">Secondary Source</strong> — Well-documented but missing one or more tradition vectors; some relationships need further sourcing.<br>
       <strong style="color:var(--dim)">Partial</strong> — Entry exists with basic data; further research needed for full coverage.</p>
 
+      <h2>Divine Hierarchy Cascade</h2>
+      <p>The <strong>Show in Cascade</strong> button on any entity opens a full-screen <em>Divine Hierarchy Cascade</em> — a tiered list reading top to bottom from the most ontologically significant (Theological Center, Level I) down through successive ranks of being: First Emanations → Sovereign Rulers → Mediators & Patriarchs → Nature Powers → Grimoiric Hierarchy → Regional & Chthonic figures. The visual language deliberately echoes <em>medieval cosmological diagrams</em> — the Great Chain of Being, Dante's celestial spheres — as structured descent from the divine into the created order. Use the tradition filter to isolate any one tradition's figures within the cascade. Click any figure to open its full profile.</p>
+
       <h2>Methodology</h2>
       <p>Three principles govern every entry. <strong style="color:var(--gold-light)">Source transparency:</strong> every correspondence is tagged with the tradition and text making the claim — ancient syncretisms, modern scholarly parallels, and polemical equivalences are each marked differently. <strong style="color:var(--gold-light)">Contested claims are preserved, not resolved:</strong> where scholars disagree, both positions are stored and flagged. <strong style="color:var(--gold-light)">History of ideas, not advocacy:</strong> mapping Augustine's claim that Zeus is a demon does not endorse that theology; every tradition is treated with scholarly care.</p>
-
-      <h2>Graph Visualization</h2>
-      <p>The graph displays a <strong>top-down hierarchy tree</strong> organized by the seven structural levels — divine/supreme principles at the apex, regional and folkloric entities at the base. Color-coded bands group entities by their level. Node colors indicate the entity's primary tradition. By default, only <em>hierarchical edges</em> (Commands, Emanated From, Descended From, Fallen Form Of) are shown — use the edge filter to reveal cross-tradition links (Syncretized With, Functional Parallel, etc.). Click any level band to highlight that tier; click any node to focus its connections and open its profile.</p>
 
       <h2>Deployment</h2>
       <p>Static site — no build step, no server required. Push to GitHub, enable Pages from Settings → Pages → Source: main branch. To add or edit entities, update <code>data/entities.json</code> and recommit — no JavaScript editing needed.</p>
@@ -117,7 +114,7 @@
       <h2 class="detail-name" id="d-name"></h2>
       <p class="detail-aliases" id="d-aliases"></p>
       <div class="detail-actions">
-        <button class="detail-graph-btn" id="d-graph-btn" onclick="openGraphForCurrent()">⊛ Focus in Graph</button>
+        <button class="detail-graph-btn" id="d-graph-btn" onclick="openGraphForCurrent()">⊛ Show in Cascade</button>
         <button class="detail-close" onclick="closeDetail()">✕ Close</button>
       </div>
     </div>
@@ -162,27 +159,12 @@
   </div>
 </div>
 
-<!-- ══ GRAPH FULLSCREEN OVERLAY ══ -->
+<!-- ══ DIVINE HIERARCHY CASCADE OVERLAY ══ -->
 <div id="graph-overlay">
   <div class="graph-overlay-header">
-    <span class="graph-overlay-title">Hierarchy Tree</span>
-    <span id="graph-focus-label" style="font-family:var(--font-body);font-size:0.88rem;color:var(--faint);font-style:italic"></span>
-    <!-- Edge filter -->
-    <select id="graph-edge-select" class="graph-trad-select" onchange="updateGraphEdgeVisibility()">
-      <option value="hier">Hierarchical edges</option>
-      <option value="all">All edges</option>
-      <option value="cross">Cross-links only</option>
-      <option value="SYNCRETIZED_WITH">Syncretized With</option>
-      <option value="FUNCTIONAL_PARALLEL">Functional Parallel</option>
-      <option value="DESCENDED_FROM">Descended From</option>
-      <option value="COMMANDS">Commands</option>
-      <option value="EMANATED_FROM">Emanated From</option>
-      <option value="FALLEN_FORM_OF">Fallen Form Of</option>
-      <option value="POLEMIC_EQUIVALENT">Polemic Equivalent</option>
-      <option value="CONTESTED_IDENTIFICATION">Contested ID</option>
-    </select>
-    <!-- Tradition filter -->
-    <select id="graph-trad-select" class="graph-trad-select" onchange="updateGraphTradVisibility()">
+    <span class="graph-overlay-title">Divine Hierarchy Cascade</span>
+    <span id="graph-focus-label" style="font-family:var(--font-body);font-size:0.85rem;color:var(--faint);font-style:italic"></span>
+    <select id="graph-trad-select" class="graph-trad-select" onchange="updateGraphTradVisibility()" title="Filter by tradition">
       <option value="all">All traditions</option>
       <option value="biblical_angel">Biblical</option>
       <option value="enochian">Enochian</option>
@@ -199,15 +181,12 @@
       <option value="islamic">Islamic</option>
       <option value="planetary">Planetary</option>
     </select>
-    <button class="graph-close-btn" onclick="closeGraph()">✕ Close Graph</button>
+    <button class="graph-close-btn" onclick="closeGraph()">✕ Close</button>
   </div>
-  <div style="position:relative;flex:1;display:flex;flex-direction:column;">
-    <div id="cy-fullscreen"></div>
-    <button class="graph-reset-fab" onclick="resetGraph()" title="Reset view">⟳</button>
-  </div>
+  <div id="cy-fullscreen"></div>
+  <button class="graph-reset-fab" onclick="resetGraph()" title="Reset to top">⟳</button>
   <div class="graph-legend-strip" id="graph-legend"></div>
 </div>
-
 
 <script src="js/data.js"></script>
 <script src="js/app.js"></script>
