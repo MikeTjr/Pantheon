@@ -134,7 +134,7 @@
           "notes": "Renaissance Christian Hermeticists placed Christ as the apex of the prisca theologia lineage, with Hermes Trismegistus as a prophetic anticipation of the Logos. Ficino saw Hermeticism as preparation for Christian revelation."
         },
         {
-          "target_id": "lucifer",
+          "target_id": "satan",
           "edge_type": "CONTESTED_IDENTIFICATION",
           "source_tradition": "Biblical / Eschatological",
           "source_text": "Revelation 22:16 (Christ calls himself the 'bright morning star'); Isaiah 14:12 (Lucifer/Helel)",
@@ -374,7 +374,7 @@
           "notes": "Azazel is among the 200 Watchers; his sin is treated as more corrupting than Semjaza's"
         },
         {
-          "target_id": "lucifer",
+          "target_id": "satan",
           "edge_type": "CONTESTED_IDENTIFICATION",
           "source_tradition": "Christian Demonology",
           "source_text": "Various Early Modern grimoires",
@@ -483,132 +483,6 @@
       ],
       "research_notes": "Thoth's role as divine scribe and keeper of cosmic records gives him singular theological importance in the Egyptian system. In the Hall of Two Truths (Spell 125 of the Book of the Dead), Thoth stands beside the scales where the deceased's heart is weighed against the Feather of Ma'at — he records the verdict on his palette, and without his notation the judgment does not stand. He is simultaneously the notary of cosmic law and the inventor of writing, numbers, and time: the Egyptians attributed all scribal arts to him. His Hermopolitan theology (Thoth as the creator-god of Hermopolis Magna) positioned him as the one who uttered or wrote creation into existence — a direct structural parallel to the Logos theology of John 1:1. The identification of Thoth with Hermes appears as early as Herodotus (Histories II.67, comparing Egyptian Hermes with Greek Hermes), and the full Thoth-Hermes synthesis produced the Hermetic tradition. Richard Jasnow and Karl-Theodor Zauzich's The Ancient Egyptian Book of Thoth (Harrassowitz, 2005) reconstructed a previously unknown priestly text from the Late Period in which Thoth initiates a student through mystery-form dialogues — direct literary ancestor of the Hermetic dialogues in the Corpus Hermeticum. Thoth's role as the measurer of time (he governs the lunar calendar, the thirty-day month, and the intercalary days) makes him the divine timekeeper whose absence would collapse cosmic order. Erik Hornung's essay on Thoth in Conceptions of God in Ancient Egypt (Cornell, 1982) remains the most concise scholarly treatment.",
       "completeness_score": 78
-    },
-    {
-      "id": "lucifer",
-      "canonical_name": "Lucifer / The Light-Bringer",
-      "aliases": [
-        "Helel ben Shahar",
-        "Phosphorus",
-        "Morning Star",
-        "Son of the Dawn"
-      ],
-      "tradition_vectors": {
-        "greek": {
-          "name": "Phosphoros / Eosphoros",
-          "class": "Other",
-          "epithets": [
-            "Light-Bringer",
-            "Dawn-Bearer"
-          ],
-          "source_texts": [
-            "Hesiod Theogony 381",
-            "Homeric Hymn to Selene"
-          ]
-        },
-        "roman": {
-          "name": "Lucifer",
-          "interpretatio_type": "Direct",
-          "source_texts": [
-            "Ovid Metamorphoses II.115",
-            "Virgil Aeneid II"
-          ]
-        },
-        "biblical_angel": {
-          "name": "Helel ben Shahar",
-          "rank": "Angel",
-          "canonical_function": "Taunt-poem figure; later tradition developed into fallen angel",
-          "source_texts": [
-            "Isaiah 14:12–15"
-          ]
-        },
-        "enochian": {
-          "name": "Gadreel / Shemihaza tradition",
-          "classification": "Fallen Watcher",
-          "enoch_book": "1 Enoch",
-          "sin_or_role": "Some traditions link the Light-Bringer motif to Gadreel who led Eve astray",
-          "chapter_reference": "1 Enoch 69:6"
-        },
-        "kabbalistic": {
-          "sephira": "Tiphareth",
-          "qliphoth_counterpart": "Thagirion (Belial / Sorath)",
-          "divine_name": "YHVH Eloah ve-Da'ath",
-          "source_texts": [
-            "Zohar III:227a",
-            "Etz Chaim"
-          ]
-        },
-        "gnostic": {
-          "name": "Sophia (Lower Aspect) / Yaldabaoth (pride parallel)",
-          "system": "Valentinian",
-          "classification": "Archon",
-          "source_texts": [
-            "Apocryphon of John",
-            "On the Origin of the World"
-          ]
-        },
-        "goetic": {
-          "name": "Lucifer",
-          "rank": "King",
-          "legions": 0,
-          "primary_functions": [
-            "Illumination",
-            "Pride",
-            "Rebellion"
-          ],
-          "grimoire_source": "Grand Grimoire"
-        },
-        "planetary": {
-          "planet": "Venus",
-          "zodiac_rulership": [
-            "Taurus",
-            "Libra"
-          ],
-          "day_of_week": "Friday",
-          "metal": "Copper",
-          "color": "Green / Emerald"
-        }
-      },
-      "functional_domains": [
-        "Forbidden Knowledge",
-        "Pride and Self-Deification",
-        "Rebellion Against Hierarchy",
-        "Morning Star / Dawn",
-        "Illumination"
-      ],
-      "hierarchical_level": 3,
-      "relationships": [
-        {
-          "target_id": "azazel",
-          "edge_type": "CONTESTED_IDENTIFICATION",
-          "source_tradition": "Christian Demonology",
-          "source_text": "Origen De Principiis I.5",
-          "notes": "Conflation common in later Christian demonology; primary sources treat separately"
-        },
-        {
-          "target_id": "yaldabaoth",
-          "edge_type": "FUNCTIONAL_PARALLEL",
-          "source_tradition": "Gnosticism",
-          "source_text": "Apocryphon of John NHC II.1",
-          "notes": "Both represent misappropriation of divine light; structural not claimed parallel"
-        },
-        {
-          "target_id": "prometheus",
-          "edge_type": "FUNCTIONAL_PARALLEL",
-          "source_tradition": "Comparative Mythology",
-          "source_text": "Forsyth The Old Enemy (1987)",
-          "notes": "Fire-bringer parallel widely noted by scholars"
-        }
-      ],
-      "source_attestations": [
-        "Isaiah 14:12",
-        "Luke 10:18",
-        "Revelation 12:9",
-        "Grand Grimoire",
-        "Zohar III:227a"
-      ],
-      "research_notes": "Isaiah 14:12 is a taunt directed at the King of Babylon; the 'fallen angel' interpretation is entirely a later Christian development, not present in the Hebrew text. The Latin 'Lucifer' simply means 'morning star.'",
-      "completeness_score": 83
     },
     {
       "id": "zeus-jupiter",
@@ -1671,7 +1545,7 @@
       "hierarchical_level": 6,
       "relationships": [
         {
-          "target_id": "lucifer",
+          "target_id": "satan",
           "edge_type": "CONTESTED_IDENTIFICATION",
           "source_tradition": "Christian Demonology",
           "source_text": "2 Cor 6:15; Milton Paradise Lost",
@@ -2028,7 +1902,7 @@
           "notes": "Semjaza is the named leader; Azazel's transgressions are treated as more severe in 1 Enoch 10"
         },
         {
-          "target_id": "lucifer",
+          "target_id": "satan",
           "edge_type": "CONTESTED_IDENTIFICATION",
           "source_tradition": "Christian demonology / Comparative",
           "source_text": "Various patristic and medieval sources",
@@ -5328,35 +5202,87 @@
     },
     {
       "id": "satan",
-      "canonical_name": "Satan",
+      "canonical_name": "Satan / Lucifer",
       "aliases": [
         "Ha-Satan",
         "The Adversary",
         "The Devil",
         "Prince of Darkness",
-        "The Accuser"
+        "The Accuser",
+        "Helel ben Shahar",
+        "Phosphorus",
+        "Morning Star",
+        "Son of the Dawn",
+        "Father of Lies",
+        "Prince of the Power of the Air",
+        "The Dragon",
+        "The Old Serpent",
+        "Diabolus",
+        "Sar ha-Olam Hazeh",
+        "The Shining One",
+        "The Light-Bearer"
       ],
       "tradition_vectors": {
+        "greek": {
+          "name": "Phosphoros / Eosphoros",
+          "class": "Other",
+          "epithets": [
+            "Light-Bringer",
+            "Dawn-Bearer"
+          ],
+          "source_texts": [
+            "Hesiod Theogony 381",
+            "Homeric Hymn to Selene"
+          ]
+        },
+        "roman": {
+          "name": "Lucifer",
+          "interpretatio_type": "Direct",
+          "source_texts": [
+            "Ovid Metamorphoses II.115",
+            "Virgil Aeneid II"
+          ]
+        },
         "biblical_angel": {
-          "name": "Ha-Satan",
-          "rank": "Accuser / Adversary",
-          "canonical_function": "In the Hebrew Bible: a member of the divine council who functions as cosmic prosecutor/tester (Job 1–2; Zechariah 3:1–2). In the New Testament: cosmic adversary of Christ and humanity (Luke 10:18; Revelation 12:9–10; John 8:44).",
+          "name": "Ha-Satan / Helel ben Shahar",
+          "rank": "Fallen Archangel / Adversary",
+          "canonical_function": "In the Hebrew Bible: cosmic prosecutor/tester (Job 1–2; Zech 3:1–2); taunt-poem figure (Is 14:12). In the NT: cosmic adversary of Christ and humanity, identified as the Dragon and ancient serpent (Rev 12:9). The Christian identification of Lucifer (Is 14:12) with Satan is a 3rd-century exegetical fusion (Origen, Tertullian) not present in the Hebrew original — but has defined Western demonology ever since.",
           "source_texts": [
             "Job 1:6–12 (ha-Satan in divine council)",
             "Zechariah 3:1–2 (accuser before YHWH)",
-            "Isaiah 14:12–15 (Lucifer conflation, later Christian)",
+            "Isaiah 14:12–15 (Helel ben Shahar — the taunt song)",
             "Luke 10:18 ('I saw Satan fall like lightning')",
             "Revelation 12:9 ('the ancient serpent called the devil or Satan')",
-            "Matthew 4:1–11 (temptation of Christ)"
+            "Matthew 4:1–11 (temptation of Christ)",
+            "John 8:44 (Father of Lies)",
+            "Ephesians 2:2 (Prince of the Power of the Air)"
           ]
         },
+        "enochian": {
+          "name": "Gadreel / Shemihaza tradition",
+          "classification": "Fallen Watcher",
+          "enoch_book": "1 Enoch",
+          "sin_or_role": "Some traditions link the Light-Bringer motif to Gadreel who led Eve astray",
+          "chapter_reference": "1 Enoch 69:6"
+        },
         "kabbalistic": {
-          "sephira": "Qliphoth — Thaumiel",
-          "qliphoth_counterpart": "Twin Gods / Double-Headed Contender",
-          "divine_name": "Contending against Kether",
+          "sephira": "Qliphoth — Thaumiel / Thagirion",
+          "qliphoth_counterpart": "Twin Gods / Double-Headed Contender (Thaumiel); Sorath / Belial (Thagirion)",
+          "divine_name": "Contending against Kether and Tiphareth",
           "source_texts": [
             "Zohar — Satan as the Other Side (Sitra Achra)",
-            "Treatise on the Left Emanation (Liqqutei Torah)"
+            "Treatise on the Left Emanation (Liqqutei Torah)",
+            "Zohar III:227a (Lucifer/Samael as the Other Side)",
+            "Etz Chaim — Thagirion as the Qliphah of Tiphareth"
+          ]
+        },
+        "gnostic": {
+          "name": "Sophia (Lower Aspect) / Yaldabaoth (pride parallel)",
+          "system": "Valentinian",
+          "classification": "Archon",
+          "source_texts": [
+            "Apocryphon of John",
+            "On the Origin of the World"
           ]
         },
         "goetic": {
@@ -5368,6 +5294,17 @@
             "Lord of Demons"
           ],
           "grimoire_source": "Grand Grimoire; Dictionnaire Infernal (Collin de Plancy 1818)"
+        },
+        "planetary": {
+          "planet": "Venus (as Lucifer, Morning Star) / Saturn (as Satan, Adversary)",
+          "zodiac_rulership": [
+            "Taurus",
+            "Libra",
+            "Capricorn"
+          ],
+          "day_of_week": "Friday / Saturday",
+          "metal": "Copper / Lead",
+          "color": "Green / Black / Crimson"
         }
       },
       "functional_domains": [
@@ -5375,7 +5312,15 @@
         "Rebellion Against Divine Authority",
         "Temptation and Adversarial Opposition",
         "Mastery of the Material World",
-        "Luciferian Liberation and Gnosis Through Opposition"
+        "Luciferian Liberation and Gnosis Through Opposition",
+        "Forbidden Knowledge",
+        "Pride and Self-Deification",
+        "Rebellion Against Hierarchy",
+        "Morning Star / Dawn",
+        "Illumination",
+        "Supreme Lord of the Infernal Hierarchy",
+        "The Adversarial Current",
+        "Forbidden Knowledge and Illumination Through Transgression"
       ],
       "hierarchical_level": 3,
       "occult_practice": {
@@ -5404,18 +5349,123 @@
       },
       "relationships": [
         {
-          "target_id": "lucifer",
-          "edge_type": "CONTESTED_IDENTIFICATION",
-          "source_tradition": "Christian Theology",
-          "source_text": "Origen De Principiis; Tertullian",
-          "notes": "The identification of Satan with Lucifer (Isaiah 14:12) is a 3rd-century Christian exegetical move not present in the Hebrew text; in the LHP tradition this conflation is often embraced as a unified adversarial principle"
+          "target_id": "azazel",
+          "edge_type": "COMMANDS",
+          "source_tradition": "Second Temple Judaism / Enochian",
+          "source_text": "1 Enoch 10:4–6; Dead Sea Scrolls (4Q Amram); Book of Jubilees 10:8",
+          "notes": "Azazel is bound in the desert of Dudael by Raphael at God's command — his domain and the Satanic function overlap in multiple Second Temple texts. The Yom Kippur scapegoat ritual sends one goat 'to Azazel' — a direct channel between the adversarial principle and fallen angelic hierarchy."
         },
         {
-          "target_id": "azazel",
+          "target_id": "beelzebub",
+          "edge_type": "COMMANDS",
+          "source_tradition": "Christian Demonology / Kabbalistic",
+          "source_text": "Matthew 12:24 ('Beelzebub, the prince of demons'); Testament of Solomon; Binsfeld Classification of Demons (1589)",
+          "notes": "Beelzebub is Satan's second-in-command in the infernal hierarchy across multiple demonological traditions. Matthew 12:24 names Beelzebub as 'ruler of demons' — the same title elsewhere applied to Satan. Peter Binsfeld's classification (1589) assigns him dominion over Gluttony; in other schemas he is Satan's viceroy over all demonic operations on earth."
+        },
+        {
+          "target_id": "asmodeus",
+          "edge_type": "COMMANDS",
+          "source_tradition": "Jewish / Christian Demonology",
+          "source_text": "Testament of Solomon; Goetia — Book of Asmodeus; Binsfeld (Lust); Collin de Plancy Dictionnaire Infernal (1818)",
+          "notes": "Asmodeus is the King of Demons in the Book of Tobit tradition. As lord of Lust and the destroyer of marriages, he operates as a lieutenant-king within the Satanic infernal structure — commanding his own domain while reporting upward through the hierarchy."
+        },
+        {
+          "target_id": "belial",
+          "edge_type": "COMMANDS",
+          "source_tradition": "Biblical / Dead Sea Scrolls / Kabbalistic",
+          "source_text": "2 Corinthians 6:15; 1QS (Community Rule) 1:18; Mastema texts; Goetia #68",
+          "notes": "Belial functions as Lord of This World and Prince of Darkness in the Dead Sea Scrolls' cosmic dualism — commanding the Sons of Darkness against the Sons of Light. The Community Rule positions Belial as the adversarial counterpart to the Angel of Light, directly within the Satanic power structure."
+        },
+        {
+          "target_id": "leviathan",
+          "edge_type": "COMMANDS",
+          "source_tradition": "Biblical / Christian Demonology",
+          "source_text": "Isaiah 27:1; Job 41; Revelation 12:9 (dragon); Collin de Plancy Dictionnaire Infernal; Peter Binsfeld (Envy)",
+          "notes": "Leviathan — the twisting serpent and sea monster of Job 41 and Isaiah 27 — is identified in Christian demonology as Satan's form as the primordial serpent-dragon (Revelation 12:9: 'the ancient serpent'). Binsfeld assigns him dominion over Envy. The Revelation identification makes Leviathan not merely a servant but one of Satan's primary manifestations."
+        },
+        {
+          "target_id": "mammon",
+          "edge_type": "COMMANDS",
+          "source_tradition": "Christian Demonology / Medieval Theology",
+          "source_text": "Matthew 6:24 ('You cannot serve God and Mammon'); Binsfeld (Greed); Gregory of Nyssa; Peter Lombard",
+          "notes": "Mammon — the personification of wealth-as-false-god — is assigned to the Satanic hierarchy as the demon of Greed in Binsfeld's classification. Augustine and Gregory of Nyssa treat Mammon as a specific demonic principle enslaving souls through avarice; his command flows from the Adversary whose kingdom is built on the corruption of the divine image through covetousness."
+        },
+        {
+          "target_id": "abaddon",
+          "edge_type": "COMMANDS",
+          "source_tradition": "Biblical / Christian Demonology",
+          "source_text": "Revelation 9:11; Job 26:6; Job 28:22; Pirke De-Rabbi Eliezer",
+          "notes": "Abaddon ('Destruction') is the angel-king of the Abyss in Revelation 9:11 — the sovereign of the bottomless pit who releases the locust army of the apocalyptic tribulation. He rules over the abyss that Satan himself will be cast into (Revelation 20:1–3). The Revelation text gives him the Hebrew name Abaddon and the Greek name Apollyon — 'The Destroyer.'"
+        },
+        {
+          "target_id": "mephistopheles",
+          "edge_type": "MANIFESTED_AS",
+          "source_tradition": "Germanic Faust Tradition / Literary Demonology",
+          "source_text": "Historia von D. Johann Fausten (1587); Marlowe Doctor Faustus (1592); Goethe Faust (1808)",
+          "notes": "Mephistopheles is the specifically German literary manifestation of the Satanic adversarial principle — the tempter who offers worldly knowledge, pleasure, and power in exchange for the soul. In Marlowe's Doctor Faustus he explicitly identifies himself: 'I am a servant to great Lucifer.' The name itself is of contested origin (possibly Hebrew mephir + tophel, 'destroyer and liar')."
+        },
+        {
+          "target_id": "samael-gnostic",
+          "edge_type": "SYNCRETIZED_WITH",
+          "source_tradition": "Kabbalistic / Gnostic",
+          "source_text": "Zohar (Samael as the Poison Angel); Apocryphon of John; Talmud Bavli, Bava Batra 16a",
+          "notes": "Samael ('Poison of God') is the primary Kabbalistic identification of the Adversary — the Zohar's 'Poison Angel' who is the heavenly counterpart of the Sitra Achra. The Talmud equates Samael with the Evil Inclination and the Angel of Death — making him functionally equivalent to Satan as adversarial cosmic principle. In Gnostic texts he is partially identified with Yaldabaoth."
+        },
+        {
+          "target_id": "paimon",
+          "edge_type": "COMMANDS",
+          "source_tradition": "Goetic Hierarchy",
+          "source_text": "Ars Goetia #9; Livre des Esperitz; Weyer Pseudomonarchia Daemonum (1577)",
+          "notes": "Paimon — one of the four Kings of Hell in the Goetia — holds special intimacy with Lucifer in the infernal hierarchy. The Ars Goetia explicitly states he is 'more obedient to Lucifer than other kings are.' He commands 200 legions of both angels and demons, and is one of Satan's most exalted subordinate monarchs."
+        },
+        {
+          "target_id": "bael",
+          "edge_type": "COMMANDS",
+          "source_tradition": "Goetic Hierarchy / Canaanite Syncretism",
+          "source_text": "Ars Goetia #1; Pseudomonarchia Daemonum (Weyer 1577); Collin de Plancy Dictionnaire Infernal",
+          "notes": "Bael is the first-ranked King of Hell in the Goetic sequence — the principal sovereign of the eastern infernal quarter, commanding 66 legions of demons. His name derives from the Canaanite Baal, whom the Hebrew prophets repeatedly identified with demonic opposition to YHWH. His listing as #1 in the Goetia places him at the apex of Satan's subordinate monarchical hierarchy."
+        },
+        {
+          "target_id": "astaroth",
+          "edge_type": "COMMANDS",
+          "source_tradition": "Christian Demonology / Canaanite Syncretism",
+          "source_text": "Ars Goetia #29; Pseudomonarchia Daemonum; Collin de Plancy; Wierus De Praestigiis Daemonum",
+          "notes": "Astaroth — Great Duke of Hell commanding 40 legions — derives from the Canaanite Ashtoreth/Astarte, the great goddess whom Solomon allegedly followed in apostasy (1 Kings 11:5). As a Duke of Hell in the Goetia, Astaroth occupies the outer council of Satan's hierarchy; he governs the western region and is said to ride a dragon while carrying a viper."
+        },
+        {
+          "target_id": "baphomet",
+          "edge_type": "MANIFESTED_AS",
+          "source_tradition": "Knights Templar Accusations / Occultism",
+          "source_text": "Templar Trial Records (1307–1314); Lévi Dogme et Rituel de la Haute Magie (1855–56); LaVey Satanic Bible (1969)",
+          "notes": "Baphomet as the goat-headed androgynous idol was the figure the Knights Templar were accused of worshipping. Éliphas Lévi's 1855 drawing cemented the image as the primary occult symbol of the Adversary. In modern Satanism (LaVey's Church of Satan) the Sigil of Baphomet — an inverted pentagram enclosing the goat's head — is the primary ritual symbol of Satan's presence."
+        },
+        {
+          "target_id": "lilith",
+          "edge_type": "COMMANDS",
+          "source_tradition": "Kabbalistic / Jewish Folklore",
+          "source_text": "Alphabet of Ben-Sira; Zohar I:19b; Isaiah 34:14; Kabbalistic Treatise on Samael and Lilith",
+          "notes": "In Kabbalistic tradition, Lilith is the consort and queen of the Sitra Achra — the Other Side over which Samael/Satan reigns. The Zohar positions her as the feminine counterpart of the adversarial principle, ruling over the qliphothic feminine as Satan rules the masculine. She is the infernal queen: Queen of Demons, seducer, and killer of newborns."
+        },
+        {
+          "target_id": "semjaza",
+          "edge_type": "COMMANDS",
+          "source_tradition": "Enochian",
+          "source_text": "1 Enoch 6:3–7; Book of Jubilees 5:1",
+          "notes": "Semjaza led the 200 Watchers in their descent to take human wives (1 Enoch 6) — the primordial act of angelic rebellion that mirrors and anticipates Satan's cosmic revolt. As the leader of the fallen Watchers he commands the Enochian tier of Satan's infernal hierarchy."
+        },
+        {
+          "target_id": "gadreel",
+          "edge_type": "COMMANDS",
+          "source_tradition": "Enochian",
+          "source_text": "1 Enoch 69:6; Book of Jubilees",
+          "notes": "Gadreel is the Watcher identified in 1 Enoch 69:6 as the one who 'led Eve astray' — the Enochian tradition's identification of the serpent in the Garden. This places Gadreel as one of Satan's most theologically significant subordinates: the named agent of the first human temptation, acting as the Adversary's instrument in Eden."
+        },
+        {
+          "target_id": "prometheus",
           "edge_type": "FUNCTIONAL_PARALLEL",
-          "source_tradition": "Jewish Apocalyptic",
-          "source_text": "1 Enoch; Dead Sea Scrolls",
-          "notes": "In some Second Temple texts Azazel takes the adversarial role that Satan occupies in other traditions; the two figures partially overlap in demonological history"
+          "source_tradition": "Comparative Mythology",
+          "source_text": "Forsyth The Old Enemy (1987)",
+          "notes": "The structural parallel between Lucifer and Prometheus — both bring forbidden light/fire to humanity at the cost of cosmic rebellion — is the most widely noted cross-traditional convergence. Aeschylus's Prometheus Bound depicts the Titan chained for cosmic transgression, directly matching the imprisonment motif of Satan in Revelation 20."
         }
       ],
       "source_attestations": [
@@ -5423,10 +5473,14 @@
         "Zechariah 3:1–2",
         "Revelation 12:9",
         "LaVey The Satanic Bible (1969)",
-        "Russell The Devil: Perceptions of Evil (1977)"
+        "Russell The Devil: Perceptions of Evil (1977)",
+        "Isaiah 14:12",
+        "Luke 10:18",
+        "Grand Grimoire",
+        "Zohar III:227a"
       ],
-      "research_notes": "Jeffrey Burton Russell's four-volume study of the devil (The Devil, Satan, Lucifer, Mephistopheles) is the definitive scholarly treatment. In its biblical origins, ha-Satan is not an evil being but a functional role in the divine council — the prosecutor who tests human virtue. The transformation into a cosmic evil principle occurs gradually through the Second Temple period and is fully developed only in the New Testament.",
-      "completeness_score": 90
+      "research_notes": "Jeffrey Burton Russell's four-volume study (The Devil, Satan, Lucifer, Mephistopheles) is the definitive scholarly treatment. The identification of Lucifer (Isaiah 14:12, the 'son of the dawn' in the taunt against the King of Babylon) with the cosmic adversary Satan is a 3rd-century Christian exegetical move made by Origen and Tertullian — not present in the Hebrew text. Yet this fusion has defined Western demonology ever since, producing one of the most influential theological figures in human history: the Light-Bringer who fell, the Morning Star who became the Prince of Darkness. In the Kabbalistic system, Satan/Samael rules the Sitra Achra ('Other Side') — the qliphothic anti-Tree that mirrors the divine Tree of Life in shadow. In the Goetia, Lucifer is listed as Emperor of Hell with Paimon his most obedient king ('more obedient to Lucifer than other kings'). The LHP (Left-Hand Path) tradition — from LaVey's Church of Satan through the Luciferian current of Michael W. Ford — reclaims this figure as a liberating adversarial intelligence rather than a cosmic villain.",
+      "completeness_score": 96
     },
     {
       "id": "leviathan",
@@ -5768,7 +5822,7 @@
       },
       "relationships": [
         {
-          "target_id": "lucifer",
+          "target_id": "satan",
           "edge_type": "FUNCTIONAL_PARALLEL",
           "source_tradition": "Luciferian",
           "source_text": "Michael W. Ford Adversarial Light (2009)",
@@ -6098,7 +6152,7 @@
           "notes": "Yaldabaoth is born from Sophia's fall — her attempt to create without her consort (the Father) produces the deformed lion-serpent Demiurge; the relationship of Sophia to Yaldabaoth is the crux of Sethian soteriology"
         },
         {
-          "target_id": "lucifer",
+          "target_id": "satan",
           "edge_type": "FUNCTIONAL_PARALLEL",
           "source_tradition": "Gnostic comparative",
           "source_text": "Apocryphon of John; Forsyth The Old Enemy (1987)",
@@ -7323,7 +7377,7 @@
       },
       "relationships": [
         {
-          "target_id": "lucifer",
+          "target_id": "satan",
           "edge_type": "FUNCTIONAL_PARALLEL",
           "source_tradition": "Comparative Mythology",
           "source_text": "Forsyth The Old Enemy (1987); Ford Adversarial Light (2009)",
@@ -8119,7 +8173,7 @@
           "notes": "Nuit and Hadit are the supreme Thelemic polarity — their union produces Ra-Hoor-Khuit, the lord of the aeon; they cannot be properly understood separately"
         },
         {
-          "target_id": "lucifer",
+          "target_id": "satan",
           "edge_type": "FUNCTIONAL_PARALLEL",
           "source_tradition": "Luciferian / Thelemic comparative",
           "source_text": "Ford Adversarial Light (2009)",
