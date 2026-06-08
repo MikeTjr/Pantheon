@@ -805,6 +805,183 @@ h1 {
 /* Tradition pip colors for search cards */
 .trad-canaanite { background:rgba(200,160,96,0.18); color:#c8a060; border:1px solid rgba(200,160,96,0.3); }
 .trad-hindu     { background:rgba(232,112,64,0.18); color:#e87040; border:1px solid rgba(232,112,64,0.3); }
+
+/* ══════════════════════════════════════════
+   CHRONOLOGICAL TIMELINE VIEW
+══════════════════════════════════════════ */
+#view-timeline { padding:0; overflow:hidden; display:none; flex-direction:column; height:calc(100vh - 100px); }
+#view-timeline.active { display:flex; }
+
+.tl-header {
+  padding:1.2rem 1.5rem 0.9rem;
+  border-bottom:1px solid var(--border);
+  background:linear-gradient(180deg,#0a0806,#0d0b07);
+  flex-shrink:0;
+}
+.tl-header-title {
+  font-family:var(--font-heading); font-size:0.72rem;
+  letter-spacing:0.25em; text-transform:uppercase;
+  color:var(--gold); margin-bottom:0.35rem;
+}
+.tl-header-sub {
+  font-family:var(--font-body); font-size:0.88rem;
+  color:var(--dim); font-style:italic; line-height:1.5;
+}
+.tl-header-note {
+  display:inline-block; margin-top:0.5rem;
+  font-family:var(--font-heading); font-size:0.6rem;
+  letter-spacing:0.12em; text-transform:uppercase;
+  color:var(--sepia); opacity:0.75;
+}
+
+/* Horizontal scroll container */
+.tl-scroll-wrap {
+  flex:1; overflow-x:auto; overflow-y:auto;
+  background:linear-gradient(180deg,#080608 0%,#0a0806 40%,#080606 100%);
+  position:relative;
+  -webkit-overflow-scrolling:touch;
+  cursor:grab;
+}
+.tl-scroll-wrap:active { cursor:grabbing; }
+/* Custom scrollbar */
+.tl-scroll-wrap::-webkit-scrollbar { height:7px; width:7px; }
+.tl-scroll-wrap::-webkit-scrollbar-track { background:#08060a; }
+.tl-scroll-wrap::-webkit-scrollbar-thumb { background:var(--sepia); border-radius:4px; }
+
+/* Wide inner canvas */
+#tl-canvas {
+  position:relative;
+  min-height:100%;
+}
+
+/* Era background zones */
+.tl-era-zone {
+  position:absolute; top:0;
+  pointer-events:none; z-index:0;
+  border-right:1px solid rgba(196,169,110,0.07);
+}
+
+/* Era label strip below spine */
+.tl-era-label {
+  position:absolute;
+  text-align:center;
+  font-family:var(--font-heading); font-size:0.57rem;
+  letter-spacing:0.13em; text-transform:uppercase;
+  color:var(--dim); opacity:0.6; line-height:1.5;
+  padding:0 4px;
+  pointer-events:none; z-index:2;
+}
+
+/* Spine — the gold horizontal axis line */
+.tl-spine {
+  position:absolute; left:0;
+  height:1px;
+  background:linear-gradient(90deg,
+    transparent 0%,
+    rgba(196,169,110,0.5) 3%,
+    rgba(196,169,110,0.5) 97%,
+    transparent 100%
+  );
+  z-index:3;
+}
+
+/* Century tick marks */
+.tl-tick {
+  position:absolute; width:1px;
+  background:rgba(196,169,110,0.2);
+  z-index:4;
+}
+.tl-tick-major {
+  background:rgba(196,169,110,0.45);
+}
+
+/* Year labels at major ticks */
+.tl-year-label {
+  position:absolute;
+  transform:translateX(-50%);
+  font-family:var(--font-heading); font-size:0.56rem;
+  letter-spacing:0.08em; text-transform:uppercase;
+  color:var(--sepia); opacity:0.7;
+  white-space:nowrap; z-index:5;
+  pointer-events:none;
+}
+
+/* Connector line from badge to spine */
+.tl-connector {
+  position:absolute; width:1px;
+  opacity:0.18; z-index:2;
+  pointer-events:none;
+}
+
+/* Entity badges */
+.tl-badge {
+  position:absolute;
+  background:rgba(12,10,7,0.85);
+  border:1px solid rgba(196,169,110,0.15);
+  border-top:2px solid var(--trad-color, rgba(196,169,110,0.4));
+  border-radius:1px;
+  padding:0 6px;
+  height:24px;
+  display:flex; align-items:center;
+  cursor:pointer;
+  z-index:6;
+  transition:background 0.15s, border-color 0.15s, transform 0.12s, box-shadow 0.15s;
+  -webkit-tap-highlight-color:transparent;
+  overflow:hidden;
+}
+.tl-badge:hover {
+  background:rgba(24,18,10,0.96);
+  border-color:var(--trad-color, rgba(196,169,110,0.5));
+  transform:translateY(-2px) scaleY(1.06);
+  box-shadow:0 4px 14px rgba(0,0,0,0.55);
+  z-index:10;
+}
+.tl-badge-name {
+  font-family:var(--font-heading); font-size:0.59rem;
+  letter-spacing:0.04em; text-transform:uppercase;
+  color:var(--trad-color, var(--vellum));
+  white-space:nowrap; overflow:hidden;
+  text-overflow:ellipsis; max-width:82px;
+}
+
+/* Jesus badge — gold special treatment */
+.tl-badge[data-entity-id="jesus-christ"] {
+  border:2px solid rgba(240,204,112,0.6);
+  border-top:2px solid var(--gold-bright);
+  background:rgba(28,20,8,0.9);
+  box-shadow:0 0 18px rgba(201,152,58,0.2);
+}
+.tl-badge[data-entity-id="jesus-christ"] .tl-badge-name {
+  color:var(--gold-bright);
+  text-shadow:0 0 10px rgba(240,204,112,0.3);
+}
+
+/* "Now" / end marker */
+.tl-now-marker {
+  position:absolute; width:1px;
+  background:rgba(196,169,110,0.12);
+  pointer-events:none; z-index:1;
+}
+
+/* Legend strip below timeline */
+.tl-legend {
+  padding:0.55rem 1.5rem;
+  border-top:1px solid var(--border);
+  display:flex; flex-wrap:wrap; gap:0.55rem;
+  background:#08060a;
+  flex-shrink:0;
+}
+.tl-legend-item {
+  display:flex; align-items:center; gap:0.35rem;
+  font-family:var(--font-heading); font-size:0.58rem;
+  letter-spacing:0.09em; text-transform:uppercase; color:var(--dim);
+}
+.tl-legend-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+
+@media (max-width:640px) {
+  #view-timeline { height:calc(100vh - 90px); }
+  .tl-header { padding:0.85rem 1rem 0.6rem; }
+}
 .graph-reset-fab:hover { transform:scale(1.1); box-shadow:var(--shadow-deep); }
 .graph-reset-fab:active { transform:scale(0.93); }
 

@@ -27,6 +27,7 @@
 <nav id="nav">
   <button class="nav-btn active" data-view="search">⊕ Search</button>
   <button class="nav-btn" data-view="hierarchy">⊗ Hierarchy</button>
+  <button class="nav-btn" data-view="timeline">◈ Timeline</button>
   <button class="nav-btn" data-view="about">⊜ About</button>
 </nav>
 
@@ -61,6 +62,19 @@
     </div>
     <p class="results-count" id="results-count"></p>
     <div id="results-grid"></div>
+  </section>
+
+  <!-- ── TIMELINE VIEW ── -->
+  <section id="view-timeline" class="view">
+    <div class="tl-header">
+      <p class="tl-header-title">Chronological Timeline of First Attestation</p>
+      <p class="tl-header-sub">Each figure placed at their earliest significant textual attestation — from Sumerian cuneiform (~3000 BCE) through to the Thelemic corpus (1904 CE). Color indicates primary tradition. Scroll horizontally to traverse history.</p>
+      <span class="tl-header-note">◆ Dates reflect first known written record, not mythological origin ◆ Click any figure to open its full profile</span>
+    </div>
+    <div class="tl-scroll-wrap" id="tl-scroll-wrap">
+      <div id="tl-canvas"></div>
+    </div>
+    <div class="tl-legend" id="tl-legend"></div>
   </section>
 
   <!-- ── HIERARCHY VIEW ── -->

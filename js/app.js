@@ -107,6 +107,7 @@ function init(data) {
       btn.classList.add('active');
       document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
       document.getElementById('view-' + btn.dataset.view).classList.add('active');
+      if (btn.dataset.view === 'timeline') openTimeline();
     });
   });
 
@@ -628,6 +629,308 @@ function buildHierarchy() {
 
   const firstBiblical = container.querySelector('.trad-hier-header');
   if (firstBiblical) firstBiblical.click();
+}
+
+// ══════════════════════════════════════════════════════════════
+//  CHRONOLOGICAL TIMELINE
+// ══════════════════════════════════════════════════════════════
+
+let timelineBuilt = false;
+
+// First significant textual attestation for each entity (year; negative = BCE)
+const ENTITY_DATES = {
+  // Theological center
+  'jesus-christ':         4,    // Incarnation ~4 BCE (canonical)
+
+  // Mesopotamian pantheon
+  'anu':              -3000,    // Early Dynastic Sumerian king-lists
+  'enlil':            -2900,    // Nippur temple hymns
+  'enki':             -2800,    // Eridu Genesis tablet
+  'inanna':           -2800,    // Sumerian love lyrics (Ur III)
+  'ereshkigal':       -2100,    // Descent of Inanna (Ur III)
+  'marduk':           -1750,    // Enuma Elish composition
+  'nanna-sin':        -2800,    // Ur III moon-god hymns
+  'ningishzida':      -2500,    // Gudea cylinder inscriptions (Lagash)
+
+  // Egyptian pantheon
+  'ra':               -2500,    // Pyramid Texts (Utt. 217)
+  'osiris':           -2400,    // Pyramid Texts (Utt. 219)
+  'isis':             -2400,    // Pyramid Texts
+  'anubis':           -2400,    // Pyramid Texts (Utt. 535)
+  'horus':            -2600,    // Early Dynastic Horus falcon serekh
+  'thoth':            -2500,    // Pyramid Texts
+  'set-egypt':        -2400,    // Pyramid Texts (Set of Nubt)
+
+  // Canaanite
+  'dagon':            -1700,    // Eblaite & Mari documents
+  'baal':             -1350,    // Ugaritic Baal Cycle (KTU 1.1–6)
+  'el-elyon':         -1350,    // Ugaritic El texts
+
+  // Hindu / Vedic
+  'varuna':           -1500,    // Rigveda (early Vedic hymns)
+  'brahma':           -1000,    // Atharva Veda / early Brahmanas
+  'vishnu':           -1000,    // Rigveda (minor, expanded in epics)
+
+  // Greek
+  'zeus-jupiter':      -800,    // Hesiod Theogony (~700 BCE)
+  'hermes':            -800,    // Homeric Hymn to Hermes
+  'hecate':            -700,    // Hesiod Theogony
+  'aphrodite-venus':   -800,    // Hesiod Theogony
+  'dionysus':         -1200,    // Linear B tablet (Pylos, Mycenaean)
+  'saturn-kronos':     -800,    // Hesiod Theogony
+
+  // Roman (assimilation of Greek ~3rd century BCE onward)
+  'jupiter':           -600,    // Capitoline triad institution
+  'mars':              -600,    // Archaic Roman religion
+  'mercury':           -500,    // Roman Mercury cult established
+
+  // Biblical patriarchs (Yahwist source composition)
+  'adam':              -950,    // Yahwist source (J)
+  'noah':              -950,    // Yahwist source (J)
+  'abraham':           -950,    // Yahwist/Elohist sources
+
+  // Biblical angels (Second Temple)
+  'michael-archangel': -167,    // Daniel 12:1 (Maccabean composition)
+  'gabriel':           -167,    // Daniel 8–9
+  'raphael':           -200,    // Book of Tobit
+  'uriel':             -200,    // 1 Enoch 20
+  'saraqael':          -200,    // 1 Enoch 20
+
+  // Enochian watchers (1 Enoch, Qumran)
+  'azazel':            -200,    // 1 Enoch 8–10
+  'semjaza':           -200,    // 1 Enoch 6
+  'gadreel':           -200,    // 1 Enoch 69
+  'kokabiel':          -200,    // 1 Enoch 6
+  'penemue':           -200,    // 1 Enoch 69
+  'baraqiel':          -200,    // 1 Enoch 6
+  'ramiel':            -200,    // 1 Enoch 20
+  'tamiel':            -200,    // 1 Enoch 6
+
+  // Enochian patriarch
+  'enoch-patriarch':   -300,    // 1 Enoch / Book of Jubilees composition
+
+  // Adversarial & fallen
+  'satan-adversary':   -600,    // Book of Job (Babylonian exile period)
+  'asmodeus':          -200,    // Book of Tobit
+  'belial':            -200,    // Dead Sea Scrolls (1QM, War Scroll)
+  'lucifer':            400,    // Jerome Vulgate — Isaiah 14:12
+  'lilith':             700,    // Alphabet of Ben-Sira (Geonic)
+  'paimon':            1600,    // Lemegeton Clavicula Salomonis
+  'astaroth':          1600,    // Lemegeton (Astarte form: -1400)
+  'bael':              1600,    // Lemegeton
+  'valefor':           1600,    // Lemegeton
+  'sitri':             1600,    // Lemegeton
+
+  // Kabbalistic / Merkabah
+  'metatron':           500,    // Heikhalot literature / 3 Enoch
+  'sandalphon':         900,    // Medieval Kabbalistic tradition
+  'samael':             200,    // Talmudic (Babylonian)
+
+  // Gnostic (Nag Hammadi / Valentinian era)
+  'sophia':             150,    // Valentinian Exposition / Apocryphon of John
+  'yaldabaoth':         150,    // Apocryphon of John
+  'abraxas':            130,    // Basilides (attested in Irenaeus, Adv. Haer.)
+  'barbelo':            150,    // Apocryphon of John / Trimorphic Protennoia
+  'eleleth':            250,    // Hypostasis of the Archons
+  'adamas':             200,    // Sethian Gnostic texts (Gospel of Judas)
+
+  // Hermetic
+  'hermes-trismegistus': 200,   // Corpus Hermeticum composition
+
+  // Islamic
+  'iblis':              632,    // Quran canonization (references throughout)
+  'jibrail':            632,    // Quran
+  'mikail':             632,    // Quran
+  'israfil':            750,    // Hadith literature
+
+  // Thelemic (20th century)
+  'nuit':              1904,    // Liber AL vel Legis (Cairo Working, April 1904)
+  'hadit':             1904,    // Liber AL vel Legis
+};
+
+// Default first-attestation date by primary tradition (fallback)
+const TRAD_DEFAULT_DATES = {
+  mesopotamian:   -2800,
+  egyptian:       -2400,
+  canaanite:      -1350,
+  hindu:          -1200,
+  greek:           -800,
+  roman:           -600,
+  planetary:       -400,
+  biblical_angel:  -200,
+  enochian:        -200,
+  kabbalistic:      200,
+  hermetic:         200,
+  gnostic:          150,
+  islamic:          650,
+  goetic:          1600,
+  default:            0,
+};
+
+// Era zone definitions
+const TL_ERAS = [
+  { start: -3500, end: -2000, label: 'Early Sumerian\n& Old Kingdom Egypt',  color: 'rgba(180,110,50,0.09)'  },
+  { start: -2000, end:  -800, label: 'Bronze Age\nNear East',                color: 'rgba(50,160,140,0.07)'  },
+  { start:  -800, end:  -167, label: 'Classical\nAntiquity',                  color: 'rgba(80,110,200,0.08)'  },
+  { start:  -167, end:   200, label: 'Second Temple\n& Early CE',             color: 'rgba(150,110,220,0.09)' },
+  { start:   200, end:   700, label: 'Late\nAntiquity',                       color: 'rgba(200,155,40,0.08)'  },
+  { start:   700, end:  1400, label: 'Medieval\nPeriod',                      color: 'rgba(60,90,70,0.08)'    },
+  { start:  1400, end:  1950, label: 'Early Modern\n& Thelema',               color: 'rgba(110,40,50,0.1)'    },
+];
+
+const TL_START      = -3500;
+const TL_END        = 1950;
+const PX_PER_DECADE = 17;        // 17px per 10 years
+const TL_PAD_LEFT   = 60;        // space before -3500
+const TL_PAD_RIGHT  = 60;
+const BADGE_W       = 94;        // badge width in px
+const BADGE_H       = 24;        // badge height
+const LANE_H        = 30;        // vertical lane pitch
+const SPINE_GAP     = 12;        // gap between spine and lane 0
+
+function yearToPx(year) {
+  return TL_PAD_LEFT + ((year - TL_START) / 10) * PX_PER_DECADE;
+}
+
+function buildTimeline() {
+  if (timelineBuilt) return;
+  timelineBuilt = true;
+
+  const canvas = document.getElementById('tl-canvas');
+  canvas.innerHTML = '';
+
+  // ── 1. Compute dates for all entities ──────────────────────
+  const items = DB.entities.map(e => {
+    const trad = getPrimaryTradition(e);
+    const date  = ENTITY_DATES[e.id] ?? TRAD_DEFAULT_DATES[trad] ?? 0;
+    return { entity: e, date, trad, color: NODE_COLORS[trad] || NODE_COLORS.default };
+  }).sort((a, b) => a.date - b.date);
+
+  // ── 2. Lane assignment (greedy, badges stack above spine) ──
+  // laneEnd[n] = rightmost x occupied in lane n
+  const laneEnd = [];
+  const BADGE_GAP = 5;
+  items.forEach(item => {
+    const x = yearToPx(item.date);
+    let lane = laneEnd.findIndex(end => end + BADGE_GAP <= x);
+    if (lane === -1) lane = laneEnd.length;
+    laneEnd[lane] = x + BADGE_W;
+    item.lane = lane;
+    item.x    = x;
+  });
+
+  const maxLanes  = laneEnd.length;
+  const spineY    = SPINE_GAP + maxLanes * LANE_H + BADGE_H + 20;
+  const totalW    = yearToPx(TL_END) + TL_PAD_RIGHT;
+  const totalH    = spineY + 110;   // spine + era-label space below
+
+  canvas.style.width  = totalW + 'px';
+  canvas.style.height = totalH + 'px';
+  canvas.style.position = 'relative';
+
+  // ── 3. Era background zones ────────────────────────────────
+  TL_ERAS.forEach(era => {
+    const x  = yearToPx(era.start);
+    const w  = yearToPx(era.end) - x;
+    const z  = document.createElement('div');
+    z.className = 'tl-era-zone';
+    z.style.cssText = `left:${x}px;width:${w}px;height:${spineY}px;background:${era.color};`;
+    canvas.appendChild(z);
+
+    // Era label below spine
+    const lbl = document.createElement('div');
+    lbl.className = 'tl-era-label';
+    lbl.style.cssText = `left:${x}px;width:${w}px;top:${spineY + 28}px;`;
+    lbl.innerHTML = era.label.split('\n').map(l => `<span>${l}</span>`).join('<br>');
+    canvas.appendChild(lbl);
+  });
+
+  // ── 4. Century ticks & year labels ────────────────────────
+  const tickStartCentury = Math.ceil(TL_START / 100) * 100;
+  for (let yr = tickStartCentury; yr <= TL_END; yr += 100) {
+    const x       = yearToPx(yr);
+    const isMajor = yr % 500 === 0;
+
+    const tick = document.createElement('div');
+    tick.className = 'tl-tick' + (isMajor ? ' tl-tick-major' : '');
+    tick.style.cssText = `left:${x}px;top:${spineY - (isMajor ? 10 : 6)}px;height:${isMajor ? 20 : 12}px;`;
+    canvas.appendChild(tick);
+
+    if (isMajor) {
+      const lbl = document.createElement('div');
+      lbl.className = 'tl-year-label';
+      lbl.style.cssText = `left:${x}px;top:${spineY + 10}px;`;
+      const absYr = Math.abs(yr);
+      lbl.textContent = yr === 0 ? '0' : absYr + (yr < 0 ? ' BCE' : ' CE');
+      canvas.appendChild(lbl);
+    }
+  }
+
+  // ── 5. Spine ───────────────────────────────────────────────
+  const spine = document.createElement('div');
+  spine.className = 'tl-spine';
+  spine.style.cssText = `top:${spineY}px;width:${totalW}px;`;
+  canvas.appendChild(spine);
+
+  // ── 6. Entity badges ───────────────────────────────────────
+  items.forEach(item => {
+    const badgeTop = spineY - SPINE_GAP - BADGE_H - item.lane * LANE_H;
+    const badge    = document.createElement('div');
+    badge.className = 'tl-badge';
+    badge.dataset.entityId = item.entity.id;
+    badge.style.cssText = `
+      left:${item.x}px;
+      top:${badgeTop}px;
+      width:${BADGE_W}px;
+      --trad-color:${item.color};
+    `;
+
+    const shortName = item.entity.canonical_name
+      .split(' / ')[0].split(' (')[0].split(',')[0];
+
+    badge.innerHTML = `<span class="tl-badge-name">${shortName}</span>`;
+    badge.title     = `${item.entity.canonical_name} — ${Math.abs(item.date)} ${item.date < 0 ? 'BCE' : 'CE'}`;
+
+    badge.onclick = () => openDetail(item.entity.id);
+    canvas.appendChild(badge);
+
+    // Connector line from badge bottom to spine
+    const lineH = spineY - (badgeTop + BADGE_H);
+    if (lineH > 2) {
+      const line = document.createElement('div');
+      line.className = 'tl-connector';
+      line.style.cssText = `
+        left:${item.x + BADGE_W / 2 - 1}px;
+        top:${badgeTop + BADGE_H}px;
+        height:${lineH}px;
+        background:${item.color};
+      `;
+      canvas.appendChild(line);
+    }
+  });
+
+  // ── 7. "Now" marker ───────────────────────────────────────
+  const nowX = yearToPx(1950);
+  const nowM = document.createElement('div');
+  nowM.className = 'tl-now-marker';
+  nowM.style.cssText = `left:${nowX}px;top:0;height:${spineY}px;`;
+  canvas.appendChild(nowM);
+
+  // ── 8. Legend ──────────────────────────────────────────────
+  const legendEl = document.getElementById('tl-legend');
+  if (legendEl) {
+    legendEl.innerHTML = Object.entries(NODE_COLORS)
+      .filter(([k]) => k !== 'default')
+      .map(([k, c]) => `<div class="tl-legend-item"><div class="tl-legend-dot" style="background:${c}"></div>${TRADITION_LABELS[k]||k}</div>`)
+      .join('');
+  }
+}
+
+function openTimeline() {
+  if (!timelineBuilt) {
+    // Small delay so the view is visible before build
+    requestAnimationFrame(() => buildTimeline());
+  }
 }
 
 // ══════════════════════════════════════════════════════════════
