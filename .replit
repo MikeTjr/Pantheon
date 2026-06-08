@@ -38,12 +38,12 @@ waitForPort = 5000
 name = "Sync to GitHub"
 author = "agent"
 
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "bash scripts/sync-github.sh"
-
 [workflows.workflow.metadata]
 outputType = "console"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "bash scripts/sync-loop.sh"
 
 [[ports]]
 localPort = 5000
