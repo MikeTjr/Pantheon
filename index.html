@@ -77,22 +77,25 @@
 
     <div class="gem-calc-controls">
       <div class="gem-calc-input-wrap">
-        <input type="text" id="gem-calc-input" placeholder="Type in Hebrew or Greek…" autocomplete="off" spellcheck="false">
+        <input type="text" id="gem-calc-input" placeholder="Hebrew, Greek, or English (then Transliterate)…" autocomplete="off" spellcheck="false">
       </div>
       <select id="gem-calc-lang">
         <option value="hebrew">Hebrew</option>
         <option value="greek">Greek</option>
       </select>
+      <button id="gem-translit-btn" class="gem-translit-btn" onclick="doTransliterate()" style="display:none" title="Convert English spelling to Greek or Hebrew letters">⇄ Transliterate</button>
     </div>
+    <p class="gem-translit-hint">Type the name in English and press <strong>⇄ Transliterate</strong> to convert it to Greek or Hebrew letters before calculating. Example: type <em>Neuralink</em>, select Greek, press Transliterate → 666.</p>
 
     <div class="gem-result-panel">
       <p class="gem-result-label">Total Value</p>
       <div class="gem-total-display" id="gem-total">—</div>
       <p id="gem-notable"></p>
       <div id="gem-breakdown">
-        <span class="gem-calc-empty">Type a word in the field above to calculate.</span>
+        <span class="gem-calc-empty">Type a word in Hebrew, Greek, or English (then press Transliterate).</span>
       </div>
     </div>
+    <div id="gem-matches"></div>
 
     <div class="gem-reference-section">
       <p class="gem-ref-title">Letter Reference Tables</p>

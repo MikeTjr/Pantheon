@@ -1614,3 +1614,77 @@ h1 {
   font-size: 0.85rem;
   color: var(--gold);
 }
+
+/* ── Transliterate button + hint ───────────────────────────────────────────── */
+.gem-translit-btn {
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.55rem 1.1rem;
+  border: 1px solid var(--gold);
+  background: rgba(201,152,58,0.12);
+  color: var(--gold-light);
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+.gem-translit-btn:hover { background: rgba(201,152,58,0.28); }
+
+.gem-translit-hint {
+  font-size: 0.72rem;
+  color: var(--dim);
+  margin: 0.4rem 0 1.2rem;
+  line-height: 1.6;
+}
+.gem-translit-hint em { color: var(--gold-light); font-style: normal; }
+
+/* ── Cross-entity matches ───────────────────────────────────────────────────── */
+#gem-matches {
+  margin-top: 1.4rem;
+}
+
+.gem-matches-label {
+  font-family: var(--font-heading);
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.75rem;
+}
+
+.gem-matches-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.6rem;
+}
+
+.gem-match-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  background: rgba(201,152,58,0.07);
+  border: 1px solid var(--border-mid);
+  border-radius: 3px;
+  padding: 0.65rem 0.85rem;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.2s, background 0.2s;
+}
+.gem-match-card:hover {
+  border-color: var(--gold);
+  background: rgba(201,152,58,0.14);
+}
+.gem-match-name {
+  font-family: var(--font-heading);
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  color: var(--gold-light);
+}
+.gem-match-val {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--dim);
+  direction: auto;
+}

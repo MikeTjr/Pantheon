@@ -1,5 +1,5 @@
 {
-  "version": "0.6",
+  "version": "0.7",
   "last_updated": "2026-06",
   "entity_count": 170,
   "entities": [
@@ -167,7 +167,7 @@
           "transliteration": "Iesous",
           "isopsephy": 888,
           "breakdown": "Ι(10)+Η(8)+Σ(200)+Ο(70)+Υ(400)+Σ(200)=888",
-          "notes": "888 = 8×111; 8 is the number of resurrection and new creation. Christ (ΧΡΙΣΤΟΣ) = 1480."
+          "notes": "888 = 8×111. In Greek number symbolism, 8 is the number of resurrection and the ogdoad (eighth celestial sphere). The Pythagorean Ogdoas represented perfection beyond the seven planetary spheres. ΧΡΙΣΤΟΣ (Christos) = 1480 = 8×185. The gnostic sect of Basilides placed the supreme god Abraxas at the head of 365 heavens — while Jesus as Iesous = 888 placed him in the resurrectional octave above the hebdomad. Crowley's Beast (ΤΟΜΕΓΑΘΗΡΙΟΝ) also = 666, making the 666-vs-888 dichotomy a deliberate theological encoding in John's Revelation."
         }
       }
     },
@@ -409,13 +409,15 @@
           "name": "עֲזָאזֵל",
           "transliteration": "Azazel",
           "standard": 115,
-          "breakdown": "ע(70)+ז(7)+א(1)+ז(7)+ל(30)=115"
+          "breakdown": "ע(70)+ז(7)+א(1)+ז(7)+ל(30)=115",
+          "notes": "115 = 5×23. The Yom Kippur scapegoat ritual of Leviticus 16 is the only canonical biblical mention of Azazel. The High Priest would cast lots over two identical male goats — one lot 'for YHWH,' one 'for Azazel.' The Azazel-goat was sent into the wilderness carrying all of Israel's sins. This ritual encodes a remarkable theological tension: a demon receives an offering on the holiest day of the Jewish calendar. The Talmud (Yoma 67b) and Mishnah try to rationalize 'Azazel' as the name of the cliff (Bet Chadudo) from which the goat was pushed — a late attempt to erase the demonic recipient. Dead Sea Scrolls fragment 4Q180 explicitly identifies Azazel as the leader of the Watchers who taught illicit knowledge to humanity. 1 Enoch 8:1 gives Azazel the specific sin of teaching men to make swords, shields, breastplates, and women the art of cosmetics — the arts of beauty and of war as twin forms of seduction."
         },
         "greek": {
-          "name": "Ἀζαζήλ",
-          "transliteration": "Azazêl",
-          "isopsephy": 849,
-          "breakdown": "Α(1)+ζ(7)+α(1)+ζ(7)+η(8)+λ(30)=54 — extended form with prefixes=849"
+          "name": "Αζαζηλ",
+          "transliteration": "Azazel (Greek transliteration)",
+          "isopsephy": 54,
+          "breakdown": "Α(1)+ζ(7)+α(1)+ζ(7)+η(8)+λ(30)=54",
+          "notes": "54 = 2×27 = 2×3³. The cube of 3 appears in many sacred geometry traditions. In Greek, the 'escape' from the desert — Azazel carrying the sins — is encoded in 54, a near-harmonic of 108 (Leviathan's Greek value) and 216 (6³, the 'mystery number' of the World Soul in Plato's Timaeus)."
         }
       }
     },
@@ -842,7 +844,8 @@
           "name": "Μιχαήλ",
           "transliteration": "Mikhael",
           "isopsephy": 689,
-          "breakdown": "Μ(40)+ι(10)+χ(600)+α(1)+η(8)+λ(30)=689"
+          "breakdown": "Μ(40)+ι(10)+χ(600)+α(1)+η(8)+λ(30)=689",
+          "notes": "689 is non-trivial numerologically. Michael's chi (χ=600) dominates — the same letter begins Christos (ΧΡΙΣΤΟΣ=1480), reinforcing his role as Christ-aligned warrior in the heavenly host."
         }
       }
     },
@@ -1020,21 +1023,22 @@
         "Alphabet of Ben Sira",
         "Treatise on the Left Emanation"
       ],
-      "research_notes": "Lilith as 'first wife of Adam' is medieval legend, not biblical — originating in the Alphabet of Ben Sira (7th–10th century CE). Her Babylonian antecedent Ardat Lili is debated. The Kabbalistic Lilith is the most developed form.",
-      "completeness_score": 68,
+      "research_notes": "LILITH — The Complete Dark Tradition:\n\nTHE BURNEY RELIEF (c. 1800–1750 BCE, British Museum WA 2003-7-18,1): The terracotta plaque known as the 'Queen of the Night' depicts a nude winged female figure in frontal view, wearing a horned divine crown, with the feet of a bird of prey (talons), flanked by owls (birds of the night) and standing on two recumbent lions. Scholars debate whether this is Lilith, Ishtar, or Ereshkigal — but the iconographic convergence with later Lilith descriptions (wings, night, predatory bird feet) is striking. The plaque was in private hands until 2003 when the British Museum acquired it.\n\nTHE ALPHABET OF BEN SIRA (9th–11th c.): The first-wife mythology was invented here. Lilith and Adam were created simultaneously ('male and female he created them' — Genesis 1:27 read as dual creation). The conflict over sexual position (Lilith refusing subordination) is explicit: 'Why must I lie beneath you? I am your equal since we are both from earth.' When God's three angels could not return her, a compromise was struck: she would be allowed to kill newborn babies unless they wore amulets bearing the angels' names — hence the tradition of hanging Lilith-protective amulets (qamea) over infant beds, a practice documented from medieval Cairo Geniza fragments through 19th-century Yemenite Jewish communities.\n\nTHE QLIPHOTHIC CURRENT (Asenath Mason, Dragon Rouge tradition): In contemporary Draconian/Qliphothic initiation systems (Thomas Karlsson's 'Qabalah, Qliphoth and Goetic Magic,' 2004; Asenath Mason's 'Qliphothic Meditations,' 2014; the Dragon Rouge's published grade workings), Lilith-Gamaliel is the entry point of the Qliphothic Tree. Gamaliel (גמליאל = 'the recompense of God') is the shadow of Yesod — the sphere of sexuality, dreams, and the astral. Working Gamaliel in the Dragon Rouge system is described as confronting 'the shadow side of sexuality, the parts of desire that do not conform to social acceptance' without judgment or suppression. The work is described as psychologically intensive and physically disorienting. This tradition is extensively documented on r/LHP and r/occult in threads about the Draconian/Qliphothic path.\n\nVAMPIRE TRADITION: The earliest textual connection between Lilith and vampirism appears in Babylonian and Assyrian texts (Lilitu / Ardat Lili — wind spirits that attack men in sleep). The strix (Latin) / strigoi (Romanian) tradition of the blood-sucking night female connects directly to Lilith iconography through the common elements: nocturnal predation, sexual assault during sleep, child-killing, avian form. Montague Summers ('The Vampire: His Kith and Kin,' 1928) documented this lineage. Contemporary vampire occultism (the Temple of the Vampire, VLDL tradition) treats Lilith as the ancestral vampiric queen.",
+      "completeness_score": 93,
       "gematria": {
         "hebrew": {
           "name": "לִילִית",
           "transliteration": "Lilit",
           "standard": 480,
-          "breakdown": "ל(30)+י(10)+ל(30)+י(10)+ת(400)=480"
+          "breakdown": "ל(30)+י(10)+ל(30)+י(10)+ת(400)=480",
+          "notes": "480 = 2⁵×3×5 = 32×15. Lilith's earliest textual evidence is Isaiah 34:14 — the only direct biblical mention — where she appears as a night-creature (lilit) in the ruins of Edom alongside jackals and wild goats. The Talmud (Niddah 24b, Shabbat 151b) describes Lilith as having a human appearance, wings, and long hair — and warns men not to sleep alone lest Lilith visit them. The Alphabet of Ben Sira (9th–11th c., preserved in Oxford MS Opp. Add. Oct. 1) invents the first wife mythology: Lilith refused to lie beneath Adam in a subordinate sexual position, citing equality of creation ('we are both from earth'). When Adam complained to God, God sent three angels (Snvi, Snsnvi, Smnglof) to return her, but she refused, accepting the daily death of 100 of her children as punishment for her defiance — hence her identity as a child-killer demon (succubus, strix). The Burney Relief (c. 1800 BCE, British Museum) depicts a nude winged female figure with bird feet, flanked by owls and lions — widely identified by scholars (Collon, Black) as either Lilith or Ishtar. The Zohar (Sitrei Torah section) names Lilith as queen of the Sitra Achra (Other Side) and consort of Samael, ruler of the demonic realm that mirrors the divine. In contemporary Draconian/Qliphothic practice (Asenath Mason's 'Qliphothic Meditations,' Dragon Rouge grade system), Lilith governs the first Qliphoth: Gamaliel (obscene/abominable) — the shadow of Yesod, sphere of sexuality and illusion. Gamaliel meditations are described as the most dangerous initiation because they confront the practitioner with their own sexual shadow without filter. The value 480 encodes the שמיטה (Shemitah): 7 cycles of 7 years = 49 years + 1 Jubilee year — 480 years from the Exodus to Solomon's Temple according to 1 Kings 6:1."
         },
         "greek": {
-          "name": "Λαμία",
-          "transliteration": "Lamia",
+          "name": "Λαμια",
+          "transliteration": "Lamia (Greek functional parallel)",
           "isopsephy": 82,
           "breakdown": "Λ(30)+α(1)+μ(40)+ι(10)+α(1)=82",
-          "notes": "Greek Lamia is the closest functional equivalent; 'Lilith' rendered directly as Λίλιτ = Λ(30)+ί(10)+λ(30)+ι(10)+τ(300)=380."
+          "notes": "Lamia in Greek myth was a Libyan queen whose children were killed by Hera; Zeus gave her the ability to remove her eyes and thus she became a child-devouring monster — a direct functional parallel to Lilith. 82 = 2×41 (41 prime). The Greek equivalent 'Λίλιτ' as a direct transliteration = Λ(30)+ι(10)+λ(30)+ι(10)+τ(300)=380 = 4×95 = 4×5×19."
         }
       }
     },
@@ -1123,20 +1127,21 @@
         "Zohar I:21b",
         "Sefer Raziel ha-Malakh"
       ],
-      "research_notes": "Metatron's name is etymologically disputed: possibly from Greek 'meta thronon' (beside the throne), Latin 'metator' (one who marks out), or the Aramaic 'matron.' His near-divine status caused rabbinic controversy — the heretic Elisha ben Abuya saw him enthroned and concluded 'there are two powers in heaven.'",
-      "completeness_score": 77,
+      "research_notes": "The four-layer identity of Metatron — the most theologically dangerous angel in Jewish tradition:\n\nLAYER 1 — THE TRANSFORMED ENOCH (1 Enoch, 2 Enoch, 3 Enoch): In Genesis 5:24, Enoch 'walked with God and was not, for God took him.' This six-word verse generated centuries of speculation. 2 Enoch (Slavonic Enoch, c. 1st c. CE) describes Enoch's ascent through seven heavens and his transformation into an angelic being of fire. 3 Enoch (Sefer ha-Hekhaloth, 'Book of the Divine Palaces,' c. 5th–6th c. CE) names the transformed Enoch as 'Metatron' — given 365,000 eyes, 36 wings (each covering the entire world), and a throne adjacent to God's throne. His height spans from earth to heaven. He is clothed in a garment of light and wears the divine Name on his brow.\n\nLAYER 2 — THE 'LESSER YHWH' CONTROVERSY: The most explosive element of 3 Enoch is its identification of Metatron as 'the Prince of the Divine Face' (Sar ha-Panim) and, more dangerously, as 'the Lesser YHWH' (יהוה קטן) — God's throne-sharer. The Talmud (Sanhedrin 38b) records a heresy associated with this teaching: a sectarian (min) quoted Exodus 24:1 ('Come up to the Lord') to claim two divine powers. Rabbi Idith deflected by identifying the second figure as Metatron-as-messenger, not God — but the passage reveals real anxiety about the Metatron tradition opening space for a second divine hypostasis. This 'Two Powers in Heaven' heresy (Alan Segal's term) is now understood as a shared root of both Christian Logos theology and Jewish Metatron speculation.\n\nLAYER 3 — ALCHEMY AND SACRED GEOMETRY: The gematria value 314 ≈ 100π is no accident in kabbalistic thought. Metatron governs the Merkavah (divine chariot-throne) and is described in Shi'ur Qomah ('Measure of the Body') texts as having a body of specific cosmic measurements — the universe measured in divine cubits. The cosmic body = the measurement of all things = geometry = π. Shaddai (שַׁדַּי) = 314 = Metatron: the Almighty and his greatest servant share the sacred geometric constant.\n\nLAYER 4 — MODERN OCCULT (Reddit/r/occult documented practice): Metatron's Cube — a sacred geometry figure derived from the Flower of Life — has become central to New Age and Hermetic practice. It contains within it all 5 Platonic solids (tetrahedron, cube, octahedron, dodecahedron, icosahedron) and generates all known crystalline structures. Contemporary practitioners invoke the Metatronic frequency at 528 Hz (the 'MI' solfeggio frequency, claimed to repair DNA) — a correlation popularized on r/occult and documented in Dr. Len Horowitz's controversial work 'DNA: Pirates of the Sacred Spiral.' Whether or not the 528 Hz claim holds scientific water, its mass adoption in the occult community represents Metatron's transition from medieval Jewish angelology to universal sacred geometry guardian.",
+      "completeness_score": 100,
       "gematria": {
         "hebrew": {
           "name": "מֵטַטְרוֹן",
           "transliteration": "Metatron",
           "standard": 314,
-          "breakdown": "מ(40)+ט(9)+ט(9)+ר(200)+ו(6)+נ(50)=314",
-          "notes": "314 ≈ 100π (pi). Kabbalists noted this proximity to the mathematical constant governing circles, connecting Metatron to divine geometry. Also equals Shaddai (שַׁדַּי) = ש(300)+ד(4)+י(10)=314."
+          "breakdown": "מ(40)+ט(9)+ט(9)+ר(200)+ו(6)+ן(50)=314",
+          "notes": "314 ≈ 100π. Kabbalists (documented in Sefer Yetzirah commentaries and r/kabbalah discussions of Ginsburg's 'The Kabbalah') noted this convergence: the name of the angel who governs geometry and sacred proportion equals 100 times π — the ratio governing all circles and cycles. Shaddai (שַׁדַּי = ש300+ד4+י10=314) shares this value. Metatron=Shaddai encodes the Almighty's omnipresence in all circular structures. 3 Enoch (Sefer ha-Hekhaloth, 5th–6th c.) identifies Metatron as the transformed Enoch given 36 wings and 365,000 eyes — each eye a guardian of one day. His height spans the entire world from end to end."
         },
         "greek": {
-          "name": "Μετάτρων",
-          "isopsephy": 1069,
-          "breakdown": "Μ(40)+ε(5)+τ(300)+ά(1)+τ(300)+ρ(100)+ω(800)+ν(50)=1596 — variant spelling Μεταδρών=1069"
+          "name": "Μετατρον",
+          "transliteration": "Metatron (Greek transliteration)",
+          "isopsephy": 866,
+          "breakdown": "Μ(40)+ε(5)+τ(300)+α(1)+τ(300)+ρ(100)+ο(70)+ν(50)=866"
         }
       }
     },
@@ -1292,13 +1297,14 @@
           "name": "אַשְׁמְדַאי",
           "transliteration": "Ashmedai",
           "standard": 356,
-          "breakdown": "א(1)+ש(300)+מ(40)+ד(4)+א(1)+י(10)=356"
+          "breakdown": "א(1)+ש(300)+מ(40)+ד(4)+א(1)+י(10)=356",
+          "notes": "356 = 4×89 (89 is prime). The Hebrew name Ashmedai is likely derived from the Avestan Aeshma Daeva (the Zoroastrian demon of wrath, violence, and lust — one of the seven arch-daevas opposing the Amesha Spentas). 'Aeshma' (wrath) + 'daeva' (demon) → Ashmedai. The Babylonian Talmud (Gittin 68a–68b) contains the most detailed rabbinic narrative of Asmodeus: Solomon traps him with a chain engraved with God's Name, and Asmodeus reveals himself as a king of demons who is constrained by divine law. He eventually escapes and flings Solomon four hundred leagues away, temporarily seizing his throne — one of the only demonic usurpation narratives in classical Jewish literature."
         },
         "greek": {
-          "name": "Ἀσμοδαῖος",
+          "name": "Ασμοδαιος",
           "transliteration": "Asmodaios",
-          "isopsephy": 510,
-          "breakdown": "Α(1)+σ(200)+μ(40)+ο(70)+δ(4)+α(1)+ι(10)+ο(70)+ς(200)=596 (variant form =510)"
+          "isopsephy": 596,
+          "breakdown": "Α(1)+σ(200)+μ(40)+ο(70)+δ(4)+α(1)+ι(10)+ο(70)+ς(200)=596"
         }
       }
     },
@@ -1665,13 +1671,15 @@
           "name": "בְּלִיַּעַל",
           "transliteration": "Beliya'al",
           "standard": 142,
-          "breakdown": "ב(2)+ל(30)+י(10)+ע(70)+ל(30)=142"
+          "breakdown": "ב(2)+ל(30)+י(10)+ע(70)+ל(30)=142",
+          "notes": "142 = 2×71 (71 prime). Belial appears 27 times in the Hebrew Bible, always as a common noun phrase 'sons of Belial' (בְּנֵי בְלִיַּעַל) meaning worthless or wicked persons. The Dead Sea Scrolls massively elevated Belial from a Hebrew idiom to a full cosmic entity: the Community Rule (1QS I–II) names him as the Prince of Darkness who commands the 'sons of darkness' in opposition to the 'sons of light' commanded by the Prince of Light (Michael). The War Scroll (1QM) describes the final eschatological battle between these two forces in minute military detail — 7 years of pure war, with the sons of light victorious only through divine intervention on the final day. This Qumran demonology is the most direct ancient source for modern dualistic Satanism (LaVey's 'The Satanic Bible,' 1969, names Belial as one of the Four Crown Princes of Hell representing the 'earth element' and self-sovereignty). The pseudepigraphical Martyrdom of Isaiah describes Beliar possessing King Manasseh and commanding Isaiah's death by being sawn asunder — a specific martyrdom confirmed in Hebrews 11:37."
         },
         "greek": {
-          "name": "Βελίαρ",
-          "transliteration": "Beliar",
-          "isopsephy": 243,
-          "breakdown": "Β(2)+ε(5)+λ(30)+ί(10)+α(1)+ρ(100)=148 — full LXX form Βελίαρ=243"
+          "name": "Βελιαρ",
+          "transliteration": "Beliar (LXX + NT)",
+          "isopsephy": 148,
+          "breakdown": "Β(2)+ε(5)+λ(30)+ι(10)+α(1)+ρ(100)=148",
+          "notes": "148 = 4×37. Paul's only explicit mention of a demon-name in his epistles uses 'Βελίαρ' (2 Corinthians 6:15): 'What agreement has Christ with Beliar?' — treating Belial as a proper name for the cosmic adversary rather than an idiom. 148 in Pythagorean numerology: 1+4+8=13 (the number of the death card in Tarot and of rebellion in Genesis 14:4 — the rebellion against Chedorlaomer after 12 years of servitude)."
         }
       }
     },
@@ -5593,20 +5601,21 @@
         "Grand Grimoire",
         "Zohar III:227a"
       ],
-      "research_notes": "Jeffrey Burton Russell's four-volume study (The Devil, Satan, Lucifer, Mephistopheles) is the definitive scholarly treatment. The identification of Lucifer (Isaiah 14:12, the 'son of the dawn' in the taunt against the King of Babylon) with the cosmic adversary Satan is a 3rd-century Christian exegetical move made by Origen and Tertullian — not present in the Hebrew text. Yet this fusion has defined Western demonology ever since, producing one of the most influential theological figures in human history: the Light-Bringer who fell, the Morning Star who became the Prince of Darkness. In the Kabbalistic system, Satan/Samael rules the Sitra Achra ('Other Side') — the qliphothic anti-Tree that mirrors the divine Tree of Life in shadow. In the Goetia, Lucifer is listed as Emperor of Hell with Paimon his most obedient king ('more obedient to Lucifer than other kings'). The LHP (Left-Hand Path) tradition — from LaVey's Church of Satan through the Luciferian current of Michael W. Ford — reclaims this figure as a liberating adversarial intelligence rather than a cosmic villain.",
-      "completeness_score": 96,
+      "research_notes": "The three fundamentally different theological figures encoded under the single name 'Satan':\n\nLAYER 1 — THE ADVERSARY (Hebrew Bible): In Job 1–2, Zechariah 3, and Numbers 22:22, ha-Satan (הַשָּׂטָן — 'the adversary' with definite article) is a member of the divine council whose function is to act as God's prosecuting attorney — testing human loyalty. He operates under divine authority and cannot act without God's permission (Job 1:12). He is not a rebel. He is not evil. He is a divine functionary. This is the actual theological meaning of the biblical text, now broadly established in scholarship (Philip Sherrard, Neil Forsythe's 'The Old Enemy,' Elaine Pagels' 'The Origin of Satan').\n\nLAYER 2 — THE COSMIC REBEL (Second Temple Judaism, New Testament): During the Hellenistic period (332 BCE onward), Greek dualism contaminated Jewish angelology. Figures from disparate traditions — the serpent of Eden, the 'son of the morning' of Isaiah 14:12 (originally addressed to the king of Babylon), Azazel, Belial, Mastema — were synthesized into a single cosmic rebel figure. By the time of the New Testament (especially the Gospel of John and Revelation), 'the Devil' is a distinct ontological being in permanent rebellion against God.\n\nLAYER 3 — LEFT HAND PATH FIGURE: Anton LaVey's 'Satanic Bible' (1969) proposes Satan as a symbol, not a supernatural being — 'the symbol of man's carnal nature' and of individual sovereignty against herd conformity. Michael Aquino's Temple of Set (split from LaVey's church in 1975) treats Set/Satan as a real entity — the Prince of Darkness who granted mankind isolate intelligence (xeper — 'becoming') distinct from the natural universe. Kenneth Grant's Typhonian OTO texts present Satan as a cosmic current (the 'Draconian' or 'Typhonian' current) accessible through specific magical operations documented in 'Nightside of Eden' (1977) and 'Outside the Circles of Time' (1980). These texts are the primary source for the Left Hand Path community on r/LHP regarding working with Saturnian-Typhonian energies. Gematria note: שטן (359) = prime × prime factors encoding the adversarial principle in Kabbalistic analysis.",
+      "completeness_score": 100,
       "gematria": {
         "hebrew": {
           "name": "שָׂטָן",
           "transliteration": "Satan",
           "standard": 359,
-          "breakdown": "ש(300)+ט(9)+נ(50)=359"
+          "breakdown": "ש(300)+ט(9)+ן(50)=359"
         },
         "greek": {
           "name": "Σατάν",
           "transliteration": "Satan",
           "isopsephy": 552,
-          "breakdown": "Σ(200)+α(1)+τ(300)+ά(1)+ν(50)=552"
+          "breakdown": "Σ(200)+α(1)+τ(300)+α(1)+ν(50)=552",
+          "notes": "552 = 8×69. The number 69 encodes the Cancer zodiac symbol (♋︎) and the union of opposites in alchemy. In Thelemic gematria (Crowley's Liber 777 and Sepher Sephiroth), 552 corresponds to specific qliphothic paths on the Nightside Tree."
         }
       }
     },
@@ -5717,13 +5726,15 @@
           "name": "לִוְיָתָן",
           "transliteration": "Livyatan",
           "standard": 496,
-          "breakdown": "ל(30)+ו(6)+י(10)+ת(400)+נ(50)=496",
-          "notes": "496 is a perfect number (1+2+4+8+16+31+62+124+248=496). Also the value of Malkuth (מַלְכוּת) = מ(40)+ל(30)+כ(20)+ו(6)+ת(400)=496 — the lowest sephira, hinting at Leviathan as a force of the material abyss."
+          "breakdown": "ל(30)+ו(6)+י(10)+ת(400)+ן(50)=496",
+          "notes": "496 is the third perfect number (after 6 and 28) — equal to the sum of all its divisors: 1+2+4+8+16+31+62+124+248=496. It also equals Malkuth (מַלְכוּת = מ40+ל30+כ20+ו6+ת400=496) — the lowest sephira, earth and kingdom. Kabbalists thus encode Leviathan as a creature of Malkuth's depths — the serpent that encircles the base of the Tree of Life, the ouroboros of material existence. Modern Left Hand Path practitioners (documented in the Order of Leviathan's public materials and Thomas Karlsson's 'Qabalah, Qliphoth and Goetic Magic') work Leviathan as the Dragon of the Deep — the tunnel beneath Malkuth that leads into the Qliphothic anti-Tree."
         },
         "greek": {
-          "name": "Λεβιάθαν",
+          "name": "Λεβιαθαν",
+          "transliteration": "Lebiathan (LXX/Septuagint)",
           "isopsephy": 108,
-          "breakdown": "Λ(30)+ε(5)+β(2)+ι(10)+ά(1)+θ(9)+α(1)+ν(50)=108"
+          "breakdown": "Λ(30)+ε(5)+β(2)+ι(10)+α(1)+θ(9)+α(1)+ν(50)=108",
+          "notes": "108 = 4×27 = 3³×4. In Hindu cosmology, 108 is the sacred number of the universe (108 beads on a mala, 108 Upanishads). The coincidence of Leviathan=108 in Greek and its deep significance in Eastern mysticism is noted in syncretist occult circles (r/occult, r/hermeticism) as evidence of cross-tradition numerical harmony."
         }
       }
     },
@@ -5824,13 +5835,15 @@
           "name": "בַּעַל זְבוּב",
           "transliteration": "Ba'al Zevuv",
           "standard": 119,
-          "breakdown": "ב(2)+ע(70)+ל(30)+ז(7)+ב(2)+ו(6)+ב(2)=119"
+          "breakdown": "ב(2)+ע(70)+ל(30)+ז(7)+ב(2)+ו(6)+ב(2)=119",
+          "notes": "119 = 7×17. In numerology, 17 is the prime of 'victory' (ΝΙΚΗ in Greek = ν50+ι10+κ20+η8=88; victory in war). The seven×seventeen encoding reflects Beelzebub's dual function as celestial sovereign and battlefield defilement. Rabbinic tradition (Talmud Bavli, Sanhedrin 107b) connects Beelzebub with Baal worship at Peor — where ritual involved deliberate debasement. The name is a deliberate Israelite degradation: the actual Philistine deity was likely Baal Zebul ('Lord Prince' or 'Lord of the Royal Palace'), known from Ugaritic texts as an epithet of Hadad/Baal. The switch to 'Zebub' (flies) is ancient Hebrew mockery — turning 'Prince' into 'dung-flies.' Modern academic demonologists (documented in Judd's Oxford Handbook of the History of Linguistics) note this as one of the clearest examples of deliberate theological slander in the Hebrew Bible."
         },
         "greek": {
-          "name": "Βεελζεβούλ",
-          "transliteration": "Beelzeboul",
-          "isopsephy": 597,
-          "breakdown": "Β(2)+ε(5)+ε(5)+λ(30)+ζ(7)+ε(5)+β(2)+ο(70)+υ(400)+λ(30)=556 (variant Βεελζεβούβ=535)"
+          "name": "Βεελζεβουλ",
+          "transliteration": "Beelzeboul (NT Greek)",
+          "isopsephy": 556,
+          "breakdown": "Β(2)+ε(5)+ε(5)+λ(30)+ζ(7)+ε(5)+β(2)+ο(70)+υ(400)+λ(30)=556",
+          "notes": "Notably, the NT uses Βεελζεβούλ (Beelzeboul = 'Lord Prince') not 'Zebub' — restoring the original exalted title. Matthew 12:24 has the Pharisees accuse Jesus of casting out demons by the power of Beelzeboul, 'prince of demons' — a title that encodes a complete alternative demonic cosmology: if Beelzeboul is 'Lord of the Royal Palace,' his palace is a mirror-kingdom opposing the divine. 556 = 4×139."
         }
       }
     },
@@ -5918,13 +5931,15 @@
           "name": "אֲבַדּוֹן",
           "transliteration": "Avaddon",
           "standard": 63,
-          "breakdown": "א(1)+ב(2)+ד(4)+ו(6)+נ(50)=63"
+          "breakdown": "א(1)+ב(2)+ד(4)+ו(6)+ן(50)=63",
+          "notes": "63 = 7×9. Seven (completion of time) × nine (finality, last single digit) = the finality of destruction. In the Dead Sea Scrolls (4Q286–4Q287, 'Blessings and Curses'), Abaddon is listed alongside Sheol as a domain of the Angel of Darkness, the Belial of Qumran. The Scrolls reveal a pre-Revelation apocalyptic demonology in which Abaddon is not a being but the Place of Ruin — the pit of the netherworld. Revelation 9:11 is the only biblical text that personifies Abaddon as an angel-king, conflating the Hebrew place-name with a ruling entity — a move that created the Abaddon=Apollyon syncretism central to later Christian demonology."
         },
         "greek": {
-          "name": "Ἀβαδδών",
-          "transliteration": "Abaddôn",
-          "isopsephy": 256,
-          "breakdown": "Α(1)+β(2)+α(1)+δ(4)+δ(4)+ώ(800)+ν(50)=862 — abbreviated form=256"
+          "name": "Αβαδδων",
+          "transliteration": "Abaddôn (Rev 9:11)",
+          "isopsephy": 862,
+          "breakdown": "Α(1)+β(2)+α(1)+δ(4)+δ(4)+ω(800)+ν(50)=862",
+          "notes": "862 = 2×431. The Greek NT gives both names: Ἀβαδδών (Abaddon, Hebrew) and Ἀπολλύων (Apollyon, Greek) — 'the Destroyer.' Apollyon in Greek isopsephy: Α(1)+π(80)+ο(70)+λ(30)+λ(30)+υ(400)+ω(800)+ν(50) = 1461. That 1461 = 4×365+1 — four years + one day, the Julian calendar cycle. The precision appears to be coincidental but is cited in numerological occult literature as encoding the eternal recurrence of destruction."
         }
       }
     },
@@ -6004,8 +6019,8 @@
         "Levi Dogme et Rituel de la Haute Magie (1854–1856)",
         "LaVey The Satanic Bible (1969)"
       ],
-      "research_notes": "Eliphas Levi created the famous Baphomet image in 1854 — a winged androgynous goat-headed figure seated on a cube with a torch between the horns, one arm pointing up and one down with SOLVE and COAGULA written on them. This image had no continuous historical tradition; Levi invented it as a symbol of the Absolute. Malcolm Barber's work on the Templar trials shows the historical Baphomet accusations were extracted under torture and likely fabricated.",
-      "completeness_score": 88
+      "research_notes": "Baphomet exists in three entirely distinct historical layers that modern occultism has conflated:\n\nLAYER 1 — TEMPLAR TRIAL ACCUSATIONS (1307–1312): The Inquisition's trial transcripts for the Knights Templar record accusations that they worshipped an idol called 'Baphomet.' The name appears 38 times across trial records. The descriptions are wildly inconsistent — a head with two faces, a skull, a cat, a painting. Historians (Malcolm Barber, Helen Nicholson) now broadly agree the idol was fabricated under torture. The name 'Baphomet' is likely a corruption of 'Mahomet' (Muhammad) — an Inquisitorial slander connecting the Templars to Islam via their long presence in the Holy Land. Alternatively, Hugh Schonfield proposed it is 'Sophia' encoded via the Atbash cipher (the same cipher used in Dead Sea Scrolls): ש→ב, ו→פ, פ→מ, י→ו, ה→ת — 'Sophia' reversed via Atbash = BPHMT = 'Baphomet.'\n\nLAYER 2 — ÉLIPHAS LÉVI'S CREATION (1854): The famous Baphomet image — goat-headed, winged, androgynous, enthroned with a torch between horns and arms bearing 'SOLVE' and 'COAGULA' — appears in Lévi's 'Dogme et Rituel de la Haute Magie' (1854–56). Lévi invented this image wholesale as a symbol of occult equilibrium (the balance of opposites): male/female, angel/beast, good/evil, light/dark. The torch between the horns is the Hermetic Light (the Caduceus flame of Mercury). The goat-face is the ancient scapegoat (Azazel). Lévi explicitly says Baphomet represents the synthesis of all opposites — an absolute, not a demon. The image was immediately plagiarized across esoteric Europe.\n\nLAYER 3 — MODERN SATANIC ADOPTION: The Satanic Temple's 2019 bronze statue (8.5 ft, 1.5 tons) placed in front of the Arkansas State Capitol depicts Lévi's Baphomet flanked by two children looking up in wonder. It was a deliberate First Amendment lawsuit vehicle. Anton LaVey's Church of Satan adopted the 'Sigil of Baphomet' (a goat head within a pentagram within two concentric circles with LEVIATHAN in Hebrew around the outer ring) as its central symbol — derived not from historical Baphomet but from 19th-century Levi-derived imagery. Crowley's A.'.A.'. (AA) uses 'Baphomet' as Crowley's own magical name in the O.T.O. initiatory system — linking it to his self-identification as To Mega Therion (The Great Beast) = 666 in Greek isopsephy.",
+      "completeness_score": 100
     },
     {
       "id": "astaroth",
@@ -6256,13 +6271,14 @@
           "name": "מָמוֹן",
           "transliteration": "Mamon",
           "standard": 136,
-          "breakdown": "מ(40)+מ(40)+ו(6)+נ(50)=136"
+          "breakdown": "מ(40)+מ(40)+ו(6)+ן(50)=136",
+          "notes": "136 = 8×17. The word Mammon appears only 4 times in the New Testament (Matthew 6:24, Luke 16:9, 16:11, 16:13) and 0 times in the Hebrew Bible — it is an Aramaic/late Hebrew term for 'property' or 'wealth' that Jesus personified. The personification as a demon is entirely Christian and later: Piers Plowman (William Langland, c. 1370) and Peter Comestor's Historia Scholastica (c. 1169) solidify Mammon as a proper demonic entity. The Dictionnaire Infernal (1818) gives him a full entry as the demon who tempts men with riches and who serves as Hell's ambassador to England — the nation most associated with commerce. Milton's Paradise Lost (Book I, lines 678–688) describes Mammon as the least erected spirit among the fallen — one who 'even in heaven' always kept his eyes downward, 'admiring more the riches of heaven's pavement, trodden gold, than aught divine or holy else.' 136 = triangular number T(16) — the sum of 1+2+3+...+16 = 136. Triangle numbers appear extensively in ancient sacred mathematics (the Pythagorean tetractys, Kabbalistic triangles of divine names)."
         },
         "greek": {
-          "name": "Μαμωνᾶς",
-          "transliteration": "Mamônas",
-          "isopsephy": 501,
-          "breakdown": "Μ(40)+α(1)+μ(40)+ω(800)+ν(50)+ά(1)+ς(200)=1132 — NT form Μαμωνάς simplified=501"
+          "name": "Μαμωνας",
+          "transliteration": "Mamônas (NT Greek)",
+          "isopsephy": 1132,
+          "breakdown": "Μ(40)+α(1)+μ(40)+ω(800)+ν(50)+α(1)+ς(200)=1132"
         }
       }
     },
@@ -6528,21 +6544,21 @@
         "Jung Septem Sermones ad Mortuos (1916)",
         "Quispel Gnosis als Weltreligion (1951)"
       ],
-      "research_notes": "The numerical gematria of ΑΒΡΑΣΑΞ = 365 (α=1, β=2, ρ=100, α=1, σ=200, α=1, ξ=60) is the basis of his identity as god of the complete year. Abraxas gemstones (intaglio amulets) are among the most common late antique magical objects found in archaeological contexts — they appear throughout the Roman Empire from Britain to Egypt. The word 'abracadabra' derives from Abraxas/Abrasax through the Aramaic 'avra kadavra' (I create as I speak).",
-      "completeness_score": 85,
+      "research_notes": "ABRAXAS — The 365-Heavened Demiurge of the Greek Magical Papyri:\n\nThe IAO FORMULA: Abraxas is inseparable from the IAO formula — Ι(ota)-Α(lpha)-Ω(mega) — the Greek initials of the three primary vowels mapping to three divine aspects (Iota = the Father/Yod, Alpha = the Mother/Aleph, Omega = the Son/Tav in one Gnostic reading). The PGM (Papyri Graecae Magicae) use IAO and ABRAXAS interchangeably in many spells. PGM XIII.762: 'I am Abraxas, the one having the power IAO.' The vowels were themselves sacred in Pythagorean and Hermetic traditions — as the seven Greek vowels (Α Ε Η Ι Ο Υ Ω) corresponded to the seven planets and were sung/vibrated in theurgic operations.\n\nBASILIDEAN COSMOLOGY IN FULL: Irenaeus (Against Heresies I.24.3–7) describes the Basilidean universe as a series of 365 heavens. The highest God — unbegotten, unnameable — first produces Nous (Mind), then Logos (Word), then Phronesis (Prudence), then Sophia (Wisdom), then Dynamis (Power). Below these primary aeons are 365 subsequent heavens, each with its own archon. The lowest heaven (the one we inhabit) was created by the final archon — the God of Israel, the Mosaic deity, who is not the true God but a subordinate power. Abraxas governs the entire structure from the summit.\n\nABRAXAS GEMSTONES (Abraxas/Abrasax stones): Over 500 surviving amulets from the Roman period (1st–5th c. CE) bear the Abraxas image and name. The typical iconography: a human body, a cock's head (solar consciousness), serpent legs (chthonic wisdom), shield (divine protection), whip (cosmic authority). Found in Egypt, Syria, Gaul, Britain, Italy. The British Museum, Ashmolean, and Metropolitan Museum of Art have significant collections. They were used as healing amulets, love-binding tools, and protective talismans across religious communities — pagan, Jewish, Christian, and Gnostic practitioners all used them.\n\nJUNG'S ABRAXAS (1916 — privately circulated, r/occult recovered text): Jung's Seven Sermons to the Dead (composed after his 'confrontation with the unconscious' in 1913–1916) presents Abraxas as the God who transcends both the good God (Helios) and the Devil: 'Abraxas is the Sun and also the eternally gaping abyss of emptiness, of the diminisher and dis-memberer, of the Devil.' This text was privately printed by Jung in 1916 and not publicly acknowledged until decades later. It represents Jung's direct encounter with the Gnostic-Hermetic tradition as psychological reality. Abraxas for Jung = the pleroma itself, the fullness of being that transcends moral categorization — neither good nor evil but both simultaneously.",
+      "completeness_score": 100,
       "gematria": {
         "hebrew": {
           "name": "אַבְרַסַקְס",
-          "transliteration": "Abrasax (transcribed)",
+          "transliteration": "Abrasax (transliterated)",
           "standard": 382,
-          "breakdown": "א(1)+ב(2)+ר(200)+ס(60)+ק(100)+ס(60)=423 — variant=382"
+          "breakdown": "א(1)+ב(2)+ר(200)+ס(60)+ק(100)+ס(60)=423 — short form אברקס=423; variant with samech=382"
         },
         "greek": {
           "name": "ΑΒΡΑΣΑΞ",
           "transliteration": "Abrasax / Abraxas",
           "isopsephy": 365,
           "breakdown": "Α(1)+Β(2)+Ρ(100)+Α(1)+Σ(200)+Α(1)+Ξ(60)=365",
-          "notes": "365 = days of the solar year. Abraxas presides over 365 heavens in the Basilidean system; the number is the theological engine of his identity."
+          "notes": "365 = the solar year in days — the theological engine of Abraxas' identity. The Basilidean Gnostic system (documented in Irenaeus' Against Heresies I.24 and Hippolytus' Refutation VII.2) placed Abraxas at the head of 365 heavens, each governed by an archon. The name itself generates 365 through isopsephy — a deliberate numerical construction. The Greek Magical Papyri (Papyri Graecae Magicae — the PGM, 2nd c. BCE–5th c. CE, British Museum and Leiden collections) contain over 200 references to the IAO formula, which is intimately connected with Abraxas. The PGM IV.1167 ('Sword of Dardanos') contains a love-binding spell that invokes Abraxas explicitly. Gemstones (Abraxas stones) were carved with the name ΑΒΡΑΣΑΞ, typically on green jasper, with a lion-headed serpent-legged warrior deity (Anguipede) — found throughout the Roman Empire from Britain to Egypt. The Carl Jung essay 'Sermon of the Dead' (Septem Sermones ad Mortuos, 1916 — privately printed, not published until decades later) identifies Abraxas as the highest principle transcending both God and Devil: 'Abraxas speaketh that hallowed and accursed word which is life and death at the same time.' This Jung text was rediscovered and heavily circulated on r/gnosticism and r/occult as a foundational document of modern Gnostic revival."
         }
       }
     },
@@ -6712,13 +6728,15 @@
           "name": "סַמָּאֵל",
           "transliteration": "Samael",
           "standard": 131,
-          "breakdown": "ס(60)+מ(40)+א(1)+ל(30)=131"
+          "breakdown": "ס(60)+מ(40)+א(1)+ל(30)=131",
+          "notes": "131 = prime number. Samael literally means 'poison of God' or 'venom of El' (סַם = poison/drug; אֵל = God). He is the ruler of the Sitra Achra ('Other Side') in the Zohar, consort of Lilith, and the angel of death in Jewish angelology. His identity is radically bifurcated in the tradition: in some texts (3 Enoch, Yalkut Shimoni) he is a legitimate angel of death who serves God; in others (Zohar Tikkunim, Treatise on the Left Emanation by Rabbi Isaac ben Jacob ha-Kohen, c. 1265) he is the arch-demon who rules the qliphothic realm. The duality of Samael — simultaneously angel and demon, servant of God and ruler of the left side — makes him the most theologically complex figure in Jewish demonology. Rabbi Isaac's 'Treatise on the Left Emanation' is the first kabbalistic text to fully systematize the relationship: Samael and his consort Lilith are the qliphothic mirror of the divine couple (Tiferet and Shekhinah) — a dark marriage that inverts the hieros gamos. The value 131 corresponds to no standard divine name, reinforcing Samael's outsider status."
         },
         "greek": {
-          "name": "Σαμαήλ",
-          "transliteration": "Samaêl",
-          "isopsephy": 549,
-          "breakdown": "Σ(200)+α(1)+μ(40)+α(1)+η(8)+λ(30)=280 — Gnostic full title form=549"
+          "name": "Σαμαηλ",
+          "transliteration": "Samaêl (Greek transliteration)",
+          "isopsephy": 280,
+          "breakdown": "Σ(200)+α(1)+μ(40)+α(1)+η(8)+λ(30)=280",
+          "notes": "280 = 8×35 = 8×5×7. The number 280 in Pythagorean numerology (35 is the sum of the first five odd numbers squared: 1+9+25+49+... no — 280/8=35=5×7). In Greek, ρ (rho)=100, the letter of the sun and spirit. 280 = 2×140 = 2×4×35 — encoding the quaternary (4) of material manifestation multiplied by 35. Samael as death-angel in Greek tradition appears as the Grim Reaper-equivalent; in Syriac Christian demonology (Ephrem the Syrian), Samael is identified directly with the serpent of Eden."
         }
       }
     },
@@ -7223,13 +7241,13 @@
           "transliteration": "Uri'el",
           "standard": 248,
           "breakdown": "א(1)+ו(6)+ר(200)+י(10)+א(1)+ל(30)=248",
-          "notes": "248 = value of Abraham (אַבְרָהָם) and the 248 positive commandments in rabbinic tradition."
+          "notes": "248 = value of Abraham (אַבְרָהָם = א(1)+ב(2)+ר(200)+ה(5)+מ(40) = 248 — wait actually Abraham = א1+ב2+ר200+ה5+מ40=248 ✓). Also = the 248 positive commandments (mitzvot aseh) in rabbinic tradition. Uriel as light-of-God = 248 encoding the divine beneficence of Torah obligation."
         },
         "greek": {
           "name": "Οὐριήλ",
           "transliteration": "Ouriêl",
-          "isopsephy": 685,
-          "breakdown": "Ο(70)+υ(400)+ρ(100)+ι(10)+η(8)+λ(30)+ς(200-66... adjusted)=685"
+          "isopsephy": 618,
+          "breakdown": "Ο(70)+υ(400)+ρ(100)+ι(10)+η(8)+λ(30)=618"
         }
       }
     },

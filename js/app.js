@@ -1026,92 +1026,277 @@ function openTimeline() {
 //  GEMATRIA CALCULATOR
 // ══════════════════════════════════════════════════════════════
 
+// ── BASE LETTER MAP — accent-strip lookup ────────────────────────────────────
+// Greek isopsephy (Milesian numeral system: α=1 … ω=800, including archaic)
+// Accented chars: normalize by stripping combining diacritics via NFD then
+// mapping the base character.
+const GREEK_BASE = {
+  'α':1,'β':2,'γ':3,'δ':4,'ε':5,'ζ':7,'η':8,'θ':9,
+  'ι':10,'κ':20,'λ':30,'μ':40,'ν':50,'ξ':60,'ο':70,'π':80,
+  'ρ':100,'σ':200,'ς':200,'τ':300,'υ':400,'φ':500,'χ':600,'ψ':700,'ω':800,
+};
+
+// Build GREEK_VALUES: lowercase + uppercase + every accented / polytonic variant
+const GREEK_VALUES = (() => {
+  const map = {};
+  for (const [base, val] of Object.entries(GREEK_BASE)) {
+    map[base] = val;
+    map[base.toUpperCase()] = val;
+  }
+  // All polytonic / accented Greek letters — mapped to their base letter value
+  // Lowercase accented
+  const acc = [
+    'ά','ὰ','ᾶ','ᾱ','ᾰ',   // alpha variants → 1
+    'έ','ὲ',                  // epsilon → 5
+    'ή','ὴ','ῆ',              // eta → 8
+    'ί','ὶ','ῖ','ΐ','ϊ','ἰ','ἱ','ἲ','ἳ','ἴ','ἵ','ἶ','ἷ', // iota → 10
+    'ό','ὸ',                  // omicron → 70
+    'ύ','ὺ','ῦ','ΰ','ϋ','ὐ','ὑ','ὒ','ὓ','ὔ','ὕ','ὖ','ὗ', // upsilon → 400
+    'ώ','ὼ','ῶ',              // omega → 800
+  ];
+  const baseMap = {
+    'ά':1,'ὰ':1,'ᾶ':1,'ᾱ':1,'ᾰ':1,
+    'έ':5,'ὲ':5,
+    'ή':8,'ὴ':8,'ῆ':8,
+    'ί':10,'ὶ':10,'ῖ':10,'ΐ':10,'ϊ':10,'ἰ':10,'ἱ':10,'ἲ':10,'ἳ':10,'ἴ':10,'ἵ':10,'ἶ':10,'ἷ':10,
+    'ό':70,'ὸ':70,
+    'ύ':400,'ὺ':400,'ῦ':400,'ΰ':400,'ϋ':400,'ὐ':400,'ὑ':400,'ὒ':400,'ὓ':400,'ὔ':400,'ὕ':400,'ὖ':400,'ὗ':400,
+    'ώ':800,'ὼ':800,'ῶ':800,
+    // uppercase accented
+    'Ά':1,'Ὰ':1,'Ᾱ':1,'Ᾰ':1,
+    'Έ':5,'Ὲ':5,
+    'Ή':8,'Ὴ':8,
+    'Ί':10,'Ὶ':10,'Ϊ':10,
+    'Ό':70,'Ὸ':70,
+    'Ύ':400,'Ὺ':400,'Ϋ':400,
+    'Ώ':800,'Ὼ':800,
+    // breathing marks on alpha (with spiritus)
+    'ἀ':1,'ἁ':1,'ἂ':1,'ἃ':1,'ἄ':1,'ἅ':1,'ἆ':1,'ἇ':1,
+    'Ἀ':1,'Ἁ':1,'Ἂ':1,'Ἃ':1,'Ἄ':1,'Ἅ':1,'Ἆ':1,'Ἇ':1,
+    'ἐ':5,'ἑ':5,'ἒ':5,'ἓ':5,'ἔ':5,'ἕ':5,
+    'Ἐ':5,'Ἑ':5,'Ἒ':5,'Ἓ':5,'Ἔ':5,'Ἕ':5,
+    'ἠ':8,'ἡ':8,'ἢ':8,'ἣ':8,'ἤ':8,'ἥ':8,'ἦ':8,'ἧ':8,
+    'Ἠ':8,'Ἡ':8,'Ἢ':8,'Ἣ':8,'Ἤ':8,'Ἥ':8,'Ἦ':8,'Ἧ':8,
+    'ὀ':70,'ὁ':70,'ὂ':70,'ὃ':70,'ὄ':70,'ὅ':70,
+    'Ὀ':70,'Ὁ':70,'Ὂ':70,'Ὃ':70,'Ὄ':70,'Ὅ':70,
+    'ὠ':800,'ὡ':800,'ὢ':800,'ὣ':800,'ὤ':800,'ὥ':800,'ὦ':800,'ὧ':800,
+    'Ὠ':800,'Ὡ':800,'Ὢ':800,'Ὣ':800,'Ὤ':800,'Ὥ':800,'Ὦ':800,'Ὧ':800,
+  };
+  for (const [ch, val] of Object.entries(baseMap)) map[ch] = val;
+  return map;
+})();
+
+// Hebrew — standard Mispar Hechrachi
 const HEBREW_VALUES = {
   'א':1,'ב':2,'ג':3,'ד':4,'ה':5,'ו':6,'ז':7,'ח':8,'ט':9,
   'י':10,'כ':20,'ל':30,'מ':40,'נ':50,'ס':60,'ע':70,'פ':80,'צ':90,
   'ק':100,'ר':200,'ש':300,'ת':400,
-  // Final forms (standard = same value)
-  'ך':20,'ם':40,'ן':50,'ף':80,'ץ':90
+  'ך':20,'ם':40,'ן':50,'ף':80,'ץ':90, // final forms = standard value
 };
 
-const GREEK_VALUES = {
-  'α':1,'β':2,'γ':3,'δ':4,'ε':5,'ζ':7,'η':8,'θ':9,
-  'ι':10,'κ':20,'λ':30,'μ':40,'ν':50,'ξ':60,'ο':70,'π':80,
-  'ρ':100,'σ':200,'τ':300,'υ':400,'φ':500,'χ':600,'ψ':700,'ω':800,
-  'ς':200, // final sigma
-  // Uppercase
-  'Α':1,'Β':2,'Γ':3,'Δ':4,'Ε':5,'Ζ':7,'Η':8,'Θ':9,
-  'Ι':10,'Κ':20,'Λ':30,'Μ':40,'Ν':50,'Ξ':60,'Ο':70,'Π':80,
-  'Ρ':100,'Σ':200,'Τ':300,'Υ':400,'Φ':500,'Χ':600,'Ψ':700,'Ω':800
-};
+// ── English → Greek transliteration ─────────────────────────────────────────
+const EN_TO_GREEK = [
+  // Multi-char first
+  ['ph','φ'],['th','θ'],['ch','χ'],['kh','χ'],['ps','ψ'],['ks','ξ'],
+  ['ou','ου'],['oo','ω'],['ee','η'],['ai','αι'],['ei','ει'],['oi','οι'],
+  ['au','αυ'],['eu','ευ'],['ng','γγ'],
+  // Single chars
+  ['a','α'],['b','β'],['g','γ'],['d','δ'],['e','ε'],['z','ζ'],['h','η'],
+  ['i','ι'],['k','κ'],['c','κ'],['l','λ'],['m','μ'],['n','ν'],['x','ξ'],
+  ['o','ο'],['p','π'],['r','ρ'],['s','σ'],['t','τ'],['u','υ'],['y','υ'],
+  ['f','φ'],['q','κ'],['v','β'],['w','ω'],
+];
 
-// Notable gematria values for Hebrew
+// English → Hebrew transliteration
+const EN_TO_HEBREW = [
+  // Multi-char first
+  ['sh','ש'],['th','ת'],['ch','ח'],['tz','צ'],['ts','צ'],['ph','פ'],
+  // Single chars
+  ['a','א'],['b','ב'],['g','ג'],['d','ד'],['h','ה'],['v','ו'],['w','ו'],
+  ['z','ז'],['i','י'],['y','י'],['k','כ'],['c','כ'],['l','ל'],['m','מ'],
+  ['n','נ'],['s','ס'],['p','פ'],['f','פ'],['r','ר'],['t','ט'],['u','ו'],
+  ['e','ה'],['o','ו'],['q','ק'],['x','ס'],
+];
+
+function transliterateToGreek(text) {
+  let result = '';
+  let i = 0;
+  const lower = text.toLowerCase();
+  while (i < lower.length) {
+    let matched = false;
+    for (const [en, gr] of EN_TO_GREEK) {
+      if (lower.startsWith(en, i)) {
+        result += gr;
+        i += en.length;
+        matched = true;
+        break;
+      }
+    }
+    if (!matched) { result += lower[i]; i++; }
+  }
+  return result;
+}
+
+function transliterateToHebrew(text) {
+  let result = '';
+  let i = 0;
+  const lower = text.toLowerCase();
+  while (i < lower.length) {
+    let matched = false;
+    for (const [en, hb] of EN_TO_HEBREW) {
+      if (lower.startsWith(en, i)) {
+        result += hb;
+        i += en.length;
+        matched = true;
+        break;
+      }
+    }
+    if (!matched) { result += lower[i]; i++; }
+  }
+  return result;
+}
+
+// ── Notable values ────────────────────────────────────────────────────────────
 const HEBREW_NOTABLE = {
-  1:'Aleph — unity; divine oneness',
-  7:'Zayin — week, covenant; the seventh day',
-  10:'Yod — the smallest letter; a point of divine power',
-  13:'Echad (אֶחָד) — "One"; also Ahavah (love)',
-  17:'Tov (טוֹב) — "Good"',
-  18:'Chai (חַי) — "Life"; the most auspicious Hebrew number',
-  26:'YHWH (יהוה) — the divine Name (Tetragrammaton)',
-  32:'Lev (לֵב) — "Heart"; 32 paths of wisdom in Sefer Yetzirah',
-  36:'36 righteous persons (Lamed-Vavniks) who sustain the world',
-  50:'Nun — 50 gates of understanding (Binah)',
-  72:'The 72 names of God; 72 Goetic spirits',
-  101:'Michael (מִיכָאֵל) — "Who is like God?"',
-  131:'Samael (סַמָּאֵל) — the adversarial angel',
-  136:'Mammon (מָמוֹן) — the demon of wealth',
-  142:'Belial (בְּלִיַּעַל) — "without worth"',
-  248:'Abraham (אַבְרָהָם); Uriel; 248 positive commandments',
-  314:'Metatron (מֵטַטְרוֹן); Shaddai (שַׁדַּי) ≈ 100π',
-  359:'Satan (שָׂטָן) — "the adversary"',
-  386:'Yeshua (יֵשׁוּעַ) — Jesus in Hebrew',
-  480:'Lilith (לִילִית)',
-  496:'Leviathan (לִוְיָתָן); Malkuth (מַלְכוּת) — both = 496 (perfect number)',
+  1:'Aleph — divine unity; the undivided',
+  7:'Zayin — the seventh day; covenant',
+  10:'Yod — the smallest letter; seed of divine power',
+  13:'Echad (אחד, "One"); Ahavah (אהבה, "Love") — both = 13',
+  18:'Chai (חי) — "Life"; basis of Jewish charitable gifts in multiples of 18',
+  26:'YHWH (יהוה) — the Tetragrammaton, the ineffable divine Name',
+  32:'Lev (לב, "Heart"); 32 paths of Wisdom in Sefer Yetzirah',
+  36:'36 Lamed-Vavniks — the hidden righteous who sustain the world',
+  50:'Nun — 50 Gates of Understanding (Binah); the Jubilee',
+  65:'Adonai (אדני) — "My Lord"; the spoken substitute for YHWH',
+  72:'The 72 Names of God; 72 Goetic spirits of Solomon',
+  86:'Elohim (אלהים) — "God"; also the numerical value of Nature (הטבע)',
+  101:'Michael (מיכאל) — "Who is like God?"',
+  114:'Din (דין) — divine judgment; Samech+Mem = the Samael-Lilith union in some texts',
+  131:'Samael (סמאל) — poison of God; the adversarial prince',
+  136:'Mammon (ממון) — wealth-demon; T(16) the 16th triangular number',
+  142:'Belial (בליעל) — "worthless/without worth"',
+  248:'Uriel; Abraham (אברהם); 248 positive commandments (Mitzvot Aseh)',
+  314:'Metatron (מטטרון); Shaddai (שדי) — both = 314 ≈ 100π',
+  359:'Satan (שטן) — "the adversary/accuser"',
+  386:'Yeshua (ישוע) — Hebrew form of Jesus',
+  480:'Lilith (לילית); also years from Exodus to Solomon\'s Temple (1 Kings 6:1)',
+  496:'Leviathan (לויתן); Malkuth (מלכות) — both = 496, the third perfect number',
+  666:'Sorath (סורת) — the solar demon of the Beast (666 = ס60+ו6+ר200+ת400); Nero Caesar in Hebrew',
 };
 
-// Notable gematria values for Greek
 const GREEK_NOTABLE = {
-  1:'Alpha — the beginning; divine unity',
-  8:'Eta — eighth letter; resurrection number',
-  153:'The 153 fish of John 21:11; triangle of 17',
+  54:'Azazel (Αζαζηλ) — the scapegoat demon, Lord of the Desert',
+  82:'Lamia (Λαμια) — Greek parallel of Lilith, the child-killing night-woman',
+  108:'Leviathan / Lebiathan (Λεβιαθαν) in the LXX Septuagint; sacred number of the Hindu cosmos (108 mala beads, 108 Upanishads)',
+  146:'Gabriel (Γαβριηλ)',
+  148:'Beliar (Βελιαρ) — NT Greek form of Belial (2 Corinthians 6:15)',
+  153:'The 153 fish (John 21:11); triangle of 17; ΝΙΖ; the Pythagorean "fish" vesica',
+  246:'Logos in a variant form; Gabriel in Hebrew',
+  280:'Samael (Σαμαηλ) — the angel of death in Greek transmission',
   284:'Theos (ΘΕΟΣ) — "God"',
-  365:'Abraxas (ΑΒΡΑΣΑΞ) — lord of 365 heavens = days of the solar year',
-  373:'Logos (ΛΟΓΟΣ) — "The Word" (John 1:1)',
-  666:'The Number of the Beast (Revelation 13:18); also Nero Caesar in Hebrew gematria',
-  777:'Jesus (some variant traditions)',
-  800:'Kyrios (ΚΥΡΙΟΣ) — "Lord"',
-  888:'Iesous (ΙΗΣΟΥΣ) — "Jesus" — 8×111; 8 = resurrection',
-  1480:'Christos (ΧΡΙΣΤΟΣ) — "The Anointed One"',
+  365:'Abraxas (ΑΒΡΑΣΑΞ) — lord of 365 heavens; the solar year',
+  373:'Logos (ΛΟΓΟΣ) — "The Word" (John 1:1); Christ as divine reason',
+  556:'Beelzeboul (Βεελζεβουλ) — "Lord of the Royal Palace" (NT Greek)',
+  596:'Asmodaios (Ασμοδαιος) — the NT/LXX form of Asmodeus',
+  618:'Uriel (Ουριηλ) in Greek polytonic transliteration',
+  666:'Number of the Beast (Revelation 13:18 — ΧΞΣ); Νευραλινκ (Neuralink); ΤΟΜΕΓΑΘΗΡΙΟΝ (Crowley\'s title "To Mega Therion"); LATEINOS (Λατεινος — "the Roman man"); Nero Caesar in Hebrew gematria (נרון קסר=666)',
+  681:'Michael (Μιχαηλ) — commander of the heavenly host',
+  689:'Michael (Μιχαήλ) with eta — the archangel of divine warfare',
+  777:'ΠΑΝΤΑ (Panta, "All Things"); also used in Crowley\'s Liber 777 as symbol of divine perfection',
+  800:'Kyrios (ΚΥΡΙΟΣ) — "Lord"; also the letter Omega alone = 800',
+  862:'Abaddon (Αβαδδων) — the Destroyer, king of the bottomless pit (Revelation 9:11)',
+  866:'Metatron (Μετατρον) — the great angel in Greek',
+  888:'Iesous (ΙΗΣΟΥΣ) — Jesus; 8×111; 8 = resurrection and the Ogdoad',
+  1132:'Mammon (Μαμωνας) — the NT Greek form of the wealth-demon',
+  1480:'Christos (ΧΡΙΣΤΟΣ) — "The Anointed One"; 8×185',
 };
+
+// ── Core calculation ──────────────────────────────────────────────────────────
+function normalizeGreekChar(ch) {
+  // NFD decomposition strips combining diacritical marks, leaving base letter
+  const decomposed = ch.normalize('NFD');
+  const base = decomposed[0];
+  return GREEK_VALUES[base] !== undefined ? base : ch;
+}
 
 function calcGematria(text, lang) {
   const values = lang === 'hebrew' ? HEBREW_VALUES : GREEK_VALUES;
-  const chars = [...text]; // handle unicode properly
+  const chars = [...text];
   let total = 0;
   const breakdown = [];
-  for (const ch of chars) {
+  for (let ch of chars) {
+    if (ch.trim() === '') continue;
+    // Try direct lookup (handles precomposed accented Greek with our extended map)
     if (values[ch] !== undefined) {
       total += values[ch];
       breakdown.push({ char: ch, val: values[ch] });
-    } else if (ch.trim()) {
+    } else if (lang === 'greek') {
+      // Try NFD base-char decomposition as fallback
+      const base = ch.normalize('NFD')[0];
+      if (GREEK_VALUES[base] !== undefined) {
+        total += GREEK_VALUES[base];
+        breakdown.push({ char: ch, val: GREEK_VALUES[base] });
+      } else {
+        breakdown.push({ char: ch, val: null });
+      }
+    } else {
       breakdown.push({ char: ch, val: null });
     }
   }
   return { total, breakdown };
 }
 
-function renderCalculator() {
-  const input = document.getElementById('gem-calc-input').value;
-  const lang  = document.getElementById('gem-calc-lang').value;
-  const { total, breakdown } = calcGematria(input, lang);
+// ── Cross-entity gematria index ────────────────────────────────────────────
+let GEM_INDEX = null; // { hebrew: { value: [entityId,...] }, greek: {...} }
 
-  // Breakdown display
+function buildGemIndex() {
+  if (GEM_INDEX || !DB) return;
+  GEM_INDEX = { hebrew: {}, greek: {} };
+  for (const entity of DB.entities) {
+    if (!entity.gematria) continue;
+    const g = entity.gematria;
+    if (g.hebrew?.standard) {
+      const v = g.hebrew.standard;
+      (GEM_INDEX.hebrew[v] = GEM_INDEX.hebrew[v] || []).push(entity.id);
+    }
+    if (g.greek?.isopsephy) {
+      const v = g.greek.isopsephy;
+      (GEM_INDEX.greek[v] = GEM_INDEX.greek[v] || []).push(entity.id);
+    }
+  }
+}
+
+function findMatchingEntities(total, lang) {
+  if (!total || !GEM_INDEX || !DB) return [];
+  const idx = lang === 'hebrew' ? GEM_INDEX.hebrew : GEM_INDEX.greek;
+  const ids = idx[total] || [];
+  return ids.map(id => DB.entities.find(e => e.id === id)).filter(Boolean);
+}
+
+// ── Calculator render ──────────────────────────────────────────────────────
+let _calcInitialized = false;
+
+function renderCalculator() {
+  const inputEl = document.getElementById('gem-calc-input');
+  const langEl  = document.getElementById('gem-calc-lang');
+  if (!inputEl || !langEl) return;
+
+  const rawInput = inputEl.value;
+  const lang = langEl.value;
+
+  // Auto-detect if input looks like ASCII (Latin letters) → offer/auto-transliterate
+  const isLatin = rawInput.length > 0 && /^[\x20-\x7E]+$/.test(rawInput);
+  const transBtn = document.getElementById('gem-translit-btn');
+  if (transBtn) transBtn.style.display = (isLatin && rawInput.trim()) ? '' : 'none';
+
+  const { total, breakdown } = calcGematria(rawInput, lang);
+
   const bdEl = document.getElementById('gem-breakdown');
   if (!breakdown.length) {
-    bdEl.innerHTML = '<span class="gem-calc-empty">Type a word in the field above to calculate.</span>';
+    bdEl.innerHTML = '<span class="gem-calc-empty">Type a word in Hebrew, Greek, or English (then press Transliterate).</span>';
     document.getElementById('gem-total').textContent = '—';
-    document.getElementById('gem-notable').textContent = '';
+    const nEl = document.getElementById('gem-notable'); nEl.textContent = ''; nEl.style.display = 'none';
+    const mEl = document.getElementById('gem-matches'); if (mEl) mEl.innerHTML = '';
     return;
   }
 
@@ -1123,32 +1308,57 @@ function renderCalculator() {
 
   document.getElementById('gem-total').textContent = total || '—';
 
-  // Notable lookup
+  // Notable value lookup
   const notable = lang === 'hebrew' ? HEBREW_NOTABLE : GREEK_NOTABLE;
   const noteEl = document.getElementById('gem-notable');
   if (total && notable[total]) {
-    noteEl.textContent = `◆ ${total} — ${notable[total]}`;
+    noteEl.innerHTML = `<strong>◆ ${total}</strong> — ${notable[total]}`;
     noteEl.style.display = '';
   } else {
     noteEl.textContent = '';
     noteEl.style.display = 'none';
   }
+
+  // Cross-entity matches
+  buildGemIndex();
+  const matches = findMatchingEntities(total, lang);
+  const mEl = document.getElementById('gem-matches');
+  if (mEl) {
+    if (matches.length) {
+      mEl.innerHTML = `
+        <p class="gem-matches-label">◈ Entities in the database with this ${lang === 'hebrew' ? 'Hebrew' : 'Greek'} value (${total}):</p>
+        <div class="gem-matches-grid">
+          ${matches.map(e => `
+            <button class="gem-match-card" onclick="openDetail('${e.id}')">
+              <span class="gem-match-name">${e.canonical_name.split(' / ')[0]}</span>
+              <span class="gem-match-val">${lang === 'hebrew' ? e.gematria.hebrew?.name || '' : e.gematria.greek?.name || ''}</span>
+            </button>
+          `).join('')}
+        </div>
+      `;
+    } else {
+      mEl.innerHTML = '';
+    }
+  }
 }
 
-function initCalculator() {
-  const input = document.getElementById('gem-calc-input');
-  const lang  = document.getElementById('gem-calc-lang');
-  if (!input) return;
-  input.addEventListener('input', renderCalculator);
-  lang.addEventListener('change', () => { input.value = ''; renderCalculator(); });
+function doTransliterate() {
+  const inputEl = document.getElementById('gem-calc-input');
+  const lang = document.getElementById('gem-calc-lang').value;
+  if (!inputEl) return;
+  const raw = inputEl.value;
+  inputEl.value = lang === 'greek' ? transliterateToGreek(raw) : transliterateToHebrew(raw);
   renderCalculator();
 }
 
-// Attach calculator init to the nav button
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.nav-btn').forEach(btn => {
-    if (btn.dataset.view === 'gematria') {
-      btn.addEventListener('click', () => { setTimeout(initCalculator, 50); });
-    }
-  });
-});
+function initCalculator() {
+  if (_calcInitialized) { renderCalculator(); return; }
+  const input = document.getElementById('gem-calc-input');
+  const lang  = document.getElementById('gem-calc-lang');
+  if (!input || !lang) return;
+  _calcInitialized = true;
+  input.addEventListener('input', renderCalculator);
+  lang.addEventListener('change', () => { input.value = ''; _calcInitialized = true; renderCalculator(); });
+  buildGemIndex();
+  renderCalculator();
+}
