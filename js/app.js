@@ -108,6 +108,7 @@ function init(data) {
       document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
       document.getElementById('view-' + btn.dataset.view).classList.add('active');
       if (btn.dataset.view === 'timeline') openTimeline();
+      if (btn.dataset.view === 'gematria') setTimeout(initCalculator, 50);
     });
   });
 
@@ -337,6 +338,61 @@ function openDetail(id) {
 
   // Notes
   document.getElementById('d-notes').textContent = entity.research_notes||'No research notes recorded.';
+
+  // Gematria
+  const gemSec = document.getElementById('d-gematria-section');
+  const gemEl  = document.getElementById('d-gematria');
+  if (entity.gematria) {
+    gemSec.style.display = '';
+    gemEl.innerHTML = '';
+    const g = entity.gematria;
+    const wrap = document.createElement('div');
+    wrap.className = 'gematria-wrap';
+
+    if (g.hebrew) {
+      const h = g.hebrew;
+      const block = document.createElement('div');
+      block.className = 'gematria-block';
+      block.innerHTML = `
+        <div class="gematria-block-header">
+          <span class="gematria-script-label">Hebrew</span>
+          <span class="gematria-script-name">${h.name||''}</span>
+          <span class="gematria-transliteration">${h.transliteration||''}</span>
+        </div>
+        <div class="gematria-value-row">
+          <span class="gematria-system-label">Standard (Mispar Hechrachi)</span>
+          <span class="gematria-value">${h.standard||'—'}</span>
+        </div>
+        ${h.breakdown ? `<p class="gematria-breakdown">${h.breakdown}</p>` : ''}
+        ${h.notes ? `<p class="gematria-note">${h.notes}</p>` : ''}
+      `;
+      wrap.appendChild(block);
+    }
+
+    if (g.greek) {
+      const k = g.greek;
+      const block = document.createElement('div');
+      block.className = 'gematria-block gematria-block-greek';
+      block.innerHTML = `
+        <div class="gematria-block-header">
+          <span class="gematria-script-label gematria-script-greek">Greek</span>
+          <span class="gematria-script-name">${k.name||''}</span>
+          <span class="gematria-transliteration">${k.transliteration||''}</span>
+        </div>
+        <div class="gematria-value-row">
+          <span class="gematria-system-label">Isopsephy (Ψῆφος)</span>
+          <span class="gematria-value gematria-value-greek">${k.isopsephy||'—'}</span>
+        </div>
+        ${k.breakdown ? `<p class="gematria-breakdown">${k.breakdown}</p>` : ''}
+        ${k.notes ? `<p class="gematria-note">${k.notes}</p>` : ''}
+      `;
+      wrap.appendChild(block);
+    }
+
+    gemEl.appendChild(wrap);
+  } else {
+    gemSec.style.display = 'none';
+  }
 
   // Research Depth
   const score = entity.completeness_score||0;
@@ -965,3 +1021,134 @@ function openTimeline() {
 // ══════════════════════════════════════════════════════════════
 //  BOOT
 // ══════════════════════════════════════════════════════════════
+
+// ══════════════════════════════════════════════════════════════
+//  GEMATRIA CALCULATOR
+// ══════════════════════════════════════════════════════════════
+
+const HEBREW_VALUES = {
+  'א':1,'ב':2,'ג':3,'ד':4,'ה':5,'ו':6,'ז':7,'ח':8,'ט':9,
+  'י':10,'כ':20,'ל':30,'מ':40,'נ':50,'ס':60,'ע':70,'פ':80,'צ':90,
+  'ק':100,'ר':200,'ש':300,'ת':400,
+  // Final forms (standard = same value)
+  'ך':20,'ם':40,'ן':50,'ף':80,'ץ':90
+};
+
+const GREEK_VALUES = {
+  'α':1,'β':2,'γ':3,'δ':4,'ε':5,'ζ':7,'η':8,'θ':9,
+  'ι':10,'κ':20,'λ':30,'μ':40,'ν':50,'ξ':60,'ο':70,'π':80,
+  'ρ':100,'σ':200,'τ':300,'υ':400,'φ':500,'χ':600,'ψ':700,'ω':800,
+  'ς':200, // final sigma
+  // Uppercase
+  'Α':1,'Β':2,'Γ':3,'Δ':4,'Ε':5,'Ζ':7,'Η':8,'Θ':9,
+  'Ι':10,'Κ':20,'Λ':30,'Μ':40,'Ν':50,'Ξ':60,'Ο':70,'Π':80,
+  'Ρ':100,'Σ':200,'Τ':300,'Υ':400,'Φ':500,'Χ':600,'Ψ':700,'Ω':800
+};
+
+// Notable gematria values for Hebrew
+const HEBREW_NOTABLE = {
+  1:'Aleph — unity; divine oneness',
+  7:'Zayin — week, covenant; the seventh day',
+  10:'Yod — the smallest letter; a point of divine power',
+  13:'Echad (אֶחָד) — "One"; also Ahavah (love)',
+  17:'Tov (טוֹב) — "Good"',
+  18:'Chai (חַי) — "Life"; the most auspicious Hebrew number',
+  26:'YHWH (יהוה) — the divine Name (Tetragrammaton)',
+  32:'Lev (לֵב) — "Heart"; 32 paths of wisdom in Sefer Yetzirah',
+  36:'36 righteous persons (Lamed-Vavniks) who sustain the world',
+  50:'Nun — 50 gates of understanding (Binah)',
+  72:'The 72 names of God; 72 Goetic spirits',
+  101:'Michael (מִיכָאֵל) — "Who is like God?"',
+  131:'Samael (סַמָּאֵל) — the adversarial angel',
+  136:'Mammon (מָמוֹן) — the demon of wealth',
+  142:'Belial (בְּלִיַּעַל) — "without worth"',
+  248:'Abraham (אַבְרָהָם); Uriel; 248 positive commandments',
+  314:'Metatron (מֵטַטְרוֹן); Shaddai (שַׁדַּי) ≈ 100π',
+  359:'Satan (שָׂטָן) — "the adversary"',
+  386:'Yeshua (יֵשׁוּעַ) — Jesus in Hebrew',
+  480:'Lilith (לִילִית)',
+  496:'Leviathan (לִוְיָתָן); Malkuth (מַלְכוּת) — both = 496 (perfect number)',
+};
+
+// Notable gematria values for Greek
+const GREEK_NOTABLE = {
+  1:'Alpha — the beginning; divine unity',
+  8:'Eta — eighth letter; resurrection number',
+  153:'The 153 fish of John 21:11; triangle of 17',
+  284:'Theos (ΘΕΟΣ) — "God"',
+  365:'Abraxas (ΑΒΡΑΣΑΞ) — lord of 365 heavens = days of the solar year',
+  373:'Logos (ΛΟΓΟΣ) — "The Word" (John 1:1)',
+  666:'The Number of the Beast (Revelation 13:18); also Nero Caesar in Hebrew gematria',
+  777:'Jesus (some variant traditions)',
+  800:'Kyrios (ΚΥΡΙΟΣ) — "Lord"',
+  888:'Iesous (ΙΗΣΟΥΣ) — "Jesus" — 8×111; 8 = resurrection',
+  1480:'Christos (ΧΡΙΣΤΟΣ) — "The Anointed One"',
+};
+
+function calcGematria(text, lang) {
+  const values = lang === 'hebrew' ? HEBREW_VALUES : GREEK_VALUES;
+  const chars = [...text]; // handle unicode properly
+  let total = 0;
+  const breakdown = [];
+  for (const ch of chars) {
+    if (values[ch] !== undefined) {
+      total += values[ch];
+      breakdown.push({ char: ch, val: values[ch] });
+    } else if (ch.trim()) {
+      breakdown.push({ char: ch, val: null });
+    }
+  }
+  return { total, breakdown };
+}
+
+function renderCalculator() {
+  const input = document.getElementById('gem-calc-input').value;
+  const lang  = document.getElementById('gem-calc-lang').value;
+  const { total, breakdown } = calcGematria(input, lang);
+
+  // Breakdown display
+  const bdEl = document.getElementById('gem-breakdown');
+  if (!breakdown.length) {
+    bdEl.innerHTML = '<span class="gem-calc-empty">Type a word in the field above to calculate.</span>';
+    document.getElementById('gem-total').textContent = '—';
+    document.getElementById('gem-notable').textContent = '';
+    return;
+  }
+
+  bdEl.innerHTML = breakdown.map(b =>
+    b.val !== null
+      ? `<span class="gem-char-chip"><span class="gem-char-letter">${b.char}</span><span class="gem-char-val">${b.val}</span></span>`
+      : `<span class="gem-char-chip gem-char-unknown"><span class="gem-char-letter">${b.char}</span><span class="gem-char-val">?</span></span>`
+  ).join('<span class="gem-plus">+</span>');
+
+  document.getElementById('gem-total').textContent = total || '—';
+
+  // Notable lookup
+  const notable = lang === 'hebrew' ? HEBREW_NOTABLE : GREEK_NOTABLE;
+  const noteEl = document.getElementById('gem-notable');
+  if (total && notable[total]) {
+    noteEl.textContent = `◆ ${total} — ${notable[total]}`;
+    noteEl.style.display = '';
+  } else {
+    noteEl.textContent = '';
+    noteEl.style.display = 'none';
+  }
+}
+
+function initCalculator() {
+  const input = document.getElementById('gem-calc-input');
+  const lang  = document.getElementById('gem-calc-lang');
+  if (!input) return;
+  input.addEventListener('input', renderCalculator);
+  lang.addEventListener('change', () => { input.value = ''; renderCalculator(); });
+  renderCalculator();
+}
+
+// Attach calculator init to the nav button
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    if (btn.dataset.view === 'gematria') {
+      btn.addEventListener('click', () => { setTimeout(initCalculator, 50); });
+    }
+  });
+});

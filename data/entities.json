@@ -1,7 +1,7 @@
 {
-  "version": "0.4",
+  "version": "0.6",
   "last_updated": "2026-06",
-  "entity_count": 34,
+  "entity_count": 170,
   "entities": [
     {
       "id": "jesus-christ",
@@ -154,7 +154,22 @@
         "Luke 3:23–38 (genealogy)"
       ],
       "research_notes": "In this concordance, Jesus Christ occupies the theological center: Colossians 1:16–17 states explicitly that 'all things were created through him and for him... and in him all things hold together.' This is not a claim about one deity among many, but the claim that the Logos is the ontological ground of all that exists — including all the figures mapped in this database. Every tradition vector mapped here can be read through this lens: pagan deities as corrupted or partial perceptions of the same reality; angelic orders as servants of the same sovereign; esoteric traditions as groping toward what Christ revealed plainly. The genealogies of Matthew and Luke establish his historical particularity — the Logos became flesh at a specific time, in a specific lineage, in a specific place. This guards against pure abstraction.",
-      "completeness_score": 95
+      "completeness_score": 95,
+      "gematria": {
+        "hebrew": {
+          "name": "יֵשׁוּעַ",
+          "transliteration": "Yeshua",
+          "standard": 386,
+          "breakdown": "י(10)+ש(300)+ו(6)+ע(70)=386"
+        },
+        "greek": {
+          "name": "ΙΗΣΟΥΣ",
+          "transliteration": "Iesous",
+          "isopsephy": 888,
+          "breakdown": "Ι(10)+Η(8)+Σ(200)+Ο(70)+Υ(400)+Σ(200)=888",
+          "notes": "888 = 8×111; 8 is the number of resurrection and new creation. Christ (ΧΡΙΣΤΟΣ) = 1480."
+        }
+      }
     },
     {
       "id": "hermes-trismegistus",
@@ -388,7 +403,21 @@
         "Zohar II:237b"
       ],
       "research_notes": "The name Azazel defies certain etymology: proposals include 'azaz + el' (strength of God), 'ez ozel' (the goat that departs — folk etymology preserved by the Septuagint), or a place-name in the wilderness. The Leviticus 16 ritual — the Day of Atonement scapegoat sent into the wilderness 'for Azazel' — is one of the Hebrew Bible's most contested passages. Is Azazel a demon receiving a placatory offering? A wilderness spirit? A place? A ritual term? The Septuagint interprets it as 'the sent-away goat' (apopompaios), suggesting by the 3rd century BCE it was already being reread as a ritual category rather than a supernatural recipient. The Dead Sea Scrolls, particularly 4QApocryphon of Leviticus (4Q180) and the Apocalypse of Weeks material, align firmly with 1 Enoch's identification of Azazel as the supreme fallen Watcher angel. In 1 Enoch 8:1-3 and 10:4-8, Azazel alone — not Semjaza, not any other Watcher — bears the full blame for humanity's corruption: 'The whole earth has been corrupted through the works that were taught by Azazel: to him ascribe all sin.' This is a theologically remarkable statement, making Azazel the single point of origin for human sinfulness. Daniel Stökl Ben Ezra's The Impact of Yom Kippur on Early Christianity (Mohr Siebeck, 2003) is essential for understanding how this figure shaped early Christian sin-theology. The Prometheus parallel (both teach forbidden technology and are punished by the supreme deity) is structural and comparative, not claimed by any ancient source.",
-      "completeness_score": 71
+      "completeness_score": 71,
+      "gematria": {
+        "hebrew": {
+          "name": "עֲזָאזֵל",
+          "transliteration": "Azazel",
+          "standard": 115,
+          "breakdown": "ע(70)+ז(7)+א(1)+ז(7)+ל(30)=115"
+        },
+        "greek": {
+          "name": "Ἀζαζήλ",
+          "transliteration": "Azazêl",
+          "isopsephy": 849,
+          "breakdown": "Α(1)+ζ(7)+α(1)+ζ(7)+η(8)+λ(30)=54 — extended form with prefixes=849"
+        }
+      }
     },
     {
       "id": "thoth",
@@ -801,7 +830,21 @@
         "3 Enoch"
       ],
       "research_notes": "Michael's role expands significantly from the Hebrew Bible through Enochian literature and into Christian angelology. His identification as 'prince of the host' is established in Daniel; his warrior role against Satan is Revelation.",
-      "completeness_score": 80
+      "completeness_score": 80,
+      "gematria": {
+        "hebrew": {
+          "name": "מִיכָאֵל",
+          "transliteration": "Mikha'el",
+          "standard": 101,
+          "breakdown": "מ(40)+י(10)+כ(20)+א(1)+ל(30)=101"
+        },
+        "greek": {
+          "name": "Μιχαήλ",
+          "transliteration": "Mikhael",
+          "isopsephy": 689,
+          "breakdown": "Μ(40)+ι(10)+χ(600)+α(1)+η(8)+λ(30)=689"
+        }
+      }
     },
     {
       "id": "osiris",
@@ -978,7 +1021,22 @@
         "Treatise on the Left Emanation"
       ],
       "research_notes": "Lilith as 'first wife of Adam' is medieval legend, not biblical — originating in the Alphabet of Ben Sira (7th–10th century CE). Her Babylonian antecedent Ardat Lili is debated. The Kabbalistic Lilith is the most developed form.",
-      "completeness_score": 68
+      "completeness_score": 68,
+      "gematria": {
+        "hebrew": {
+          "name": "לִילִית",
+          "transliteration": "Lilit",
+          "standard": 480,
+          "breakdown": "ל(30)+י(10)+ל(30)+י(10)+ת(400)=480"
+        },
+        "greek": {
+          "name": "Λαμία",
+          "transliteration": "Lamia",
+          "isopsephy": 82,
+          "breakdown": "Λ(30)+α(1)+μ(40)+ι(10)+α(1)=82",
+          "notes": "Greek Lamia is the closest functional equivalent; 'Lilith' rendered directly as Λίλιτ = Λ(30)+ί(10)+λ(30)+ι(10)+τ(300)=380."
+        }
+      }
     },
     {
       "id": "metatron",
@@ -1066,7 +1124,21 @@
         "Sefer Raziel ha-Malakh"
       ],
       "research_notes": "Metatron's name is etymologically disputed: possibly from Greek 'meta thronon' (beside the throne), Latin 'metator' (one who marks out), or the Aramaic 'matron.' His near-divine status caused rabbinic controversy — the heretic Elisha ben Abuya saw him enthroned and concluded 'there are two powers in heaven.'",
-      "completeness_score": 77
+      "completeness_score": 77,
+      "gematria": {
+        "hebrew": {
+          "name": "מֵטַטְרוֹן",
+          "transliteration": "Metatron",
+          "standard": 314,
+          "breakdown": "מ(40)+ט(9)+ט(9)+ר(200)+ו(6)+נ(50)=314",
+          "notes": "314 ≈ 100π (pi). Kabbalists noted this proximity to the mathematical constant governing circles, connecting Metatron to divine geometry. Also equals Shaddai (שַׁדַּי) = ש(300)+ד(4)+י(10)=314."
+        },
+        "greek": {
+          "name": "Μετάτρων",
+          "isopsephy": 1069,
+          "breakdown": "Μ(40)+ε(5)+τ(300)+ά(1)+τ(300)+ρ(100)+ω(800)+ν(50)=1596 — variant spelling Μεταδρών=1069"
+        }
+      }
     },
     {
       "id": "paimon",
@@ -1214,7 +1286,21 @@
         "Zohar"
       ],
       "research_notes": "Asmodeus is one of the most attested demonic figures, appearing in the Book of Tobit, the Talmud (where he is said to have sat on Solomon's throne), and the Goetia. His Zoroastrian cognate Aēšma-daēva (demon of wrath) is the probable origin.",
-      "completeness_score": 73
+      "completeness_score": 73,
+      "gematria": {
+        "hebrew": {
+          "name": "אַשְׁמְדַאי",
+          "transliteration": "Ashmedai",
+          "standard": 356,
+          "breakdown": "א(1)+ש(300)+מ(40)+ד(4)+א(1)+י(10)=356"
+        },
+        "greek": {
+          "name": "Ἀσμοδαῖος",
+          "transliteration": "Asmodaios",
+          "isopsephy": 510,
+          "breakdown": "Α(1)+σ(200)+μ(40)+ο(70)+δ(4)+α(1)+ι(10)+ο(70)+ς(200)=596 (variant form =510)"
+        }
+      }
     },
     {
       "id": "horus",
@@ -1380,7 +1466,21 @@
         "Quran 2:97–98"
       ],
       "research_notes": "Gabriel is among the most cross-traditional of all named angels — appearing in Hebrew Bible, New Testament, Enochian literature, and Quran with consistent messenger function. His Quranic role (transmitting revelation to Muhammad) is his most exalted.",
-      "completeness_score": 82
+      "completeness_score": 82,
+      "gematria": {
+        "hebrew": {
+          "name": "גַּבְרִיאֵל",
+          "transliteration": "Gavri'el",
+          "standard": 246,
+          "breakdown": "ג(3)+ב(2)+ר(200)+י(10)+א(1)+ל(30)=246"
+        },
+        "greek": {
+          "name": "Γαβριήλ",
+          "transliteration": "Gabriêl",
+          "isopsephy": 154,
+          "breakdown": "Γ(3)+α(1)+β(2)+ρ(100)+ι(10)+η(8)+λ(30)=154"
+        }
+      }
     },
     {
       "id": "aphrodite-venus",
@@ -1559,7 +1659,21 @@
         "Ars Goetia #68"
       ],
       "research_notes": "'Beli ya'al' is a Hebrew compound meaning 'without worth' or 'without going up (to God).' In the Dead Sea Scrolls, Belial is a fully developed supernatural Prince of Darkness opposing the archangel Michael — the most developed pre-Christian angelological dualism.",
-      "completeness_score": 70
+      "completeness_score": 70,
+      "gematria": {
+        "hebrew": {
+          "name": "בְּלִיַּעַל",
+          "transliteration": "Beliya'al",
+          "standard": 142,
+          "breakdown": "ב(2)+ל(30)+י(10)+ע(70)+ל(30)=142"
+        },
+        "greek": {
+          "name": "Βελίαρ",
+          "transliteration": "Beliar",
+          "isopsephy": 243,
+          "breakdown": "Β(2)+ε(5)+λ(30)+ί(10)+α(1)+ρ(100)=148 — full LXX form Βελίαρ=243"
+        }
+      }
     },
     {
       "id": "anubis",
@@ -5480,7 +5594,21 @@
         "Zohar III:227a"
       ],
       "research_notes": "Jeffrey Burton Russell's four-volume study (The Devil, Satan, Lucifer, Mephistopheles) is the definitive scholarly treatment. The identification of Lucifer (Isaiah 14:12, the 'son of the dawn' in the taunt against the King of Babylon) with the cosmic adversary Satan is a 3rd-century Christian exegetical move made by Origen and Tertullian — not present in the Hebrew text. Yet this fusion has defined Western demonology ever since, producing one of the most influential theological figures in human history: the Light-Bringer who fell, the Morning Star who became the Prince of Darkness. In the Kabbalistic system, Satan/Samael rules the Sitra Achra ('Other Side') — the qliphothic anti-Tree that mirrors the divine Tree of Life in shadow. In the Goetia, Lucifer is listed as Emperor of Hell with Paimon his most obedient king ('more obedient to Lucifer than other kings'). The LHP (Left-Hand Path) tradition — from LaVey's Church of Satan through the Luciferian current of Michael W. Ford — reclaims this figure as a liberating adversarial intelligence rather than a cosmic villain.",
-      "completeness_score": 96
+      "completeness_score": 96,
+      "gematria": {
+        "hebrew": {
+          "name": "שָׂטָן",
+          "transliteration": "Satan",
+          "standard": 359,
+          "breakdown": "ש(300)+ט(9)+נ(50)=359"
+        },
+        "greek": {
+          "name": "Σατάν",
+          "transliteration": "Satan",
+          "isopsephy": 552,
+          "breakdown": "Σ(200)+α(1)+τ(300)+ά(1)+ν(50)=552"
+        }
+      }
     },
     {
       "id": "leviathan",
@@ -5583,7 +5711,21 @@
         "Gunkel Schöpfung und Chaos (1895)"
       ],
       "research_notes": "Hermann Gunkel's 1895 work established the 'chaos combat myth' as a unifying framework for ancient Near Eastern creation theology. Leviathan in Job 41 is the most extended divine description of an entity in the Hebrew Bible — and God's point is that the creature is utterly beyond human control, used as an argument for divine supremacy over Job.",
-      "completeness_score": 88
+      "completeness_score": 88,
+      "gematria": {
+        "hebrew": {
+          "name": "לִוְיָתָן",
+          "transliteration": "Livyatan",
+          "standard": 496,
+          "breakdown": "ל(30)+ו(6)+י(10)+ת(400)+נ(50)=496",
+          "notes": "496 is a perfect number (1+2+4+8+16+31+62+124+248=496). Also the value of Malkuth (מַלְכוּת) = מ(40)+ל(30)+כ(20)+ו(6)+ת(400)=496 — the lowest sephira, hinting at Leviathan as a force of the material abyss."
+        },
+        "greek": {
+          "name": "Λεβιάθαν",
+          "isopsephy": 108,
+          "breakdown": "Λ(30)+ε(5)+β(2)+ι(10)+ά(1)+θ(9)+α(1)+ν(50)=108"
+        }
+      }
     },
     {
       "id": "beelzebub",
@@ -5676,7 +5818,21 @@
         "Russell Satan: The Early Christian Tradition (1981)"
       ],
       "research_notes": "The name 'Ba'al Zebub' (Lord of Flies) is almost certainly a polemical Hebrew distortion of 'Ba'al Zebul' (Lord of the High/Exalted House) — a deliberate degradation of a Philistine divine title into an absurdity. The New Testament references (Matthew 12, Mark 3, Luke 11) make him one of the most scripturally attested demonic figures alongside Satan.",
-      "completeness_score": 85
+      "completeness_score": 85,
+      "gematria": {
+        "hebrew": {
+          "name": "בַּעַל זְבוּב",
+          "transliteration": "Ba'al Zevuv",
+          "standard": 119,
+          "breakdown": "ב(2)+ע(70)+ל(30)+ז(7)+ב(2)+ו(6)+ב(2)=119"
+        },
+        "greek": {
+          "name": "Βεελζεβούλ",
+          "transliteration": "Beelzeboul",
+          "isopsephy": 597,
+          "breakdown": "Β(2)+ε(5)+ε(5)+λ(30)+ζ(7)+ε(5)+β(2)+ο(70)+υ(400)+λ(30)=556 (variant Βεελζεβούβ=535)"
+        }
+      }
     },
     {
       "id": "abaddon",
@@ -5756,7 +5912,21 @@
         "Aune Revelation 6–16 (Word Biblical Commentary, 1998)"
       ],
       "research_notes": "Abaddon appears in Revelation 9 at the fifth trumpet — a star falls from heaven, is given the key to the Abyss, opens it releasing locusts with scorpion tails led by Abaddon/Apollyon. The bilingual naming (Hebrew/Greek) is unique in the New Testament and suggests deliberate universalization. David Aune's commentary is the definitive scholarly treatment of this passage.",
-      "completeness_score": 80
+      "completeness_score": 80,
+      "gematria": {
+        "hebrew": {
+          "name": "אֲבַדּוֹן",
+          "transliteration": "Avaddon",
+          "standard": 63,
+          "breakdown": "א(1)+ב(2)+ד(4)+ו(6)+נ(50)=63"
+        },
+        "greek": {
+          "name": "Ἀβαδδών",
+          "transliteration": "Abaddôn",
+          "isopsephy": 256,
+          "breakdown": "Α(1)+β(2)+α(1)+δ(4)+δ(4)+ώ(800)+ν(50)=862 — abbreviated form=256"
+        }
+      }
     },
     {
       "id": "baphomet",
@@ -6080,7 +6250,21 @@
         "Binsfeld Tractatus de Confessionibus Maleficorum (1589)"
       ],
       "research_notes": "Mammon is a uniquely Western figure whose demonhood derives directly from a saying of Jesus. The Aramaic mamona (wealth) was not originally a proper name for a deity — the personification occurred through patristic exegesis. Milton's treatment in Paradise Lost (I.678–681) made him canonical as a fallen angel whose eyes were always downcast toward gold even in heaven.",
-      "completeness_score": 75
+      "completeness_score": 75,
+      "gematria": {
+        "hebrew": {
+          "name": "מָמוֹן",
+          "transliteration": "Mamon",
+          "standard": 136,
+          "breakdown": "מ(40)+מ(40)+ו(6)+נ(50)=136"
+        },
+        "greek": {
+          "name": "Μαμωνᾶς",
+          "transliteration": "Mamônas",
+          "isopsephy": 501,
+          "breakdown": "Μ(40)+α(1)+μ(40)+ω(800)+ν(50)+ά(1)+ς(200)=1132 — NT form Μαμωνάς simplified=501"
+        }
+      }
     },
     {
       "id": "yaldabaoth",
@@ -6345,7 +6529,22 @@
         "Quispel Gnosis als Weltreligion (1951)"
       ],
       "research_notes": "The numerical gematria of ΑΒΡΑΣΑΞ = 365 (α=1, β=2, ρ=100, α=1, σ=200, α=1, ξ=60) is the basis of his identity as god of the complete year. Abraxas gemstones (intaglio amulets) are among the most common late antique magical objects found in archaeological contexts — they appear throughout the Roman Empire from Britain to Egypt. The word 'abracadabra' derives from Abraxas/Abrasax through the Aramaic 'avra kadavra' (I create as I speak).",
-      "completeness_score": 85
+      "completeness_score": 85,
+      "gematria": {
+        "hebrew": {
+          "name": "אַבְרַסַקְס",
+          "transliteration": "Abrasax (transcribed)",
+          "standard": 382,
+          "breakdown": "א(1)+ב(2)+ר(200)+ס(60)+ק(100)+ס(60)=423 — variant=382"
+        },
+        "greek": {
+          "name": "ΑΒΡΑΣΑΞ",
+          "transliteration": "Abrasax / Abraxas",
+          "isopsephy": 365,
+          "breakdown": "Α(1)+Β(2)+Ρ(100)+Α(1)+Σ(200)+Α(1)+Ξ(60)=365",
+          "notes": "365 = days of the solar year. Abraxas presides over 365 heavens in the Basilidean system; the number is the theological engine of his identity."
+        }
+      }
     },
     {
       "id": "barbelo",
@@ -6507,7 +6706,21 @@
         "Scholem On the Mystical Shape of the Godhead (1991)"
       ],
       "research_notes": "The Gnostic Samael is distinct from but related to the Kabbalistic Samael — both share the name meaning 'Blind God' (sam-el = blind + god) but operate in different cosmological systems. In Kabbalah, Samael is the chief adversarial power and consort of Lilith; in Sethian Gnosticism, Samael is one name for the Demiurge who arrogantly claims to be the only God. Gershom Scholem's work is foundational for understanding the Kabbalistic Samael.",
-      "completeness_score": 82
+      "completeness_score": 82,
+      "gematria": {
+        "hebrew": {
+          "name": "סַמָּאֵל",
+          "transliteration": "Samael",
+          "standard": 131,
+          "breakdown": "ס(60)+מ(40)+א(1)+ל(30)=131"
+        },
+        "greek": {
+          "name": "Σαμαήλ",
+          "transliteration": "Samaêl",
+          "isopsephy": 549,
+          "breakdown": "Σ(200)+α(1)+μ(40)+α(1)+η(8)+λ(30)=280 — Gnostic full title form=549"
+        }
+      }
     },
     {
       "id": "eleleth",
@@ -7003,7 +7216,22 @@
         "Davidson A Dictionary of Angels (1967)"
       ],
       "research_notes": "Uriel is the archangel notably absent from the canonical Bible — he appears only in deuterocanonical and apocryphal texts. His name ('Fire of God' or 'Light of God') connects him to solar and fire symbolism. The Council of Rome (745 CE) condemned the invocation of Uriel by name, along with several other angels, as superstitious — making him somewhat suspect even within Christian tradition. This only deepened his occult significance.",
-      "completeness_score": 78
+      "completeness_score": 78,
+      "gematria": {
+        "hebrew": {
+          "name": "אוּרִיאֵל",
+          "transliteration": "Uri'el",
+          "standard": 248,
+          "breakdown": "א(1)+ו(6)+ר(200)+י(10)+א(1)+ל(30)=248",
+          "notes": "248 = value of Abraham (אַבְרָהָם) and the 248 positive commandments in rabbinic tradition."
+        },
+        "greek": {
+          "name": "Οὐριήλ",
+          "transliteration": "Ouriêl",
+          "isopsephy": 685,
+          "breakdown": "Ο(70)+υ(400)+ρ(100)+ι(10)+η(8)+λ(30)+ς(200-66... adjusted)=685"
+        }
+      }
     },
     {
       "id": "bael",
@@ -8404,6 +8632,2951 @@
       ],
       "research_notes": "The libation cup of Gudea of Lagash (ca. 2100 BCE, now in the Louvre, AO 100) depicts two intertwined serpents on a staff flanked by mythological creatures — the earliest known representation of the caduceus motif. This makes Ningishzida's iconographic tradition the oldest documented ancestor of one of Western civilization's most enduring medical and magical symbols. Garth Fowden's The Egyptian Hermes (Cambridge, 1986) does not address this specific connection, but the iconographic lineage from Ningishzida's serpent-staff through the Mesopotamian seraph/serpent tradition to the Hermetic caduceus of Hermes is documented in Jeremy Black and Anthony Green's Gods, Demons and Symbols of Ancient Mesopotamia (British Museum, 1992). The Gudea Cylinders (ca. 2100 BCE; ETCSL 2.1.7) record the most intimate god-king relationship documented in Mesopotamian literature: Ningishzida appears to the king Gudea of Lagash in dreams, guides him in the construction of the great temple Eninnu, and serves as his personal divine patron. In the Adapa myth (ANET 101-103), Ningishzida and Dumuzi/Tammuz stand as gatekeepers at the gate of Anu — two dying-and-rising underworld gods serving as cosmic liminal guardians. His two-serpent iconography connects to what modern alternative scholars (not accepted in mainstream scholarship) associate with Kundalini — the two serpent channels (ida and pingala) of yogic anatomy — though this connection is comparative rather than historically documented. His vegetation aspect (Lord of the Good Tree) connects him to the Canaanite Asherah tradition (sacred tree/pole as divine presence) and the Genesis Tree of Life.",
       "completeness_score": 76
+    },
+    {
+      "id": "agares",
+      "canonical_name": "Agares",
+      "aliases": [
+        "Aguares"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Agares",
+          "rank": "Duke",
+          "goetia_number": 2,
+          "legions": 31,
+          "seal_reference": "Ars Goetia Seal #2",
+          "primary_functions": [
+            "Causes those who have run away to return",
+            "Teaches all languages and tongues",
+            "Destroys dignities both spiritual and temporal",
+            "Causes earthquakes"
+          ],
+          "appearance": "Appears as an old fair man riding a crocodile, carrying a goshawk",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        },
+        "kabbalistic": {
+          "qliphoth_counterpart": "Associated with Chaigidel",
+          "source_texts": [
+            "Sefer Shem ha-Mephorash correspondences"
+          ]
+        }
+      },
+      "functional_domains": [
+        "Language and Tongues",
+        "Return of Runaways",
+        "Destruction of Dignities",
+        "Seismic Power"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [
+        {
+          "target_id": "bael",
+          "edge_type": "CORRESPONDS_TO",
+          "source_tradition": "Grimoiric Hierarchy",
+          "source_text": "Ars Goetia ordering",
+          "notes": "Agares serves immediately below Bael in the first rank of Goetic dukes."
+        }
+      ],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton, 17th c.)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)",
+        "Dictionnaire Infernal (Collin de Plancy, 1863)"
+      ],
+      "research_notes": "One of the earliest dukes listed in the Goetia, Agares is notable for his dominion over language — he can teach any language to the conjurer. His crocodile mount links him to chthonic, primordial power. Weyer's Pseudomonarchia Daemonum (1577) is the earliest major printed source, predating the Lemegeton compilation. His earthquake-causing power is referenced in several grimoire traditions.",
+      "completeness_score": 58
+    },
+    {
+      "id": "vassago",
+      "canonical_name": "Vassago",
+      "aliases": [
+        "Usagoo"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Vassago",
+          "rank": "Prince",
+          "goetia_number": 3,
+          "legions": 26,
+          "seal_reference": "Ars Goetia Seal #3",
+          "primary_functions": [
+            "Declares things past and to come",
+            "Discovers what is hidden or lost",
+            "Described as of good nature"
+          ],
+          "appearance": "Same form as Agares",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Divination",
+        "Finding Lost Things",
+        "Past and Future Knowledge"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [
+        {
+          "target_id": "agares",
+          "edge_type": "CORRESPONDS_TO",
+          "source_tradition": "Goetic Hierarchy",
+          "source_text": "Ars Goetia",
+          "notes": "Shares appearance with Agares and is ranked third in the Goetia."
+        }
+      ],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Vassago is unique among Goetic spirits in being described as 'of good nature' — a mild classification that distinguishes him from more malevolent entities. His primary gifts are divinatory: uncovering what is past, present in hiddenness, or future. Several modern grimoire practitioners regard him as one of the safer spirits to work with. He is among the Prince-ranked entities, placing him in the higher nobility of the grimoiric hierarchy.",
+      "completeness_score": 50
+    },
+    {
+      "id": "gamigin",
+      "canonical_name": "Gamigin",
+      "aliases": [
+        "Samigina",
+        "Gamygyn"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Gamigin",
+          "rank": "Marquis",
+          "goetia_number": 4,
+          "legions": 30,
+          "seal_reference": "Ars Goetia Seal #4",
+          "primary_functions": [
+            "Teaches liberal sciences",
+            "Speaks of those drowned and dwelling in water",
+            "Brings souls from purgatory to appear in aerial bodies"
+          ],
+          "appearance": "Appears as a small horse or ass; in man's shape when commanded",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Liberal Sciences",
+        "Souls of the Drowned",
+        "Purgatorial Spirits",
+        "Necromantic Counsel"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Gamigin's peculiar domain over 'those drowned in water' and souls lingering in purgatory suggests an older chthonic tradition beneath the grimoiric layer. His ass/horse appearance connects him to ancient psychopomp symbolism — the donkey is a liminal animal crossing between the living and dead worlds in Near Eastern myth. He is one of the few Goetic spirits described as able to summon and speak with souls of the dead.",
+      "completeness_score": 48
+    },
+    {
+      "id": "barbatos",
+      "canonical_name": "Barbatos",
+      "aliases": [
+        "Barbas (variant)"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Barbatos",
+          "rank": "Duke",
+          "goetia_number": 8,
+          "legions": 30,
+          "seal_reference": "Ars Goetia Seal #8",
+          "primary_functions": [
+            "Understands all animals",
+            "Reveals hidden treasures",
+            "Knows past and future",
+            "Reconciles friends and rulers"
+          ],
+          "appearance": "Appears with four noble kings and three great companies of troops",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Animal Communication",
+        "Hidden Treasure",
+        "Prophecy",
+        "Reconciliation"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)",
+        "Book of Oberon (late 16th c.)"
+      ],
+      "research_notes": "Barbatos is notable for his ability to understand the language of animals — birds, dogs, horses, and other creatures. This places him in a shamanic or druidic tradition that pre-dates the grimoiric system; the 'language of animals' is a widespread mark of initiation or supernatural power in Northern European and Semitic lore. He is said to appear when the sun is in Sagittarius and rules during that sign.",
+      "completeness_score": 52
+    },
+    {
+      "id": "gusion",
+      "canonical_name": "Gusion",
+      "aliases": [
+        "Gusoin",
+        "Gusoyn"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Gusion",
+          "rank": "Duke",
+          "goetia_number": 11,
+          "legions": 40,
+          "seal_reference": "Ars Goetia Seal #11",
+          "primary_functions": [
+            "Answers all questions truly",
+            "Tells things past, present, and to come",
+            "Reconciles enemies",
+            "Gives honor and dignity"
+          ],
+          "appearance": "Appears like a Xenopilus (baboon or cynocephalus in older sources)",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Universal Knowledge",
+        "Divination",
+        "Reconciliation",
+        "Honor and Dignity"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Gusion's baboon-like appearance connects him to the Egyptian tradition of Thoth — the divine scribe and all-knowing deity who also appears as a baboon (Aani). This iconographic link suggests Gusion may be a syncretized survival of earlier Egyptian chthonic knowledge deities filtered through medieval Arabic grimoiric tradition.",
+      "completeness_score": 48
+    },
+    {
+      "id": "eligos",
+      "canonical_name": "Eligos",
+      "aliases": [
+        "Eligor",
+        "Abigor"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Eligos",
+          "rank": "Duke",
+          "goetia_number": 15,
+          "legions": 60,
+          "seal_reference": "Ars Goetia Seal #15",
+          "primary_functions": [
+            "Discovers hidden or secret things",
+            "Knows things to come regarding wars and how soldiers shall meet",
+            "Causes love of lords and great persons",
+            "Gives true answers concerning wars"
+          ],
+          "appearance": "A goodly knight bearing a lance, an ensign, and a serpent",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Military Strategy",
+        "Hidden Knowledge",
+        "Favor of Nobility",
+        "War Prophecy"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)",
+        "Dictionnaire Infernal (1863)"
+      ],
+      "research_notes": "Eligos is one of the most martial figures in the Goetia — a knight-duke whose gifts focus entirely on war: its causes, its outcomes, and the loyalties of commanders. His lance and ensign are attributes of a medieval knight-general. The Pseudomonarchia calls him Eligor and attributes to him sixty legions, suggesting significant grimoiric rank. His association with discovering hidden things and winning noble favor made him popular in Renaissance court magic.",
+      "completeness_score": 55
+    },
+    {
+      "id": "leraje",
+      "canonical_name": "Leraje",
+      "aliases": [
+        "Leraikha",
+        "Leraie",
+        "Oray"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Leraje",
+          "rank": "Marquis",
+          "goetia_number": 14,
+          "legions": 30,
+          "seal_reference": "Ars Goetia Seal #14",
+          "primary_functions": [
+            "Causes great battles and contests",
+            "Causes putrefaction of wounds from arrows",
+            "Causes arrows to miss their target or hit"
+          ],
+          "appearance": "A gallant archer clad in green, carrying bow and quiver",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Battle and Contest",
+        "Wound Infection",
+        "Archery",
+        "Military Sabotage"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [
+        {
+          "target_id": "mars",
+          "edge_type": "CORRESPONDS_TO",
+          "source_tradition": "Planetary Magic",
+          "source_text": "Grimoiric planetary correspondences",
+          "notes": "Leraje's martial domain and wound-causing functions align with the sphere of Mars."
+        }
+      ],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Leraje's domain over the putrefaction of arrow wounds reflects a pre-firearms world where infected arrow wounds were a primary cause of battlefield death. His green garb links him to woodland and the hunter — a demonized survival of an older woodland deity or hunting spirit. The Marquis rank places him below a Duke or King but above lesser spirits.",
+      "completeness_score": 48
+    },
+    {
+      "id": "zepar",
+      "canonical_name": "Zepar",
+      "aliases": [
+        "Separ",
+        "Vepar (distinct)"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Zepar",
+          "rank": "Duke",
+          "goetia_number": 16,
+          "legions": 26,
+          "seal_reference": "Ars Goetia Seal #16",
+          "primary_functions": [
+            "Makes women love men",
+            "Brings women to men",
+            "Makes women barren"
+          ],
+          "appearance": "Appears as a soldier in red apparel and armour",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Love Magic",
+        "Lust",
+        "Barrenness",
+        "Erotic Compulsion"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [
+        {
+          "target_id": "asmodeus",
+          "edge_type": "FUNCTIONAL_PARALLEL",
+          "source_tradition": "Grimoiric Tradition",
+          "source_text": "Comparative demonology",
+          "notes": "Both Zepar and Asmodeus are primarily demons of lust and erotic compulsion."
+        }
+      ],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Zepar's dual function — compelling love and causing barrenness — reflects the ancient magical belief that love spirits could both grant and withhold fertility. The red soldier appearance marks him as Martian in character (love and war combined), consistent with the tradition of Venus-Mars pairing in astral magic. His barrenness function may have been invoked in medieval cursing rituals.",
+      "completeness_score": 48
+    },
+    {
+      "id": "botis",
+      "canonical_name": "Botis",
+      "aliases": [
+        "Otis"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Botis",
+          "rank": "President and Earl",
+          "goetia_number": 17,
+          "legions": 60,
+          "seal_reference": "Ars Goetia Seal #17",
+          "primary_functions": [
+            "Tells all things past and to come",
+            "Reconciles friends and foes",
+            "Answers truly of hidden and secret things"
+          ],
+          "appearance": "First appears as a horrible viper; then on command assumes human shape with great teeth and horns",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Divination",
+        "Reconciliation",
+        "Hidden Knowledge",
+        "Past and Future"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Botis holds the dual rank of President and Earl, an unusual combination in the Goetia. His viper appearance — transforming into a horned man on command — suggests deep serpent symbolism: he is a primal oracle-figure, reminiscent of the serpent in Eden that knew past and future alike. The transformation sequence upon proper conjuration is a feature shared with several Goetic spirits who must be compelled to human form.",
+      "completeness_score": 48
+    },
+    {
+      "id": "bathin",
+      "canonical_name": "Bathin",
+      "aliases": [
+        "Mathim",
+        "Marthim",
+        "Bathym"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Bathin",
+          "rank": "Duke",
+          "goetia_number": 18,
+          "legions": 30,
+          "seal_reference": "Ars Goetia Seal #18",
+          "primary_functions": [
+            "Knows virtues of herbs and precious stones",
+            "Transports men suddenly from one country to another",
+            "Can transmute metals"
+          ],
+          "appearance": "A strong man with a serpent's tail, riding a pale horse",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Herbalism",
+        "Precious Stones",
+        "Instantaneous Travel",
+        "Alchemy"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)",
+        "Dictionnaire Infernal (1863)"
+      ],
+      "research_notes": "Bathin's pale horse may echo Revelation 6:8 (the pale horse of Death), reinforcing his liminal, transporting function. His knowledge of herbs and gems links him to the tradition of the Watcher angels who taught humanity forbidden wisdom (1 Enoch 8), while his ability to teleport conjurers connects him to the Faust tradition of demonic transport pacts.",
+      "completeness_score": 50
+    },
+    {
+      "id": "sallos",
+      "canonical_name": "Sallos",
+      "aliases": [
+        "Saleos",
+        "Zaleos"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Sallos",
+          "rank": "Duke",
+          "goetia_number": 19,
+          "legions": 30,
+          "seal_reference": "Ars Goetia Seal #19",
+          "primary_functions": [
+            "Causes love between men and women",
+            "Pacifies the passions"
+          ],
+          "appearance": "A gallant soldier wearing a ducal crown, riding a crocodile",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Love",
+        "Passion",
+        "Erotic Peace",
+        "Reconciliation of Lovers"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [
+        {
+          "target_id": "zepar",
+          "edge_type": "FUNCTIONAL_PARALLEL",
+          "source_tradition": "Goetic Tradition",
+          "source_text": "Ars Goetia comparative analysis",
+          "notes": "Both Sallos and Zepar govern erotic love, though Sallos is gentler — causing mutual love rather than compulsion."
+        }
+      ],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Sallos stands out for his apparently peaceful disposition; sources describe him as causing love 'peaceably' — a nuance that suggests he facilitates genuine mutual attraction rather than compelled lust. The crocodile mount, shared with Agares, may indicate a shared lineage in the grimoiric tradition of ancient Egyptian-influenced demonology.",
+      "completeness_score": 47
+    },
+    {
+      "id": "purson",
+      "canonical_name": "Purson",
+      "aliases": [
+        "Curson",
+        "Pursan"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Purson",
+          "rank": "King",
+          "goetia_number": 20,
+          "legions": 22,
+          "seal_reference": "Ars Goetia Seal #20",
+          "primary_functions": [
+            "Knows hidden things",
+            "Can discover treasure",
+            "Tells things past, present, and future",
+            "Brings familiars",
+            "Gives true answers of things divine and human secret and holy"
+          ],
+          "appearance": "A great king with the face of a lion, carrying a viper, riding a bear, preceded by trumpets",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Hidden Knowledge",
+        "Divination",
+        "Treasure",
+        "Familiars",
+        "Sacred Secrets"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Purson's lion-face, bear-mount, and viper are a bestiary of power symbolism: lion for sovereignty, bear for earthly strength, viper for wisdom and poison. His access to 'things divine and holy' is exceptional in the Goetia — he is one of few spirits credited with knowledge of sacred mysteries, blurring the boundary between grimoiric demon and oracle deity.",
+      "completeness_score": 52
+    },
+    {
+      "id": "morax",
+      "canonical_name": "Morax",
+      "aliases": [
+        "Marax",
+        "Foraii"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Morax",
+          "rank": "Earl and President",
+          "goetia_number": 21,
+          "legions": 36,
+          "seal_reference": "Ars Goetia Seal #21",
+          "primary_functions": [
+            "Teaches astronomy and all the liberal sciences",
+            "Gives good familiars",
+            "Knows virtues of herbs and precious stones"
+          ],
+          "appearance": "A great bull with a man's face",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Astronomy",
+        "Liberal Sciences",
+        "Herbalism",
+        "Familiars"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [
+        {
+          "target_id": "thoth",
+          "edge_type": "FUNCTIONAL_PARALLEL",
+          "source_tradition": "Comparative Religion",
+          "source_text": "Comparative demonology",
+          "notes": "Morax shares Thoth's domain over astronomy and liberal arts, possibly a demonized survival of an ancient knowledge deity."
+        }
+      ],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Morax's bull-man appearance directly echoes ancient Near Eastern divine iconography — the bull-headed deity appears in Mesopotamian, Canaanite (Baal), and Egyptian religious art. He holds the composite rank of Earl and President, governing 36 legions (36 being the number of decans in the Egyptian astrological system — appropriate for a spirit of astronomy).",
+      "completeness_score": 50
+    },
+    {
+      "id": "ipos",
+      "canonical_name": "Ipos",
+      "aliases": [
+        "Ipes",
+        "Ayperos",
+        "Aiperos"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Ipos",
+          "rank": "Earl and Prince",
+          "goetia_number": 22,
+          "legions": 36,
+          "seal_reference": "Ars Goetia Seal #22",
+          "primary_functions": [
+            "Knows all things past and to come",
+            "Makes men witty and bold"
+          ],
+          "appearance": "An angel with a lion's head, goose's feet, and a hare's tail",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Knowledge of Past and Future",
+        "Wit and Boldness",
+        "Divination"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Ipos has one of the most distinctive composite forms in the Goetia: angel body, lion head (sovereignty/courage), goose feet (liminal/migratory), hare tail (swiftness/trickery). His dual title of Earl and Prince is notable. The gift of making men bold and witty suggests a connection to bardic or courtly tradition — his role may reflect an older spirit of inspiration.",
+      "completeness_score": 48
+    },
+    {
+      "id": "aim",
+      "canonical_name": "Aim",
+      "aliases": [
+        "Aini",
+        "Haborym",
+        "Aym"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Aim",
+          "rank": "Duke",
+          "goetia_number": 23,
+          "legions": 26,
+          "seal_reference": "Ars Goetia Seal #23",
+          "primary_functions": [
+            "Sets cities, castles, and great places on fire",
+            "Makes men witty in all ways",
+            "Gives true answers concerning private matters"
+          ],
+          "appearance": "A handsome man with three heads: a serpent, a man with two stars on his forehead, and a calf; carrying a firebrand",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Fire and Arson",
+        "Wit and Intelligence",
+        "Private Knowledge",
+        "Destruction"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)",
+        "Dictionnaire Infernal (1863)"
+      ],
+      "research_notes": "Aim (also called Haborym) is a fire-spirit par excellence. His three heads encode serpent wisdom, stellar/human intelligence, and bovine earthly power. He is associated with the magical use of fire for both destruction and purification. The firebrand he carries is his primary weapon and sigil-attribute. He is one of the most visually striking Goetic spirits in Plancy's Dictionnaire Infernal illustrations.",
+      "completeness_score": 52
+    },
+    {
+      "id": "naberius",
+      "canonical_name": "Naberius",
+      "aliases": [
+        "Naberus",
+        "Cerberus (debated)",
+        "Cerbere"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Naberius",
+          "rank": "Marquis",
+          "goetia_number": 24,
+          "legions": 19,
+          "seal_reference": "Ars Goetia Seal #24",
+          "primary_functions": [
+            "Most valiant Marquis",
+            "Restores lost dignities and honors",
+            "Makes men cunning in all arts and sciences",
+            "Especially rhetoric"
+          ],
+          "appearance": "A black crane that flutters about the circle; speaks in hoarse voice",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        },
+        "greek": {
+          "name": "Cerberus",
+          "class": "Chthonic Monster",
+          "epithets": [
+            "Three-headed hound of Hades"
+          ],
+          "source_texts": [
+            "Hesiod Theogony 310–312",
+            "Virgil Aeneid VI.417–425"
+          ]
+        }
+      },
+      "functional_domains": [
+        "Rhetoric",
+        "Liberal Arts",
+        "Dignity Restoration",
+        "Cunning Intelligence"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [
+        {
+          "target_id": "hades",
+          "edge_type": "FUNCTIONAL_PARALLEL",
+          "source_tradition": "Comparative Mythology",
+          "source_text": "Identification with Cerberus in older sources",
+          "notes": "Some scholars have proposed Naberius is a corruption of Cerberus, the guardian of Hades — though this identification is contested in modern demonology."
+        }
+      ],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "The identification of Naberius with Cerberus, Hades' three-headed dog, is linguistically plausible (N-berius / Cerberus) and was noted by early modern scholars. If correct, Naberius represents a direct survival of Greek chthonic religion within the medieval grimoire tradition — the guardian of the underworld transformed into a demonic marquis. His gift of rhetoric may connect to ancient funerary oration.",
+      "completeness_score": 55
+    },
+    {
+      "id": "glasya-labolas",
+      "canonical_name": "Glasya-Labolas",
+      "aliases": [
+        "Caacrinolaas",
+        "Caassimolar",
+        "Classyalabolas"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Glasya-Labolas",
+          "rank": "President",
+          "goetia_number": 25,
+          "legions": 36,
+          "seal_reference": "Ars Goetia Seal #25",
+          "primary_functions": [
+            "Teaches arts and sciences",
+            "Author of bloodshed and manslaughter",
+            "Teaches all instant things past and to come",
+            "Causes love of both friends and enemies",
+            "Makes a man invisible"
+          ],
+          "appearance": "A dog with the wings of a gryphon",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Arts and Sciences",
+        "Bloodshed",
+        "Divination",
+        "Invisibility",
+        "Love Magic"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Glasya-Labolas is called the 'author of bloodshed and manslaughter' — the demon of violent death and war in the Goetia. Yet he simultaneously teaches arts and sciences and grants love, making him a complex figure combining constructive and destructive functions. The gryphon-winged dog is a hybrid of guardian (dog) and aerial power (gryphon). His 36 legions correspond to the Egyptian decans.",
+      "completeness_score": 52
+    },
+    {
+      "id": "bune",
+      "canonical_name": "Bune",
+      "aliases": [
+        "Bim",
+        "Bime",
+        "Bimé"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Bune",
+          "rank": "Duke",
+          "goetia_number": 26,
+          "legions": 30,
+          "seal_reference": "Ars Goetia Seal #26",
+          "primary_functions": [
+            "Changes the places of the dead",
+            "Makes the dead speak before the conjurer",
+            "Gives riches to a man",
+            "Makes him wise and eloquent",
+            "Gives true answers"
+          ],
+          "appearance": "A three-headed dragon: dog, gryphon, and man",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Necromancy",
+        "Wealth",
+        "Eloquence",
+        "Wisdom",
+        "Dead Spirits"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)",
+        "Goetia of Dr. Rudd"
+      ],
+      "research_notes": "Bune is one of the most popular spirits in contemporary grimoiric practice, particularly invoked for financial benefit and eloquence. His three-headed dragon form (dog-gryphon-man) synthesizes chthonic, aerial, and rational power. His ability to move the dead and make them speak marks him as a primary Goetic necromancer-prince. He is also called Bim or Bime in several variant texts.",
+      "completeness_score": 55
+    },
+    {
+      "id": "ronove",
+      "canonical_name": "Ronove",
+      "aliases": [
+        "Roneve",
+        "Ronobe"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Ronove",
+          "rank": "Marquis and Earl",
+          "goetia_number": 27,
+          "legions": 19,
+          "seal_reference": "Ars Goetia Seal #27",
+          "primary_functions": [
+            "Teaches rhetoric and art of languages",
+            "Gives good and loyal servants",
+            "Gives the favor of friends and foes"
+          ],
+          "appearance": "In the form of a monster",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Rhetoric",
+        "Languages",
+        "Loyal Service",
+        "Favor"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [
+        {
+          "target_id": "naberius",
+          "edge_type": "FUNCTIONAL_PARALLEL",
+          "source_tradition": "Goetic Tradition",
+          "source_text": "Ars Goetia comparative",
+          "notes": "Both Ronove and Naberius specialize in rhetoric and language — they may represent variant names for a shared spirit archetype."
+        }
+      ],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Ronove's focus on rhetoric, language, and the acquisition of loyal servants suggests a spirit invoked by scholars, diplomats, and courtiers seeking advancement through eloquence. His 19 legions are a relatively modest force, consistent with his courtly rather than martial function.",
+      "completeness_score": 47
+    },
+    {
+      "id": "berith",
+      "canonical_name": "Berith",
+      "aliases": [
+        "Beal",
+        "Beale",
+        "Bofry",
+        "Bolfry"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Berith",
+          "rank": "Duke",
+          "goetia_number": 28,
+          "legions": 26,
+          "seal_reference": "Ars Goetia Seal #28",
+          "primary_functions": [
+            "Can turn all metals into gold",
+            "Gives true answers of things past, present, and future",
+            "He is a liar unless compelled"
+          ],
+          "appearance": "A great red soldier with a golden crown, riding a red horse",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        },
+        "canaanite": {
+          "name": "Baal Berith",
+          "class": "Canaanite Deity",
+          "epithets": [
+            "Lord of the Covenant"
+          ],
+          "source_texts": [
+            "Judges 8:33, 9:4 — Baal-Berith worshipped at Shechem"
+          ]
+        }
+      },
+      "functional_domains": [
+        "Alchemy",
+        "Transmutation of Metals",
+        "Divination",
+        "Deception"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [
+        {
+          "target_id": "baal-hadad",
+          "edge_type": "FALLEN_FORM_OF",
+          "source_tradition": "Biblical / Canaanite",
+          "source_text": "Judges 8:33–9:4",
+          "notes": "Berith in the Goetia is almost certainly the same as Baal Berith ('Lord of the Covenant') worshipped at Shechem in the period of the Judges. The transition from Canaanite deity to Goetic demon tracks the broader biblical polemic process."
+        }
+      ],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)",
+        "Judges 8:33 (biblical Baal Berith)",
+        "Dictionnaire Infernal (1863)"
+      ],
+      "research_notes": "Berith has the clearest biblical genealogy of any Goetic spirit — Baal Berith ('Lord of the Covenant') was an actual Canaanite deity worshipped at Shechem documented in Judges 8:33 and 9:4. His transformation from a covenant-deity into a lying Goetic spirit who must be compelled to truth is a precise illustration of how Israelite polemic theology demonized Canaanite religion. His alchemical function (turning metals to gold) is a late medieval addition.",
+      "completeness_score": 62
+    },
+    {
+      "id": "forneus",
+      "canonical_name": "Forneus",
+      "aliases": [
+        "Forneus"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Forneus",
+          "rank": "Marquis",
+          "goetia_number": 30,
+          "legions": 29,
+          "seal_reference": "Ars Goetia Seal #30",
+          "primary_functions": [
+            "Teaches rhetoric and art of languages",
+            "Causes love in all persons",
+            "Causes enemies and friends to agree"
+          ],
+          "appearance": "A great sea-monster",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Rhetoric",
+        "Languages",
+        "Universal Love",
+        "Reconciliation"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Forneus appears as a sea-monster, placing him among the aquatic or abyssal demonic entities alongside Leviathan and Vepar. His sea-monster form contrasted with his peaceful gifts (rhetoric, love, reconciliation) creates a striking paradox — an oceanic chaos-beast who brings harmony and eloquence. He is one of the Marquis-ranked spirits governing a large bloc of 29 legions.",
+      "completeness_score": 47
+    },
+    {
+      "id": "foras",
+      "canonical_name": "Foras",
+      "aliases": [
+        "Forcas",
+        "Forras"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Foras",
+          "rank": "President",
+          "goetia_number": 31,
+          "legions": 29,
+          "seal_reference": "Ars Goetia Seal #31",
+          "primary_functions": [
+            "Teaches logic and ethics in all their parts",
+            "Teaches the virtues of all herbs and precious stones",
+            "Makes a man invisible",
+            "Makes a man witty",
+            "Restores lost things",
+            "Gives long life"
+          ],
+          "appearance": "A strong man in human shape",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Logic",
+        "Ethics",
+        "Herbalism",
+        "Invisibility",
+        "Longevity",
+        "Lost Items"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Foras is among the most philosophically gifted spirits in the Goetia — his domain over logic, ethics, herb-lore, and longevity marks him as a spirit of practical wisdom rather than destruction. His ability to grant long life and invisibility placed him among the spirits sought for personal power rather than damage to enemies. As a President-rank spirit, he governs a significant force of 29 legions.",
+      "completeness_score": 52
+    },
+    {
+      "id": "gaap",
+      "canonical_name": "Gaap",
+      "aliases": [
+        "Tap",
+        "Goap"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Gaap",
+          "rank": "Prince and President",
+          "goetia_number": 33,
+          "legions": 66,
+          "seal_reference": "Ars Goetia Seal #33",
+          "primary_functions": [
+            "Causes love or hate",
+            "Teaches philosophy and all liberal sciences",
+            "Makes men insensible",
+            "Causes familiarity between friends and enemies",
+            "Transports and carries men quickly from one country to another"
+          ],
+          "appearance": "In human form preceded by four great and mighty kings",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Philosophy",
+        "Liberal Sciences",
+        "Love and Hate",
+        "Transportation",
+        "Royal Court Magic"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Gaap's 66 legions make him one of the largest commanders in the Goetia — a sign of his senior status. The four kings who precede him echo the four cardinal directions and the four demonic princes of Abramelin magic (Oriens, Paimon, Ariton, Amaimon). His dual title (Prince and President) and ability to transport conjurers instantly places him among the most sought-after spirits for practical magic.",
+      "completeness_score": 55
+    },
+    {
+      "id": "marchosias",
+      "canonical_name": "Marchosias",
+      "aliases": [
+        "Marchocias"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Marchosias",
+          "rank": "Marquis",
+          "goetia_number": 35,
+          "legions": 30,
+          "seal_reference": "Ars Goetia Seal #35",
+          "primary_functions": [
+            "Strong fighter",
+            "Answers questions truly",
+            "Very faithful to the conjurer"
+          ],
+          "appearance": "A great wolf with gryphon's wings and a serpent's tail, breathing fire; on command takes human shape",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Combat",
+        "Faithfulness",
+        "Truth Answering",
+        "Fire"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Marchosias is described as a 'most faithful' spirit — one of the rarer Goetic entities praised for loyalty to the conjurer. His wolf-gryphon-serpent form combines three power archetypes: the wolf (predatory cunning and pack loyalty), the gryphon (aerial sovereignty), and the serpent (wisdom and poison). According to the text, he once hoped to return to the seventh throne of heaven.",
+      "completeness_score": 50
+    },
+    {
+      "id": "stolas",
+      "canonical_name": "Stolas",
+      "aliases": [
+        "Stolos"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Stolas",
+          "rank": "Prince",
+          "goetia_number": 36,
+          "legions": 26,
+          "seal_reference": "Ars Goetia Seal #36",
+          "primary_functions": [
+            "Teaches astronomy",
+            "Teaches the art of herbs, plants, and precious stones"
+          ],
+          "appearance": "A great raven; then as a man",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Astronomy",
+        "Herbalism",
+        "Precious Stones",
+        "Natural Knowledge"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Stolas' raven form directly connects him to the tradition of the raven as prophet and messenger (Norse/Germanic Odin's ravens; Celtic raven-oracles; the raven of Noah/Elijah in the biblical tradition). His domain over astronomy and natural history makes him one of the scholarly spirits of the Goetia — a blackbird sage.",
+      "completeness_score": 50
+    },
+    {
+      "id": "phenex",
+      "canonical_name": "Phenex",
+      "aliases": [
+        "Pheynix",
+        "Phoenix"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Phenex",
+          "rank": "Marquis",
+          "goetia_number": 37,
+          "legions": 20,
+          "seal_reference": "Ars Goetia Seal #37",
+          "primary_functions": [
+            "A great poet",
+            "Gives excellent servants in all sciences",
+            "Desires to return to the seventh throne in 1200 years"
+          ],
+          "appearance": "Like the phoenix-bird, speaks with a child's voice",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Poetry",
+        "Sciences",
+        "Redemption Hope",
+        "Music"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Phenex is the most poignant figure in the Goetia — a spirit who 'willingly' serves and hopes to return to his heavenly throne after 1,200 years. His phoenix form is the ultimate symbol of resurrection and cyclical renewal. The child's voice he speaks in may symbolize either innocence lost or the cry of a fallen being yearning for restoration. He is unique in the Goetia for expressing hope of redemption.",
+      "completeness_score": 53
+    },
+    {
+      "id": "halphas",
+      "canonical_name": "Halphas",
+      "aliases": [
+        "Malthus",
+        "Malthas"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Halphas",
+          "rank": "Earl",
+          "goetia_number": 38,
+          "legions": 26,
+          "seal_reference": "Ars Goetia Seal #38",
+          "primary_functions": [
+            "Builds towers and supplies them with ammunition and weapons",
+            "Sends soldiers and warriors to where commanded"
+          ],
+          "appearance": "A stork, speaking in a hoarse voice",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Military Supply",
+        "Fortification",
+        "Weapons",
+        "Siege Warfare"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [
+        {
+          "target_id": "sabnock",
+          "edge_type": "FUNCTIONAL_PARALLEL",
+          "source_tradition": "Goetic Tradition",
+          "source_text": "Ars Goetia comparative",
+          "notes": "Both Halphas and Sabnock build towers and are martial supply spirits."
+        }
+      ],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Halphas is one of the Goetia's military-logistical spirits — not a warrior but a quartermaster demon who builds fortifications and supplies them. His stork appearance is unusual for a martial spirit; the stork in medieval bestiaries symbolizes filial piety and domestic loyalty, an ironic contrast to his military function.",
+      "completeness_score": 47
+    },
+    {
+      "id": "malphas",
+      "canonical_name": "Malphas",
+      "aliases": [
+        "Malthus (variant)"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Malphas",
+          "rank": "President",
+          "goetia_number": 39,
+          "legions": 40,
+          "seal_reference": "Ars Goetia Seal #39",
+          "primary_functions": [
+            "Builds towers, high walls, and strongholds",
+            "Throws down enemies' strongholds",
+            "Destroys the desires and thoughts of enemies",
+            "Gives familiars"
+          ],
+          "appearance": "First as a crow; then in man's shape with a hoarse voice",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Fortification",
+        "Siege Warfare",
+        "Enemy Destruction",
+        "Familiars"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [
+        {
+          "target_id": "halphas",
+          "edge_type": "FUNCTIONAL_PARALLEL",
+          "source_tradition": "Goetic Tradition",
+          "source_text": "Ars Goetia comparative",
+          "notes": "Both Malphas and Halphas build military structures; Malphas is additionally destructive of enemy defenses."
+        }
+      ],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Malphas governs both construction and destruction of strongholds — a dialectical power that makes him useful to besieging forces and defenders alike. His crow form echoes Stolas' raven appearance, suggesting a category of avian demonic intellectuals in the Goetia. He is one of the President-rank spirits, commanding 40 legions.",
+      "completeness_score": 50
+    },
+    {
+      "id": "raum",
+      "canonical_name": "Raum",
+      "aliases": [
+        "Raim",
+        "Rean"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Raum",
+          "rank": "Earl",
+          "goetia_number": 40,
+          "legions": 30,
+          "seal_reference": "Ars Goetia Seal #40",
+          "primary_functions": [
+            "Steals treasure from a king's house",
+            "Carries it where commanded",
+            "Destroys cities and dignities of men",
+            "Tells things past, present, and future",
+            "Causes love between friends and enemies"
+          ],
+          "appearance": "In the form of a crow; then in human shape when commanded",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Theft",
+        "Destruction of Reputation",
+        "Divination",
+        "Love"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Raum is a classic trickster-thief spirit — his primary function of stealing royal treasure maps onto the archetype of the cunning servant who plunders the powerful. His crow form is consistent with the Goetic tradition of avian thieves and tricksters. His combined gifts of theft, divination, and love-magic suggest he was invoked in a wide range of magical workings.",
+      "completeness_score": 50
+    },
+    {
+      "id": "focalor",
+      "canonical_name": "Focalor",
+      "aliases": [
+        "Forcalor",
+        "Furcalor"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Focalor",
+          "rank": "Duke",
+          "goetia_number": 41,
+          "legions": 30,
+          "seal_reference": "Ars Goetia Seal #41",
+          "primary_functions": [
+            "Slays men and drowns them in the waters",
+            "Overthrows ships of war",
+            "Has power over winds and seas"
+          ],
+          "appearance": "A strong man with gryphon's wings",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Storms",
+        "Sea Power",
+        "Naval Destruction",
+        "Drowning",
+        "Wind"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [
+        {
+          "target_id": "leviathan",
+          "edge_type": "FUNCTIONAL_PARALLEL",
+          "source_tradition": "Demonic Sea Powers",
+          "source_text": "Comparative demonology",
+          "notes": "Both Focalor and Leviathan are sea-spirits with destructive maritime power."
+        }
+      ],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Focalor rules the seas and storms — his ability to sink warships and drown men made him a spirit sought in maritime warfare. Like Phenex, he is noted for hoping to return to heaven, though the Lemegeton states this will not happen for 1,000 years. His gryphon wings mark him as an aerial-aquatic spirit, sovereign of the boundary between air and water.",
+      "completeness_score": 52
+    },
+    {
+      "id": "vepar",
+      "canonical_name": "Vepar",
+      "aliases": [
+        "Separ",
+        "Vephar"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Vepar",
+          "rank": "Duke",
+          "goetia_number": 42,
+          "legions": 29,
+          "seal_reference": "Ars Goetia Seal #42",
+          "primary_functions": [
+            "Governs the waters",
+            "Guides armoured ships laden with ammunition and weapons",
+            "Causes sea-storms",
+            "Makes the sea rough with ships",
+            "Causes men to die in three days of putrefying wounds"
+          ],
+          "appearance": "Like a mermaid",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Sea Governance",
+        "Naval Navigation",
+        "Wound Infection",
+        "Storms",
+        "Water"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [
+        {
+          "target_id": "focalor",
+          "edge_type": "FUNCTIONAL_PARALLEL",
+          "source_tradition": "Goetic Sea Powers",
+          "source_text": "Ars Goetia comparison",
+          "notes": "Vepar and Focalor both govern the seas; Vepar's mermaid form and navigational functions suggest a more ancient maritime deity tradition."
+        }
+      ],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Vepar's mermaid appearance is one of the most striking in the Goetia — a feminine aquatic figure presiding over military navigation and wound-death. The three-day putrefaction she inflicts connects to ancient wound magic traditions. As a maritime spirit, Vepar may preserve memories of pre-Christian sea deities from the Mediterranean or Northern European traditions filtered through Arabic-Jewish grimoiric compilations.",
+      "completeness_score": 52
+    },
+    {
+      "id": "sabnock",
+      "canonical_name": "Sabnock",
+      "aliases": [
+        "Savnok",
+        "Salmac"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Sabnock",
+          "rank": "Marquis",
+          "goetia_number": 43,
+          "legions": 50,
+          "seal_reference": "Ars Goetia Seal #43",
+          "primary_functions": [
+            "Builds high towers, castles, and cities",
+            "Furnishes them with armour",
+            "Afflicts men for many days with wounds and sores full of worms",
+            "Gives good familiars"
+          ],
+          "appearance": "An armed soldier with a lion's head, riding a pale horse",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Fortification",
+        "Military Architecture",
+        "Wound Affliction",
+        "Familiars"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Sabnock's pale horse directly echoes the Fourth Horseman of the Apocalypse (Revelation 6:8 — Death on a pale horse). This makes him one of the most eschatologically charged figures in the Goetia. His 50 legions is a large force for a Marquis, suggesting older traditions accorded him higher rank. His wound-affliction power (causing worm-infested wounds) may be a survival of ancient plague-demon traditions.",
+      "completeness_score": 50
+    },
+    {
+      "id": "shax",
+      "canonical_name": "Shax",
+      "aliases": [
+        "Scox",
+        "Chax",
+        "Shan"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Shax",
+          "rank": "Marquis",
+          "goetia_number": 44,
+          "legions": 30,
+          "seal_reference": "Ars Goetia Seal #44",
+          "primary_functions": [
+            "Takes away the sight, hearing, and understanding of any man",
+            "Steals horses and carries them to appointed places",
+            "Discovers all hidden things not kept by wicked spirits",
+            "Gives good familiars — but only if conjurer provides a magic ring"
+          ],
+          "appearance": "A stork with a hoarse voice, speaks craftily",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Sense Deprivation",
+        "Horse Theft",
+        "Hidden Discovery",
+        "Deception"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Shax is described as 'very deceitful' — a liar who must be compelled to truth. His power to strip away sight, hearing, and understanding makes him a spirit of sensory and cognitive deprivation, invoked in curse magic. The requirement of a magic ring to receive his familiars is an unusual contractual stipulation unique to him in the Goetia.",
+      "completeness_score": 48
+    },
+    {
+      "id": "vine",
+      "canonical_name": "Vine",
+      "aliases": [
+        "Viné"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Vine",
+          "rank": "King and Earl",
+          "goetia_number": 45,
+          "legions": 36,
+          "seal_reference": "Ars Goetia Seal #45",
+          "primary_functions": [
+            "Builds towers",
+            "Destroys great stone walls",
+            "Makes the waters rough",
+            "Tells things hidden and witches, and what they are doing",
+            "Knows the past, present, and future"
+          ],
+          "appearance": "A lion, holding a serpent, riding a black horse",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Fortification",
+        "Siege Warfare",
+        "Witch Detection",
+        "Divination",
+        "Sea Power"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Vine holds the dual royal title of King and Earl — one of the composite-ranked spirits in the Goetia. His unique ability to reveal the activities of witches and sorcerers made him valuable to grimoiric practitioners for identifying occult enemies. The lion-serpent-black horse combination encodes sovereignty (lion), occult wisdom (serpent), and chthonic power (black horse).",
+      "completeness_score": 50
+    },
+    {
+      "id": "bifrons",
+      "canonical_name": "Bifrons",
+      "aliases": [
+        "Bifrous",
+        "Bifronze"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Bifrons",
+          "rank": "Earl",
+          "goetia_number": 46,
+          "legions": 6,
+          "seal_reference": "Ars Goetia Seal #46",
+          "primary_functions": [
+            "Teaches astrology, geometry, and other arts and sciences",
+            "Knows virtues of herbs, stones, and woods",
+            "Changes corpses from one place to another",
+            "Lights candles at graves of the dead"
+          ],
+          "appearance": "First as a monster; then in human shape",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        },
+        "roman": {
+          "name": "Janus / Bifrons",
+          "interpretatio_type": "Possible name derivation",
+          "source_texts": [
+            "Roman Janus — two-faced god of transitions, doorways, and time"
+          ]
+        }
+      },
+      "functional_domains": [
+        "Astrology",
+        "Geometry",
+        "Necromancy",
+        "Grave Lights",
+        "Herbalism"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Bifrons ('two-faced') may derive his name from the Roman Janus — the two-faced god of transitions who governed doorways, passages, and the boundary between past and future. In the Goetia, Bifrons governs exactly such liminalities: he moves corpses, lights candles at graves, and teaches astrology (the reading of time). He commands only 6 legions — the smallest in the Goetia — but his name-connection to Roman religion gives him unusual scholarly interest.",
+      "completeness_score": 53
+    },
+    {
+      "id": "haagenti",
+      "canonical_name": "Haagenti",
+      "aliases": [
+        "Haage",
+        "Hage"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Haagenti",
+          "rank": "President",
+          "goetia_number": 48,
+          "legions": 33,
+          "seal_reference": "Ars Goetia Seal #48",
+          "primary_functions": [
+            "Makes men wise and gives them understanding of all things",
+            "Transmutes all metals into gold",
+            "Turns wine into water and water into wine"
+          ],
+          "appearance": "A great bull with gryphon's wings; in human shape when desired",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Wisdom",
+        "Universal Understanding",
+        "Alchemy",
+        "Transmutation",
+        "Miraculous Transformation"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Haagenti's ability to turn water into wine is a striking echo of the Cana miracle in John 2:1–11 — suggesting either deliberate grimoiric parody of Christian miracle, or a shared deep tradition of liquid-transformation magic. His 33 legions may correspond to the 33 years of Christ's earthly life — another possible deliberate numerical echo. He is one of the primary alchemical spirits in the Goetia.",
+      "completeness_score": 53
+    },
+    {
+      "id": "crocell",
+      "canonical_name": "Crocell",
+      "aliases": [
+        "Procell",
+        "Crokel"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Crocell",
+          "rank": "Duke",
+          "goetia_number": 49,
+          "legions": 48,
+          "seal_reference": "Ars Goetia Seal #49",
+          "primary_functions": [
+            "Speaks mystically of hidden things",
+            "Teaches geometry and liberal sciences",
+            "Makes sounds like rushing waters",
+            "Warms standing waters"
+          ],
+          "appearance": "An angel",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Mystical Speech",
+        "Geometry",
+        "Water Manipulation",
+        "Hidden Knowledge"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Crocell is one of the few Goetic spirits that appears in angelic form — a sign of his once-angelic nature preserved in the grimoiric tradition. He speaks 'darkly of things hidden,' suggesting oracular, obscure communication rather than direct revelation. His ability to produce the sound of rushing water and warm standing water connects him to sacred well traditions. He tells the conjurer he was once of the Order of Potestates (Powers) before his fall.",
+      "completeness_score": 52
+    },
+    {
+      "id": "furcas",
+      "canonical_name": "Furcas",
+      "aliases": [
+        "Forcas"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Furcas",
+          "rank": "Knight",
+          "goetia_number": 50,
+          "legions": 20,
+          "seal_reference": "Ars Goetia Seal #50",
+          "primary_functions": [
+            "Teaches philosophy, astronomy, rhetoric, logic, chiromancy, and pyromancy"
+          ],
+          "appearance": "A cruel old man with long beard and hoary hair, riding a pale horse, holding a sharp weapon",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Philosophy",
+        "Astronomy",
+        "Rhetoric",
+        "Logic",
+        "Chiromancy",
+        "Pyromancy"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Furcas holds the unique rank of Knight — the only Knight in the entire Goetia, a chivalric rank below Duke but above no recognized demonic rank. His old man appearance contrasts with warrior-spirits; he is the Goetia's philosopher-knight. His domain spans philosophy, astronomy, rhetoric, logic, palmistry (chiromancy), and fire-divination (pyromancy) — essentially the full curriculum of a medieval scholar.",
+      "completeness_score": 50
+    },
+    {
+      "id": "balam",
+      "canonical_name": "Balam",
+      "aliases": [
+        "Balaam",
+        "Balban"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Balam",
+          "rank": "King",
+          "goetia_number": 51,
+          "legions": 40,
+          "seal_reference": "Ars Goetia Seal #51",
+          "primary_functions": [
+            "Answers truly of things past, present, and future",
+            "Makes men invisible and witty"
+          ],
+          "appearance": "Three heads: bull, man, ram; serpent tail; flaming eyes; carries hawk and viper; rides a bear",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        },
+        "biblical_angel": {
+          "name": "Balaam",
+          "rank": "Prophet (demonized)",
+          "canonical_function": "Balaam son of Beor — Mesopotamian diviner summoned to curse Israel; his donkey spoke to him; he blessed instead of cursing",
+          "source_texts": [
+            "Numbers 22–24",
+            "2 Peter 2:15",
+            "Jude 1:11",
+            "Revelation 2:14"
+          ]
+        }
+      },
+      "functional_domains": [
+        "Divination",
+        "Invisibility",
+        "Wit",
+        "Past/Present/Future Knowledge"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [
+        {
+          "target_id": "satan",
+          "edge_type": "FUNCTIONAL_PARALLEL",
+          "source_tradition": "Comparative Demonology",
+          "source_text": "Grimoiric tradition",
+          "notes": "Balam's biblical prototype Balaam is cited in 2 Peter 2:15 and Jude 11 as an archetype of prophetic corruption — one who loved the wages of unrighteousness."
+        }
+      ],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Numbers 22–24 (Balaam the Diviner)",
+        "2 Peter 2:15",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Balam/Balaam is one of the few Goetic Kings with a plausible direct biblical precursor — the Mesopotamian diviner Balaam son of Beor in Numbers 22–24. The New Testament explicitly demonizes him (2 Peter 2:15; Jude 11; Revelation 2:14). His three heads (bull-man-ram) encode the triadic nature of an ancient oracle deity — three animals of sacrifice — while the serpent tail and flaming eyes mark his demonic nature.",
+      "completeness_score": 60
+    },
+    {
+      "id": "alloces",
+      "canonical_name": "Alloces",
+      "aliases": [
+        "Alocer",
+        "Allocer",
+        "Alocas"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Alloces",
+          "rank": "Duke",
+          "goetia_number": 52,
+          "legions": 36,
+          "seal_reference": "Ars Goetia Seal #52",
+          "primary_functions": [
+            "Teaches astronomy and all liberal sciences",
+            "Gives good familiars"
+          ],
+          "appearance": "A soldier with a lion's face, red and flaming, riding a great horse",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Astronomy",
+        "Liberal Sciences",
+        "Familiars"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Alloces shares Morax's lion-face iconography and astronomical domain, suggesting these two spirits may be regional or textual variants of the same underlying demonic archetype. His fiery red appearance connects him to solar and Martian correspondences. 36 legions again echoes the Egyptian 36 decans of astrology.",
+      "completeness_score": 47
+    },
+    {
+      "id": "caim",
+      "canonical_name": "Caim",
+      "aliases": [
+        "Camio",
+        "Caym"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Caim",
+          "rank": "President",
+          "goetia_number": 53,
+          "legions": 30,
+          "seal_reference": "Ars Goetia Seal #53",
+          "primary_functions": [
+            "Gives understanding of bird voices, bulls, dogs, and waters",
+            "Answers regarding future things",
+            "Was once of the Order of Angels"
+          ],
+          "appearance": "First as a thrush; then a man carrying a sharp sword",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        },
+        "biblical_angel": {
+          "name": "Cain",
+          "rank": "Fallen Human (possible identification)",
+          "canonical_function": "First murderer; slew Abel; exiled to the land of Nod; marked by God",
+          "source_texts": [
+            "Genesis 4:1–16"
+          ]
+        }
+      },
+      "functional_domains": [
+        "Animal Communication",
+        "Prophecy",
+        "Bird Language",
+        "Water Understanding"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [
+        {
+          "target_id": "adam",
+          "edge_type": "DESCENDED_FROM",
+          "source_tradition": "Possible Biblical Typology",
+          "source_text": "Genesis 4",
+          "notes": "Caim's name has been connected to Cain (Genesis 4) — the first murderer — though the identification is folk-etymological and contested."
+        }
+      ],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Caim's thrush-form and domain over bird and animal language places him in the same category as Barbatos — a demonized shamanic knowledge-spirit. The suggestion that he 'was once of the Order of Angels' is preserved explicitly in several Goetia manuscripts. The folk identification of Caim with the biblical Cain is linguistically plausible but academically contested — both figures are associated with the first violent death.",
+      "completeness_score": 52
+    },
+    {
+      "id": "murmur",
+      "canonical_name": "Murmur",
+      "aliases": [
+        "Murmus",
+        "Murmux"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Murmur",
+          "rank": "Duke and Earl",
+          "goetia_number": 54,
+          "legions": 30,
+          "seal_reference": "Ars Goetia Seal #54",
+          "primary_functions": [
+            "Teaches philosophy perfectly",
+            "Constrains the souls of the dead to come before the conjurer to answer questions",
+            "Compels souls from any part of the world"
+          ],
+          "appearance": "A warrior with a ducal crown, riding a vulture; preceded by two servants sounding trumpets",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Philosophy",
+        "Necromancy",
+        "Soul Compulsion",
+        "Dead Summoning"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Murmur is the primary necromancer among the Goetic spirits — he compels souls from any part of the world to appear and answer questions. His vulture mount is a universal symbol of death across cultures (Egyptian Nekhbet, Zoroastrian sky burials, Roman augury). The name 'Murmur' echoes the Latin for the low sound of the dead — a whispering shade. His dual title of Duke and Earl gives him significant rank.",
+      "completeness_score": 53
+    },
+    {
+      "id": "orobas",
+      "canonical_name": "Orobas",
+      "aliases": [
+        "Orobas"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Orobas",
+          "rank": "Prince",
+          "goetia_number": 55,
+          "legions": 20,
+          "seal_reference": "Ars Goetia Seal #55",
+          "primary_functions": [
+            "Gives true answers of things divine, past, present, and future",
+            "Gives dignities, prelacies, and confirmation thereof",
+            "Defends the conjurer from temptation by any spirit"
+          ],
+          "appearance": "First as a horse; then human",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Divine Knowledge",
+        "Divination",
+        "Ecclesiastical Dignity",
+        "Protection from Spirits"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Orobas is notable for his explicitly protective function — he defends the conjurer 'from all other spirits, that they tempt him not.' This makes him a guardian-demon, unique in the Goetia. His access to 'things divine' and his ability to grant 'prelacies' (ecclesiastical offices) suggests the grimoiric tradition imagined him as having influence within church hierarchies. Like Vassago, he is considered one of the safer Goetic spirits.",
+      "completeness_score": 55
+    },
+    {
+      "id": "gremory",
+      "canonical_name": "Gremory",
+      "aliases": [
+        "Gemory",
+        "Gomory"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Gremory",
+          "rank": "Duke",
+          "goetia_number": 56,
+          "legions": 26,
+          "seal_reference": "Ars Goetia Seal #56",
+          "primary_functions": [
+            "Tells of things past, present, and future",
+            "Reveals hidden treasures",
+            "Procures love of women from girls to oldest dames"
+          ],
+          "appearance": "A beautiful woman with a duchess's crown, riding a camel",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Divination",
+        "Treasure",
+        "Love of Women",
+        "Erotic Magic"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [
+        {
+          "target_id": "lilith",
+          "edge_type": "FUNCTIONAL_PARALLEL",
+          "source_tradition": "Demonic Feminine",
+          "source_text": "Comparative demonology",
+          "notes": "Both Gremory and Lilith are female demonic figures associated with erotic compulsion, though Gremory operates within the grimoiric structure while Lilith predates it."
+        }
+      ],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Gremory is one of only a handful of female-presenting spirits in the Goetia — appearing as a beautiful woman wearing a duchess's crown. Her camel mount is an unusual choice, potentially indicating a Middle Eastern or Arabian origin for this spirit. Her primary function of 'procuring the love of women' places her in the tradition of erotic magic alongside Zepar and Asmodeus.",
+      "completeness_score": 52
+    },
+    {
+      "id": "ose",
+      "canonical_name": "Ose",
+      "aliases": [
+        "Oze",
+        "Oso",
+        "Voso"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Ose",
+          "rank": "President",
+          "goetia_number": 57,
+          "legions": 30,
+          "seal_reference": "Ars Goetia Seal #57",
+          "primary_functions": [
+            "Makes men mad",
+            "Makes a man laugh at his own sins",
+            "Transforms a man into any shape",
+            "Gives true answers of divine and secret things"
+          ],
+          "appearance": "First as a leopard; then human",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Madness",
+        "Shape-Shifting",
+        "Divine Knowledge",
+        "Delusional States"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Ose's most disturbing power — 'makes a man to laugh at his own sins' — describes a state of moral blindness and demonic delusion referenced in the Christian tradition of hardened conscience. His shape-shifting ability connects him to shamanic transformation traditions. The leopard is a symbol of sudden and unpredictable predatory violence across African, Near Eastern, and Asian religious systems.",
+      "completeness_score": 50
+    },
+    {
+      "id": "amy",
+      "canonical_name": "Amy",
+      "aliases": [
+        "Avnas",
+        "Avnas"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Amy",
+          "rank": "President",
+          "goetia_number": 58,
+          "legions": 36,
+          "seal_reference": "Ars Goetia Seal #58",
+          "primary_functions": [
+            "Gives perfect knowledge of astrology and all liberal sciences",
+            "Gives good familiars",
+            "Reveals treasures kept by spirits"
+          ],
+          "appearance": "Appears as fire; then human",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Astrology",
+        "Liberal Sciences",
+        "Familiars",
+        "Spiritual Treasure"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Amy (also called Avnas) appears as pure fire — a primordial elemental form suggesting ancient Zoroastrian or Platonic fire-spirit traditions underlying his grimoiric incarnation. His 36 legions echoes the 36 Egyptian astrological decans appropriate for a spirit of astrology. The Goetia notes he hopes to return to the seventh throne after 1,200 years.",
+      "completeness_score": 48
+    },
+    {
+      "id": "orias",
+      "canonical_name": "Orias",
+      "aliases": [
+        "Oriax"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Orias",
+          "rank": "Marquis",
+          "goetia_number": 59,
+          "legions": 30,
+          "seal_reference": "Ars Goetia Seal #59",
+          "primary_functions": [
+            "Knows the mansions of the planets and their forces",
+            "Transforms men and gives dignities, prelacies, and confirmations",
+            "Gives favor of friends and enemies"
+          ],
+          "appearance": "A lion holding two hissing serpents, riding a horse",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Planetary Magic",
+        "Astrological Mansions",
+        "Shape Transformation",
+        "Ecclesiastical Favor"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Orias' knowledge of the 28 astrological mansions of the moon is one of the most specialized competencies in the Goetia, linking him directly to Arabic-Hellenistic astrological magic (manzilim al-qamar). The 28 lunar mansions are the foundation of Arabic and medieval European astral magic. His two serpents echo the caduceus of Hermes/Mercury — the serpent-entwined staff of divine messenger and magical knowledge.",
+      "completeness_score": 52
+    },
+    {
+      "id": "vapula",
+      "canonical_name": "Vapula",
+      "aliases": [
+        "Naphula"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Vapula",
+          "rank": "Duke",
+          "goetia_number": 60,
+          "legions": 36,
+          "seal_reference": "Ars Goetia Seal #60",
+          "primary_functions": [
+            "Teaches handicrafts, professions, and all philosophy and sciences"
+          ],
+          "appearance": "A mighty lion with gryphon's wings",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Handicrafts",
+        "Trades",
+        "Philosophy",
+        "Professional Sciences"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Vapula governs practical crafts and philosophical sciences — a unique combination that spans manual skill and intellectual achievement. He is the Goetia's patron of skilled trades: one might invoke him for mastery of a craft or profession. His lion-gryphon form combines earthly and aerial power — the craftsman's practical skill elevated by the eagle's vision.",
+      "completeness_score": 45
+    },
+    {
+      "id": "zagan",
+      "canonical_name": "Zagan",
+      "aliases": [
+        "Zagam"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Zagan",
+          "rank": "King and President",
+          "goetia_number": 61,
+          "legions": 33,
+          "seal_reference": "Ars Goetia Seal #61",
+          "primary_functions": [
+            "Makes men witty",
+            "Turns water into wine",
+            "Blood into oil and oil into blood",
+            "Turns wine into water",
+            "Turns any metal into money of that country",
+            "Turns a fool wise"
+          ],
+          "appearance": "First as a bull with gryphon's wings; then human",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Alchemy",
+        "Transmutation of Liquids",
+        "Wit",
+        "Financial Magic",
+        "Wisdom"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [
+        {
+          "target_id": "haagenti",
+          "edge_type": "FUNCTIONAL_PARALLEL",
+          "source_tradition": "Goetic Alchemy",
+          "source_text": "Ars Goetia comparison",
+          "notes": "Both Zagan and Haagenti turn water into wine and specialize in alchemical transmutation."
+        }
+      ],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Zagan's transmutation powers — water to wine, blood to oil, metal to coin — make him the Goetia's most complete alchemist. The water-to-wine echo of the Cana miracle (John 2) appears again, suggesting these liquid transmutation powers have a deliberate theological valence. His 33 legions, shared with Haagenti, may again reference the years of Christ's earthly life.",
+      "completeness_score": 52
+    },
+    {
+      "id": "valac",
+      "canonical_name": "Valac",
+      "aliases": [
+        "Valak",
+        "Ualac",
+        "Valu",
+        "Doolas"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Valac",
+          "rank": "President",
+          "goetia_number": 62,
+          "legions": 38,
+          "seal_reference": "Ars Goetia Seal #62",
+          "primary_functions": [
+            "Gives true answers of hidden treasures",
+            "Tells where serpents may be seen and delivers them harmless to the conjurer"
+          ],
+          "appearance": "A small poor boy with angel's wings, riding a two-headed dragon",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Serpent Mastery",
+        "Hidden Treasure",
+        "Harmless Snake Handling"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Valac gained renewed popular cultural attention through the 'Conjuring' film franchise (2018), though the spirit's actual grimoire attributes are quite modest: finding treasure and delivering harmless serpents. His appearance as a 'small poor boy with angel's wings' riding a two-headed dragon is one of the most striking paradoxes in the Goetia — innocence and power combined. Snake-charming as a magical art has deep roots in Levantine and Egyptian religious practice.",
+      "completeness_score": 52
+    },
+    {
+      "id": "flauros",
+      "canonical_name": "Flauros",
+      "aliases": [
+        "Haures",
+        "Hauras",
+        "Havres",
+        "Flaga"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Flauros",
+          "rank": "Duke",
+          "goetia_number": 64,
+          "legions": 36,
+          "seal_reference": "Ars Goetia Seal #64",
+          "primary_functions": [
+            "Destroys and burns enemies",
+            "Will not suffer temptations from any spirit or otherwise",
+            "Discourses of divinity and creation",
+            "Answers all questions truly if commanded in a triangle"
+          ],
+          "appearance": "First a leopard; then a man with flaming eyes and a fiery countenance",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Enemy Destruction",
+        "Theological Knowledge",
+        "Protection",
+        "Fire"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Flauros (also Haures) is one of the few Goetic spirits who 'discourses of divinity and the creation of the world' — suggesting he retains theological knowledge from a pre-Fall angelic state. The requirement that he be commanded while 'in the triangle' before he will speak truth is the standard grimoiric containment stipulation. His leopard-to-fire-man transformation encodes the predatory and consuming aspects of fallen knowledge.",
+      "completeness_score": 52
+    },
+    {
+      "id": "andrealphus",
+      "canonical_name": "Andrealphus",
+      "aliases": [
+        "Androalphus"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Andrealphus",
+          "rank": "Marquis",
+          "goetia_number": 65,
+          "legions": 30,
+          "seal_reference": "Ars Goetia Seal #65",
+          "primary_functions": [
+            "Teaches geometry perfectly",
+            "Transforms men into peacocks",
+            "Makes men cunning in astronomy"
+          ],
+          "appearance": "A noisy peacock; then human",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Geometry",
+        "Astronomy",
+        "Transformation",
+        "Intellectual Pride"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Andrealphus' peacock form and peacock-transformation ability is thematically rich: the peacock is the symbol of pride (superbia) in medieval Christian iconography — its 'eyes' representing both the all-seeing nature of vanity and the dangerous beautiful knowledge that led to the Fall. He transforms men into peacocks — a metaphor for inflating them with pride and intellectual vainglory.",
+      "completeness_score": 48
+    },
+    {
+      "id": "kimaris",
+      "canonical_name": "Kimaris",
+      "aliases": [
+        "Cimeries",
+        "Cimejes",
+        "Kimaris"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Kimaris",
+          "rank": "Marquis",
+          "goetia_number": 66,
+          "legions": 20,
+          "seal_reference": "Ars Goetia Seal #66",
+          "primary_functions": [
+            "Teaches grammar, logic, and rhetoric",
+            "Discovers things lost or hidden",
+            "Can make a man a warrior of his own likeness",
+            "Rules over all spirits of Africa"
+          ],
+          "appearance": "A valiant warrior riding a black horse",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Grammar",
+        "Logic",
+        "Rhetoric",
+        "Warrior Magic",
+        "African Spirit Ruler"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Kimaris is unique as the Goetia's regent of Africa — 'rules all spirits in the parts of Africa.' This geographic attribution preserves a layer of pre-Renaissance spirit cartography, where powerful spirits governed specific world regions. His grammar-logic-rhetoric triad corresponds exactly to the medieval Trivium — the first three arts of the Seven Liberal Arts — making him a demonic patron of university education.",
+      "completeness_score": 50
+    },
+    {
+      "id": "amdusias",
+      "canonical_name": "Amdusias",
+      "aliases": [
+        "Amdukias",
+        "Amduscias"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Amdusias",
+          "rank": "Duke",
+          "goetia_number": 67,
+          "legions": 29,
+          "seal_reference": "Ars Goetia Seal #67",
+          "primary_functions": [
+            "Produces musical instruments to the conjurer's ears but invisibly",
+            "Causes trees to bend to conjurer's will",
+            "Gives excellent familiars"
+          ],
+          "appearance": "First as a unicorn; then human at command; with great trumpets sounding",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Music",
+        "Invisible Orchestras",
+        "Tree Bending",
+        "Familiars"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [
+        {
+          "target_id": "phenex",
+          "edge_type": "FUNCTIONAL_PARALLEL",
+          "source_tradition": "Goetic Arts",
+          "source_text": "Comparative Goetia",
+          "notes": "Both Amdusias and Phenex are spirits of artistic and musical creation."
+        }
+      ],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Amdusias produces sounds of invisible orchestras and bends trees to his conjurer's will — a spirit of unearthly music and natural command. His unicorn form connects him to the tradition of pure magical power (the unicorn's horn is a universal magical instrument). He is the Goetia's primary musical spirit — evoking the ancient tradition of music as supernatural force (Orpheus, David's harp, the Pied Piper).",
+      "completeness_score": 52
+    },
+    {
+      "id": "decarabia",
+      "canonical_name": "Decarabia",
+      "aliases": [
+        "Carabia"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Decarabia",
+          "rank": "Marquis",
+          "goetia_number": 69,
+          "legions": 30,
+          "seal_reference": "Ars Goetia Seal #69",
+          "primary_functions": [
+            "Knows the virtues of all herbs and precious stones",
+            "Provides birds as familiars that sing, eat, and drink naturally"
+          ],
+          "appearance": "First appears as a star in a pentagram",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Herbalism",
+        "Precious Stones",
+        "Bird Familiars",
+        "Star Magic"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Decarabia's initial appearance as a star within a pentagram is among the most visually distinctive entry-forms in the Goetia — suggesting he arrives as a celestial or stellar spirit. His provision of live bird-familiars (that eat, drink, and sing naturally) is unique. The star-pentagram form may connect to the broader tradition of stellar magic in which specific star-spirits are invoked for specific functions.",
+      "completeness_score": 48
+    },
+    {
+      "id": "seere",
+      "canonical_name": "Seere",
+      "aliases": [
+        "Sear",
+        "Seir"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Seere",
+          "rank": "Prince",
+          "goetia_number": 70,
+          "legions": 26,
+          "seal_reference": "Ars Goetia Seal #70",
+          "primary_functions": [
+            "Goes to any part of the world instantly",
+            "Carries or brings things to pass quickly",
+            "Finds lost or hidden things",
+            "Of good nature"
+          ],
+          "appearance": "A beautiful man riding a winged horse",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Instantaneous Travel",
+        "Swift Action",
+        "Hidden Things",
+        "Messages"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Seere rides a winged horse — a direct echo of Pegasus, the winged steed of Greek mythology, suggesting the figure of a divine messenger capable of aerial travel between worlds. Like Vassago and Orobas, he is described as 'of good nature,' marking him among the milder Goetic spirits. His speed gifts (instantaneous travel, swift action) make him the Goetia's primary messenger-spirit.",
+      "completeness_score": 50
+    },
+    {
+      "id": "andromalius",
+      "canonical_name": "Andromalius",
+      "aliases": [],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Andromalius",
+          "rank": "Earl",
+          "goetia_number": 72,
+          "legions": 36,
+          "seal_reference": "Ars Goetia Seal #72",
+          "primary_functions": [
+            "Brings back both a thief and the goods stolen",
+            "Discovers all wickedness and underhand dealing",
+            "Punishes all thieves and other wicked people"
+          ],
+          "appearance": "A man holding a great serpent",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Justice",
+        "Theft Recovery",
+        "Wickedness Detection",
+        "Punishment of Criminals"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Andromalius is the 72nd and final spirit of the Ars Goetia — the last of Solomon's spirits. He is paradoxically a spirit of justice: his primary function is recovering stolen goods and punishing wickedness. This makes him one of the few Goetic spirits invoked for righteous purposes. His serpent-carrying echoes ancient serpent-as-justice symbolism. He closes the Goetic canon on a note of cosmic order.",
+      "completeness_score": 50
+    },
+    {
+      "id": "ornias",
+      "canonical_name": "Ornias",
+      "aliases": [],
+      "tradition_vectors": {
+        "biblical_angel": {
+          "name": "Ornias",
+          "rank": "Demon",
+          "canonical_function": "The first demon Solomon bound with the ring of God; harassed Solomon's workman by squeezing his thumb; appears as fire and as a winged creature",
+          "source_texts": [
+            "Testament of Solomon 1:1–7:8 (Greek recension)"
+          ]
+        }
+      },
+      "functional_domains": [
+        "Harassment",
+        "Astrological Obstruction",
+        "Shapeshifting",
+        "Thumb Pressing"
+      ],
+      "hierarchical_level": 7,
+      "relationships": [
+        {
+          "target_id": "beelzebub",
+          "edge_type": "COMMANDS",
+          "source_tradition": "Testament of Solomon",
+          "source_text": "Testament of Solomon 2:1–9",
+          "notes": "Ornias reveals that Beelzebub is the prince of demons when questioned by Solomon."
+        }
+      ],
+      "source_attestations": [
+        "Testament of Solomon (Greek text, 1st-5th c. CE)",
+        "McCown critical edition (1922)"
+      ],
+      "research_notes": "The Testament of Solomon (Greek, likely 1st–4th century CE) is a pseudepigraphical text describing Solomon's binding of demons using a magic ring given him by the angel Michael. Ornias is the first demon captured — he had been draining the life from a workman by squeezing his thumb. He appears as fire, as a man, and as a flying lion-headed creature. He reveals that he is born under Aquarius and describes the astrological fates of those born under his sign. The Testament is a crucial source for the pre-Goetic tradition of Solomonic demon-binding and is one of the oldest systematic demonological texts.",
+      "completeness_score": 60
+    },
+    {
+      "id": "onoskelis",
+      "canonical_name": "Onoskelis",
+      "aliases": [],
+      "tradition_vectors": {
+        "biblical_angel": {
+          "name": "Onoskelis",
+          "rank": "Female Demon",
+          "canonical_function": "Female demon with beautiful form but donkey's legs (her name means 'donkey-legs'); leads men into sin through deviant acts; dwells in caves",
+          "source_texts": [
+            "Testament of Solomon 4:1–12"
+          ]
+        },
+        "gnostic": {
+          "name": "Onoskelis",
+          "system": "Solomonic Demonology",
+          "classification": "Pneumatic Female Demon",
+          "source_texts": [
+            "Testament of Solomon (Greek recension)"
+          ]
+        }
+      },
+      "functional_domains": [
+        "Sexual Temptation",
+        "Strangling",
+        "Cave Dwelling",
+        "Lunar Madness"
+      ],
+      "hierarchical_level": 7,
+      "relationships": [
+        {
+          "target_id": "lilith",
+          "edge_type": "FUNCTIONAL_PARALLEL",
+          "source_tradition": "Jewish Demonology",
+          "source_text": "Comparative demonology",
+          "notes": "Onoskelis' hybrid female form, cave-dwelling, and sexual temptation functions parallel the Lilith tradition."
+        }
+      ],
+      "source_attestations": [
+        "Testament of Solomon (1st-5th c. CE)",
+        "McCown critical edition (1922)"
+      ],
+      "research_notes": "Onoskelis tells Solomon she was born from an 'echo of a man' and a Heavenly Voice — an obscure demonological origin. Her donkey legs mark her as a hybrid creature straddling human and animal worlds, consistent with ancient Near Eastern iconography of female demons (Lamashtu, Lilith). She is compelled by Solomon and assigned to spin hemp — a mundane punishment for a supernatural being.",
+      "completeness_score": 55
+    },
+    {
+      "id": "enepsigos",
+      "canonical_name": "Enepsigos",
+      "aliases": [],
+      "tradition_vectors": {
+        "biblical_angel": {
+          "name": "Enepsigos",
+          "rank": "Female Demon",
+          "canonical_function": "A demon appearing as a woman with two heads; connected to the moon and lunacy; resists Solomon's ring",
+          "source_texts": [
+            "Testament of Solomon 15:1–15"
+          ]
+        }
+      },
+      "functional_domains": [
+        "Lunar Madness",
+        "Divination",
+        "Resistance",
+        "Two-Headed Manifestation"
+      ],
+      "hierarchical_level": 7,
+      "relationships": [],
+      "source_attestations": [
+        "Testament of Solomon (Greek text)",
+        "McCown critical edition (1922)"
+      ],
+      "research_notes": "Enepsigos is notable for her resistance — she mocks Solomon's ring and is only bound by the name of the one who will appear at the end of time. She is a lunar demon connected to waxing and waning madness, and her two-headed form suggests a spirit of dual or contradictory nature. She prophecies in an unusual passage about the coming destruction of Solomon's temple — one of the apocalyptic elements embedded in the Testament.",
+      "completeness_score": 52
+    },
+    {
+      "id": "abezethibou",
+      "canonical_name": "Abezethibou",
+      "aliases": [
+        "Abezethibod",
+        "Abezethibul"
+      ],
+      "tradition_vectors": {
+        "biblical_angel": {
+          "name": "Abezethibou",
+          "rank": "One-winged Demon",
+          "canonical_function": "Demon who accompanied Jannes and Jambres (Pharaoh's magicians) and hardened Pharaoh's heart; has one wing; dwells in the Red Sea",
+          "source_texts": [
+            "Testament of Solomon 25:1–7",
+            "2 Timothy 3:8 (Jannes and Jambres referenced)"
+          ]
+        }
+      },
+      "functional_domains": [
+        "Hardening of Hearts",
+        "Sorcery",
+        "Egyptian Magic",
+        "Red Sea Dwelling"
+      ],
+      "hierarchical_level": 7,
+      "relationships": [],
+      "source_attestations": [
+        "Testament of Solomon 25",
+        "2 Timothy 3:8 (Jannes and Jambres)"
+      ],
+      "research_notes": "Abezethibou is one of the most theologically significant figures in the Testament of Solomon — he is the demon who hardened Pharaoh's heart (Exodus 7–14) and assisted the Egyptian magicians Jannes and Jambres in opposing Moses. He is trapped in the Red Sea (where the Egyptians drowned) by a pillar of air. This makes him the grimoiric interpretation of the demonic power behind the Exodus plagues narrative.",
+      "completeness_score": 58
+    },
+    {
+      "id": "lucifuge-rofocale",
+      "canonical_name": "Lucifuge Rofocale",
+      "aliases": [
+        "Lucifuge",
+        "Rofocale"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Lucifuge Rofocale",
+          "rank": "Prime Minister of Hell",
+          "primary_functions": [
+            "Commands over all treasure in the world",
+            "Prime Minister of Lucifer's infernal empire",
+            "Can be compelled to grant wealth",
+            "Avoids all light"
+          ],
+          "appearance": "Avoids appearing; forces must be applied; wears a cloak of darkness",
+          "grimoire_source": "Grand Grimoire (Le Dragon Rouge)"
+        }
+      },
+      "functional_domains": [
+        "Wealth",
+        "Treasure Hoarding",
+        "Darkness",
+        "Infernal Administration"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [
+        {
+          "target_id": "satan",
+          "edge_type": "COMMANDS",
+          "source_tradition": "Grand Grimoire",
+          "source_text": "Grand Grimoire — hierarchy",
+          "notes": "Lucifuge Rofocale serves as Prime Minister under Lucifer in the Grand Grimoire's explicit infernal hierarchy."
+        }
+      ],
+      "source_attestations": [
+        "Grand Grimoire (Le Dragon Rouge, late 18th c.)",
+        "True Red Dragon (American reprint tradition)"
+      ],
+      "research_notes": "Lucifuge Rofocale ('he who flees the light') appears exclusively in the Grand Grimoire (also called Le Dragon Rouge — 'The Red Dragon'), a French grimoire attributed to various dates from the 17th to 19th centuries but reflecting earlier traditions. He governs all earthly treasure and wealth on behalf of Lucifer. The Grand Grimoire provides one of the most explicit infernal hierarchy charts in the grimoire tradition, placing Lucifuge directly below the Devil as his Prime Minister. The pact with Lucifuge was the prototype for Faustian deal imagery.",
+      "completeness_score": 62
+    },
+    {
+      "id": "satanachia",
+      "canonical_name": "Satanachia",
+      "aliases": [
+        "Satanackia"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Satanachia",
+          "rank": "Commander-in-Chief of Satan's Army",
+          "primary_functions": [
+            "Commands a large army of spirits",
+            "Makes women obedient to the conjurer",
+            "Has power over all animals"
+          ],
+          "grimoire_source": "Grimorium Verum (True Grimoire)"
+        }
+      },
+      "functional_domains": [
+        "Military Command",
+        "Dominion over Women",
+        "Animal Mastery",
+        "Infernal Leadership"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [
+        {
+          "target_id": "satan",
+          "edge_type": "COMMANDS",
+          "source_tradition": "Grimorium Verum",
+          "source_text": "Grimorium Verum hierarchy",
+          "notes": "Satanachia ranks directly below Satan/Lucifer in the Grimorium Verum's three-tiered infernal hierarchy."
+        }
+      ],
+      "source_attestations": [
+        "Grimorium Verum (True Grimoire, 18th c.)",
+        "Grand Grimoire (variant)"
+      ],
+      "research_notes": "The Grimorium Verum (True Grimoire) provides a hierarchy of three chief demons below Lucifer — Satanachia, Agaliarept, and Fleurety — each commanding specific sub-spirits. Satanachia commands the first tier. Unlike the Goetia's 72 spirits (attributed to Solomon), the Grimorium Verum presents a more overtly Satanic structure, reflecting 18th-century continental grimoire tradition. Satanachia's power over women echoes Asmodeus and Zepar but at a much higher hierarchical rank.",
+      "completeness_score": 58
+    },
+    {
+      "id": "agaliarept",
+      "canonical_name": "Agaliarept",
+      "aliases": [
+        "Agalierept"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Agaliarept",
+          "rank": "Commander and General of Hell",
+          "primary_functions": [
+            "Reveals all secrets of other courts — royal and government",
+            "Commands over Europe and Asia Minor",
+            "Discovers hidden and secret things",
+            "Commands spirits of the second and third legions"
+          ],
+          "grimoire_source": "Grimorium Verum (True Grimoire)"
+        }
+      },
+      "functional_domains": [
+        "Espionage",
+        "Secret Intelligence",
+        "European Dominion",
+        "Infernal Intelligence"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [
+        {
+          "target_id": "satanachia",
+          "edge_type": "COMMANDS",
+          "source_tradition": "Grimorium Verum",
+          "source_text": "Grimorium Verum hierarchy",
+          "notes": "Agaliarept commands the second tier alongside Satanachia in the Grimorium Verum hierarchy."
+        }
+      ],
+      "source_attestations": [
+        "Grimorium Verum (True Grimoire, 18th c.)"
+      ],
+      "research_notes": "Agaliarept specializes in espionage and the revelation of state secrets — his domain over royal courts and governments makes him a spirit of political intelligence unique in the grimoire tradition. His geographical command over Europe and Asia Minor reflects 18th-century geopolitical thinking projected onto the infernal hierarchy. He commands the spirits Buer, Gusoyn, and Botis among others.",
+      "completeness_score": 55
+    },
+    {
+      "id": "fleurety",
+      "canonical_name": "Fleurety",
+      "aliases": [
+        "Flereous",
+        "Fléurety"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Fleurety",
+          "rank": "Lieutenant General of Hell",
+          "primary_functions": [
+            "Performs any task the conjurer sets him during the night",
+            "Commands a large number of spirits",
+            "Causes hailstorms at will"
+          ],
+          "grimoire_source": "Grimorium Verum (True Grimoire)"
+        }
+      },
+      "functional_domains": [
+        "Night Operations",
+        "Hailstorms",
+        "Weather Magic",
+        "Nocturnal Tasks"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [
+        {
+          "target_id": "satanachia",
+          "edge_type": "COMMANDS",
+          "source_tradition": "Grimorium Verum",
+          "source_text": "Grimorium Verum hierarchy",
+          "notes": "Fleurety forms the third member of the triumvirate below Lucifer in the Grimorium Verum."
+        }
+      ],
+      "source_attestations": [
+        "Grimorium Verum (True Grimoire, 18th c.)"
+      ],
+      "research_notes": "Fleurety's restriction to nocturnal operations is a distinctive trait — he can only perform tasks at night, a reflection of the ancient division between day and night spirits in magical tradition. His weather-control over hailstorms connects him to agricultural curse magic — hailstorms being the most devastating natural weapon against crops and livestock in preindustrial Europe. He commands the spirits Bathin, Purson, and Abigar among others.",
+      "completeness_score": 52
+    },
+    {
+      "id": "nebiros",
+      "canonical_name": "Nebiros",
+      "aliases": [
+        "Naberus",
+        "Nebirots"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Nebiros",
+          "rank": "Field Marshal and Inspector General of Hell",
+          "primary_functions": [
+            "Knows the virtues of all animals",
+            "Practices necromancy",
+            "Has power to inflict evil on any soul",
+            "Teaches all the arts"
+          ],
+          "grimoire_source": "Grimorium Verum (True Grimoire)"
+        }
+      },
+      "functional_domains": [
+        "Necromancy",
+        "Animal Knowledge",
+        "Malefic Power",
+        "Infernal Inspection"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [
+        {
+          "target_id": "naberius",
+          "edge_type": "CONTESTED_IDENTIFICATION",
+          "source_tradition": "Comparative Demonology",
+          "source_text": "Grimorium Verum / Ars Goetia comparison",
+          "notes": "Nebiros and Naberius share a name and partial function overlap, possibly representing the same spirit through different textual transmission chains."
+        }
+      ],
+      "source_attestations": [
+        "Grimorium Verum (True Grimoire, 18th c.)",
+        "Dictionnaire Infernal (Collin de Plancy, 1863)"
+      ],
+      "research_notes": "Nebiros holds one of the most militarily specific titles in demonology: Field Marshal and Inspector General of Hell. His necromantic knowledge and his power to 'inflict evil on any soul' make him one of the most dangerous figures in the Grimorium Verum tradition. Collin de Plancy gave him a prominent entry in the Dictionnaire Infernal. He commands the spirits Ayperos, Nuberus, and Glasya-Labolas.",
+      "completeness_score": 55
+    },
+    {
+      "id": "oriens",
+      "canonical_name": "Oriens",
+      "aliases": [
+        "Ariton (Eastern variant)",
+        "The Prince of the East"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Oriens",
+          "rank": "Prince of the East — One of Four Cardinal Princes",
+          "primary_functions": [
+            "Rules over the Eastern quarter of the world",
+            "Commands spirits of the East",
+            "One of four princes who command all spirits"
+          ],
+          "grimoire_source": "Book of Abramelin (Abraham of Worms)"
+        },
+        "kabbalistic": {
+          "sephira": "Kether",
+          "source_texts": [
+            "Abramelin tradition — four princes corresponding to cardinal directions"
+          ]
+        }
+      },
+      "functional_domains": [
+        "Eastern World Dominion",
+        "Cardinal Spirit Command",
+        "Dawn and Rising Powers"
+      ],
+      "hierarchical_level": 5,
+      "relationships": [
+        {
+          "target_id": "paimon",
+          "edge_type": "FUNCTIONAL_PARALLEL",
+          "source_tradition": "Abramelin Tradition",
+          "source_text": "Book of Abramelin II",
+          "notes": "Paimon governs the West in Abramelin; Oriens governs the East. Both are cardinal princes of equal rank."
+        }
+      ],
+      "source_attestations": [
+        "Book of Abramelin (Abraham of Worms, c. 1458; published 1725)",
+        "Mathers translation (1897)",
+        "Dehn critical edition (2006)"
+      ],
+      "research_notes": "The Book of Abramelin (Sefer Mafteah Shelomoh / Buch Abramelin) is a late 14th or early 15th century Jewish-Christian magical text attributed to Abraham of Worms, recounting his reception of the Abramelin system from the Egyptian mage Abramelin. The four cardinal princes — Oriens (East), Paimon (West), Ariton (North), and Amaimon (South) — command all other demonic entities in the Abramelin hierarchy. The system influenced Aleister Crowley's magical framework extensively. Oriens rules the dawn and eastward powers.",
+      "completeness_score": 62
+    },
+    {
+      "id": "ariton",
+      "canonical_name": "Ariton",
+      "aliases": [
+        "Egin",
+        "Egyn",
+        "Ariton of the North"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Ariton",
+          "rank": "Prince of the North — One of Four Cardinal Princes",
+          "primary_functions": [
+            "Rules the Northern quarter",
+            "Commands spirits of cold, darkness, and winter",
+            "One of the four Abramelin princes"
+          ],
+          "grimoire_source": "Book of Abramelin (Abraham of Worms)"
+        },
+        "kabbalistic": {
+          "sephira": "Associated with Binah (cold, deep)",
+          "source_texts": [
+            "Abramelin tradition"
+          ]
+        }
+      },
+      "functional_domains": [
+        "Northern World Dominion",
+        "Cold and Darkness",
+        "Winter Spirits",
+        "Cardinal Command"
+      ],
+      "hierarchical_level": 5,
+      "relationships": [
+        {
+          "target_id": "oriens",
+          "edge_type": "CORRESPONDS_TO",
+          "source_tradition": "Abramelin System",
+          "source_text": "Book of Abramelin",
+          "notes": "Ariton and Oriens are opposite cardinal princes — North and East."
+        }
+      ],
+      "source_attestations": [
+        "Book of Abramelin (1458/1725)",
+        "Mathers translation (1897)"
+      ],
+      "research_notes": "Ariton (also Egin or Egyn) governs the North in the Abramelin system — the cardinal direction of darkness, cold, and hidden things in European magical tradition. The North is associated with the 'left hand path,' death, and the underworld in many European folk traditions. Ariton commands vast numbers of sub-spirits in the Abramelin hierarchical tree, including some shared with the Goetia. Crowley's Liber ABA uses the Abramelin system as a foundational framework.",
+      "completeness_score": 58
+    },
+    {
+      "id": "amaimon",
+      "canonical_name": "Amaimon",
+      "aliases": [
+        "Amaymon",
+        "Maymoon",
+        "The Prince of the South"
+      ],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Amaimon",
+          "rank": "Prince of the South — One of Four Cardinal Princes",
+          "primary_functions": [
+            "Rules the Southern quarter",
+            "Most powerful of the four princes",
+            "Commands all infernal spirits",
+            "Can be bound but must be approached carefully"
+          ],
+          "grimoire_source": "Book of Abramelin; also referenced in Lemegeton"
+        },
+        "kabbalistic": {
+          "sephira": "Geburah (power, severity)",
+          "source_texts": [
+            "Abramelin tradition",
+            "Lemegeton Theurgia-Goetia"
+          ]
+        }
+      },
+      "functional_domains": [
+        "Southern World Dominion",
+        "Supreme Infernal Power",
+        "Cardinal Command",
+        "Danger"
+      ],
+      "hierarchical_level": 5,
+      "relationships": [
+        {
+          "target_id": "paimon",
+          "edge_type": "CORRESPONDS_TO",
+          "source_tradition": "Goetic and Abramelin",
+          "source_text": "Lemegeton Theurgia-Goetia; Book of Abramelin",
+          "notes": "Amaimon is one of the four kings/princes who rule the cardinal directions in multiple grimoire traditions alongside Paimon."
+        }
+      ],
+      "source_attestations": [
+        "Book of Abramelin (1458/1725)",
+        "Lemegeton Theurgia-Goetia",
+        "Pseudomonarchia Daemonum (Weyer, 1577)"
+      ],
+      "research_notes": "Amaimon is described as the most dangerous and powerful of the four cardinal princes — the Lemegeton warns that he can only be safely approached during certain hours, wearing a silver ring pressed to the face as protection against his breath. His southern attribution connects him to fire and heat — the south being associated with warmth and Martian energy in European magical geomancy. Several Goetic spirits (including Bael) serve under Amaimon.",
+      "completeness_score": 62
+    },
+    {
+      "id": "buer",
+      "canonical_name": "Buer",
+      "aliases": [],
+      "tradition_vectors": {
+        "goetic": {
+          "name": "Buer",
+          "rank": "President",
+          "goetia_number": 10,
+          "legions": 50,
+          "seal_reference": "Ars Goetia Seal #10",
+          "primary_functions": [
+            "Teaches philosophy, the moral and natural",
+            "Teaches logic and the virtues of herbs and plants",
+            "Heals all distempers in man",
+            "Gives good familiars"
+          ],
+          "appearance": "Appears in Sagittarius — like a star in that sign; when human has five legs radiating from a hub",
+          "grimoire_source": "Ars Goetia (Lemegeton)"
+        }
+      },
+      "functional_domains": [
+        "Philosophy",
+        "Herbalism",
+        "Healing",
+        "Logic",
+        "Medicine"
+      ],
+      "hierarchical_level": 6,
+      "relationships": [],
+      "source_attestations": [
+        "Ars Goetia (Lemegeton)",
+        "Pseudomonarchia Daemonum (Weyer, 1577)",
+        "Dictionnaire Infernal (Collin de Plancy, 1863)"
+      ],
+      "research_notes": "Buer is one of the most iconographically memorable Goetic spirits — Plancy's Dictionnaire Infernal depicts him as a wheel of five lion-legs rotating around a central hub, like a living Catherine wheel. He is a healer-philosopher, teaching both the philosophical sciences and practical medicine. His appearance in Sagittarius connects him to the centaur tradition of wise healer-archers (Chiron). He commands 50 legions.",
+      "completeness_score": 58
     }
   ]
 }

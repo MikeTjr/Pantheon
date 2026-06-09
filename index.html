@@ -31,6 +31,7 @@
   <button class="nav-btn active" data-view="search">⊕ Search</button>
   <button class="nav-btn" data-view="hierarchy">⊗ Hierarchy</button>
   <button class="nav-btn" data-view="timeline">◈ Timeline</button>
+  <button class="nav-btn" data-view="gematria">✦ Gematria</button>
   <button class="nav-btn" data-view="about">⊜ About</button>
 </nav>
 
@@ -65,6 +66,107 @@
     </div>
     <p class="results-count" id="results-count"></p>
     <div id="results-grid"></div>
+  </section>
+
+  <!-- ── GEMATRIA CALCULATOR VIEW ── -->
+  <section id="view-gematria" class="view">
+    <div class="gem-calc-header">
+      <p class="gem-calc-title">Gematria Calculator</p>
+      <p class="gem-calc-subtitle">Enter any word or name in Hebrew or Greek to compute its numerical value.<br>Hebrew uses <em>Mispar Hechrachi</em> (standard). Greek uses <em>Isopsephy</em> (letter-number equivalence).</p>
+    </div>
+
+    <div class="gem-calc-controls">
+      <div class="gem-calc-input-wrap">
+        <input type="text" id="gem-calc-input" placeholder="Type in Hebrew or Greek…" autocomplete="off" spellcheck="false">
+      </div>
+      <select id="gem-calc-lang">
+        <option value="hebrew">Hebrew</option>
+        <option value="greek">Greek</option>
+      </select>
+    </div>
+
+    <div class="gem-result-panel">
+      <p class="gem-result-label">Total Value</p>
+      <div class="gem-total-display" id="gem-total">—</div>
+      <p id="gem-notable"></p>
+      <div id="gem-breakdown">
+        <span class="gem-calc-empty">Type a word in the field above to calculate.</span>
+      </div>
+    </div>
+
+    <div class="gem-reference-section">
+      <p class="gem-ref-title">Letter Reference Tables</p>
+      <div class="gem-ref-tabs">
+        <button class="gem-ref-tab active" onclick="showRefTab('hebrew', this)">Hebrew Alphabet</button>
+        <button class="gem-ref-tab" onclick="showRefTab('greek', this)">Greek Alphabet</button>
+      </div>
+      <div id="gem-ref-hebrew" class="gem-letter-grid">
+        <div class="gem-letter-row" onclick="appendCalc('א')"><span class="gem-letter-glyph">א</span><div class="gem-letter-info"><span class="gem-letter-name">Aleph</span><span class="gem-letter-num">1</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('ב')"><span class="gem-letter-glyph">ב</span><div class="gem-letter-info"><span class="gem-letter-name">Bet</span><span class="gem-letter-num">2</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('ג')"><span class="gem-letter-glyph">ג</span><div class="gem-letter-info"><span class="gem-letter-name">Gimel</span><span class="gem-letter-num">3</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('ד')"><span class="gem-letter-glyph">ד</span><div class="gem-letter-info"><span class="gem-letter-name">Dalet</span><span class="gem-letter-num">4</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('ה')"><span class="gem-letter-glyph">ה</span><div class="gem-letter-info"><span class="gem-letter-name">He</span><span class="gem-letter-num">5</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('ו')"><span class="gem-letter-glyph">ו</span><div class="gem-letter-info"><span class="gem-letter-name">Vav</span><span class="gem-letter-num">6</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('ז')"><span class="gem-letter-glyph">ז</span><div class="gem-letter-info"><span class="gem-letter-name">Zayin</span><span class="gem-letter-num">7</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('ח')"><span class="gem-letter-glyph">ח</span><div class="gem-letter-info"><span class="gem-letter-name">Chet</span><span class="gem-letter-num">8</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('ט')"><span class="gem-letter-glyph">ט</span><div class="gem-letter-info"><span class="gem-letter-name">Tet</span><span class="gem-letter-num">9</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('י')"><span class="gem-letter-glyph">י</span><div class="gem-letter-info"><span class="gem-letter-name">Yod</span><span class="gem-letter-num">10</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('כ')"><span class="gem-letter-glyph">כ</span><div class="gem-letter-info"><span class="gem-letter-name">Kaf</span><span class="gem-letter-num">20</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('ל')"><span class="gem-letter-glyph">ל</span><div class="gem-letter-info"><span class="gem-letter-name">Lamed</span><span class="gem-letter-num">30</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('מ')"><span class="gem-letter-glyph">מ</span><div class="gem-letter-info"><span class="gem-letter-name">Mem</span><span class="gem-letter-num">40</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('נ')"><span class="gem-letter-glyph">נ</span><div class="gem-letter-info"><span class="gem-letter-name">Nun</span><span class="gem-letter-num">50</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('ס')"><span class="gem-letter-glyph">ס</span><div class="gem-letter-info"><span class="gem-letter-name">Samech</span><span class="gem-letter-num">60</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('ע')"><span class="gem-letter-glyph">ע</span><div class="gem-letter-info"><span class="gem-letter-name">Ayin</span><span class="gem-letter-num">70</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('פ')"><span class="gem-letter-glyph">פ</span><div class="gem-letter-info"><span class="gem-letter-name">Pe</span><span class="gem-letter-num">80</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('צ')"><span class="gem-letter-glyph">צ</span><div class="gem-letter-info"><span class="gem-letter-name">Tzadi</span><span class="gem-letter-num">90</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('ק')"><span class="gem-letter-glyph">ק</span><div class="gem-letter-info"><span class="gem-letter-name">Qof</span><span class="gem-letter-num">100</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('ר')"><span class="gem-letter-glyph">ר</span><div class="gem-letter-info"><span class="gem-letter-name">Resh</span><span class="gem-letter-num">200</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('ש')"><span class="gem-letter-glyph">ש</span><div class="gem-letter-info"><span class="gem-letter-name">Shin</span><span class="gem-letter-num">300</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('ת')"><span class="gem-letter-glyph">ת</span><div class="gem-letter-info"><span class="gem-letter-name">Tav</span><span class="gem-letter-num">400</span></div></div>
+      </div>
+      <div id="gem-ref-greek" class="gem-letter-grid" style="display:none">
+        <div class="gem-letter-row" onclick="appendCalc('α')"><span class="gem-letter-glyph">Αα</span><div class="gem-letter-info"><span class="gem-letter-name">Alpha</span><span class="gem-letter-num">1</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('β')"><span class="gem-letter-glyph">Ββ</span><div class="gem-letter-info"><span class="gem-letter-name">Beta</span><span class="gem-letter-num">2</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('γ')"><span class="gem-letter-glyph">Γγ</span><div class="gem-letter-info"><span class="gem-letter-name">Gamma</span><span class="gem-letter-num">3</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('δ')"><span class="gem-letter-glyph">Δδ</span><div class="gem-letter-info"><span class="gem-letter-name">Delta</span><span class="gem-letter-num">4</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('ε')"><span class="gem-letter-glyph">Εε</span><div class="gem-letter-info"><span class="gem-letter-name">Epsilon</span><span class="gem-letter-num">5</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('ζ')"><span class="gem-letter-glyph">Ζζ</span><div class="gem-letter-info"><span class="gem-letter-name">Zeta</span><span class="gem-letter-num">7</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('η')"><span class="gem-letter-glyph">Ηη</span><div class="gem-letter-info"><span class="gem-letter-name">Eta</span><span class="gem-letter-num">8</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('θ')"><span class="gem-letter-glyph">Θθ</span><div class="gem-letter-info"><span class="gem-letter-name">Theta</span><span class="gem-letter-num">9</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('ι')"><span class="gem-letter-glyph">Ιι</span><div class="gem-letter-info"><span class="gem-letter-name">Iota</span><span class="gem-letter-num">10</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('κ')"><span class="gem-letter-glyph">Κκ</span><div class="gem-letter-info"><span class="gem-letter-name">Kappa</span><span class="gem-letter-num">20</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('λ')"><span class="gem-letter-glyph">Λλ</span><div class="gem-letter-info"><span class="gem-letter-name">Lambda</span><span class="gem-letter-num">30</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('μ')"><span class="gem-letter-glyph">Μμ</span><div class="gem-letter-info"><span class="gem-letter-name">Mu</span><span class="gem-letter-num">40</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('ν')"><span class="gem-letter-glyph">Νν</span><div class="gem-letter-info"><span class="gem-letter-name">Nu</span><span class="gem-letter-num">50</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('ξ')"><span class="gem-letter-glyph">Ξξ</span><div class="gem-letter-info"><span class="gem-letter-name">Xi</span><span class="gem-letter-num">60</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('ο')"><span class="gem-letter-glyph">Οο</span><div class="gem-letter-info"><span class="gem-letter-name">Omicron</span><span class="gem-letter-num">70</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('π')"><span class="gem-letter-glyph">Ππ</span><div class="gem-letter-info"><span class="gem-letter-name">Pi</span><span class="gem-letter-num">80</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('ρ')"><span class="gem-letter-glyph">Ρρ</span><div class="gem-letter-info"><span class="gem-letter-name">Rho</span><span class="gem-letter-num">100</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('σ')"><span class="gem-letter-glyph">Σσ</span><div class="gem-letter-info"><span class="gem-letter-name">Sigma</span><span class="gem-letter-num">200</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('τ')"><span class="gem-letter-glyph">Ττ</span><div class="gem-letter-info"><span class="gem-letter-name">Tau</span><span class="gem-letter-num">300</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('υ')"><span class="gem-letter-glyph">Υυ</span><div class="gem-letter-info"><span class="gem-letter-name">Upsilon</span><span class="gem-letter-num">400</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('φ')"><span class="gem-letter-glyph">Φφ</span><div class="gem-letter-info"><span class="gem-letter-name">Phi</span><span class="gem-letter-num">500</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('χ')"><span class="gem-letter-glyph">Χχ</span><div class="gem-letter-info"><span class="gem-letter-name">Chi</span><span class="gem-letter-num">600</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('ψ')"><span class="gem-letter-glyph">Ψψ</span><div class="gem-letter-info"><span class="gem-letter-name">Psi</span><span class="gem-letter-num">700</span></div></div>
+        <div class="gem-letter-row" onclick="appendCalc('ω')"><span class="gem-letter-glyph">Ωω</span><div class="gem-letter-info"><span class="gem-letter-name">Omega</span><span class="gem-letter-num">800</span></div></div>
+      </div>
+    </div>
+
+    <script>
+    function showRefTab(lang, btn) {
+      document.querySelectorAll('.gem-ref-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('gem-ref-hebrew').style.display = lang === 'hebrew' ? '' : 'none';
+      document.getElementById('gem-ref-greek').style.display  = lang === 'greek'  ? '' : 'none';
+    }
+    function appendCalc(ch) {
+      const inp = document.getElementById('gem-calc-input');
+      if (!inp) return;
+      inp.value += ch;
+      inp.dispatchEvent(new Event('input'));
+      inp.focus();
+    }
+    </script>
   </section>
 
   <!-- ── TIMELINE VIEW ── -->
@@ -159,6 +261,10 @@
       <div class="detail-section">
         <p class="detail-section-title">Primary Source Attestations</p>
         <ul class="source-list" id="d-sources"></ul>
+      </div>
+      <div class="detail-section" id="d-gematria-section" style="display:none">
+        <p class="detail-section-title">Gematria &amp; Isopsephy</p>
+        <div id="d-gematria"></div>
       </div>
       <div class="detail-section">
         <p class="detail-section-title">Research Notes</p>
