@@ -12,6 +12,22 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/7.0.0/fuse.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js"></script>
+
+  <!-- Gematria resonance map styles -->
+  <style>
+  .gem-view-tabs{display:flex;gap:0;border-bottom:1px solid rgba(201,152,58,0.2);margin:0 0 2rem;padding:0 1rem}
+  .gem-view-tab{background:none;border:none;border-bottom:2px solid transparent;color:var(--dim);font-family:var(--font-display);font-size:0.88rem;letter-spacing:0.06em;padding:0.7rem 1.4rem;cursor:pointer;transition:color 0.18s,border-color 0.18s}
+  .gem-view-tab:hover{color:var(--gold)}
+  .gem-view-tab.active{color:var(--gold-light);border-bottom-color:var(--gold)}
+  #gem-sub-resonance{padding:0}
+  .gem-resonance-header{text-align:center;margin-bottom:1.4rem;padding:0 1.5rem}
+  .gem-resonance-header .gem-calc-title{margin-bottom:0.4rem}
+  .gem-resonance-header .gem-calc-subtitle{font-size:0.92rem}
+  .gem-resonance-note{font-size:0.77rem;color:var(--faint);font-style:italic;text-align:center;margin-top:0.3rem;padding:0 2rem;font-family:var(--font-body)}
+  #gem-map-svg-wrap{width:100%;min-height:600px;overflow:hidden;position:relative}
+  #gem-map-svg-wrap svg{cursor:grab}
+  #gem-map-svg-wrap svg:active{cursor:grabbing}
+  </style>
 </head>
 <body>
 
@@ -70,6 +86,14 @@
 
   <!-- ── GEMATRIA CALCULATOR VIEW ── -->
   <section id="view-gematria" class="view">
+
+  <!-- Gematria sub-navigation -->
+  <div class="gem-view-tabs" id="gem-view-tabs">
+    <button class="gem-view-tab active" onclick="GEM_MAP.switchTab('calculator',this)">◉ Calculator</button>
+    <button class="gem-view-tab" onclick="GEM_MAP.switchTab('resonance',this)">✦ Resonance Map</button>
+  </div>
+
+  <div id="gem-sub-calculator" class="gem-sub-panel">
     <div class="gem-calc-header">
       <p class="gem-calc-title">Gematria Calculator</p>
       <p class="gem-calc-subtitle">Enter any word or name in Hebrew or Greek to compute its numerical value.<br>Hebrew uses <em>Mispar Hechrachi</em> (standard). Greek uses <em>Isopsephy</em> (letter-number equivalence).</p>
@@ -415,6 +439,7 @@
   </div>
 </div>
 
+<script src="js/gematria-map.js"></script>
 <script src="js/data.js"></script>
 <script src="js/app.js"></script>
 <script src="js/magic.js"></script>
